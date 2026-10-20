@@ -1,0 +1,260 @@
+package com.example.ui
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.data.local.RigourDatabase
+import com.example.data.model.CryptoCoin
+import com.example.data.model.SubscriptionPlan
+import com.example.data.model.TechnicalAnalysisResult
+import com.example.data.model.UserSubscription
+import com.example.data.repository.CryptoRepository
+import com.example.data.repository.SubscriptionRepository
+import com.example.i18n.Language
+import com.example.i18n.StringsDictionary
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+
+sealed class Screen {
+    object Welcome : Screen()
+    object Markets : Screen()
+    data class CoinDetail(val coin: CryptoCoin) : Screen()
+    object Subscription : Screen()
+    object ContactUs : Screen()
+    object Settings : Screen()
+}
+
+class RigourViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val database = RigourDatabase.getInstance(application)
+    private val cryptoRepository = CryptoRepository(database.favoritesDao())
+    private val subscriptionRepository = SubscriptionRepository(database.subscriptionDao())
+
+    // App Navigation
+    private val _currentScreen = MutableStateFlow<Screen>(Screen.Markets)
+    val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
+
+    // i18n & RTL State
+    private val _currentLanguage = MutableStateFlow(Language.ENGLISH)
+    val currentLanguage: StateFlow<Language> = _currentLanguage.asStateFlow()
+
+    // Search and Filter State
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    private val _onlyFavorites = MutableStateFlow(false)
+    val onlyFavorites: StateFlow<Boolean> = _onlyFavorites.asStateFlow()
+
+    // Crypto Market Data
+    val coins: StateFlow<List<CryptoCoin>> = cryptoRepository.coins
+    val isMarketLoading: StateFlow<Boolean> = cryptoRepository.isLoading
+    val lastUpdated: StateFlow<Long> = cryptoRepository.lastUpdated
+    val favoriteSymbols: StateFlow<List<String>> = cryptoRepository.favoriteSymbols
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val filteredCoins: StateFlow<List<CryptoCoin>> = combine(
+        coins,
+        _searchQuery,
+        _onlyFavorites,
+        favoriteSymbols
+    ) { coinList, query, onlyFavs, favs ->
+        var list = coinList
+        if (query.isNotBlank()) {
+            val q = query.trim().lowercase()
+            list = list.filter {
+                it.name.lowercase().contains(q) || it.symbol.lowercase().contains(q)
+            }
+        }
+        if (onlyFavs) {
+            list = list.filter { favs.contains(it.symbol) }
+        }
+        list
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // Selected Coin & Technical Analysis
+    private val _selectedCoin = MutableStateFlow<CryptoCoin?>(null)
+    val selectedCoin: StateFlow<CryptoCoin?> = _selectedCoin.asStateFlow()
+
+    private val _currentTimeframe = MutableStateFlow("1h")
+    val currentTimeframe: StateFlow<String> = _currentTimeframe.asStateFlow()
+
+    private val _analysisResult = MutableStateFlow<TechnicalAnalysisResult?>(null)
+    val analysisResult: StateFlow<TechnicalAnalysisResult?> = _analysisResult.asStateFlow()
+
+    private val _isAnalysisLoading = MutableStateFlow(false)
+    val isAnalysisLoading: StateFlow<Boolean> = _isAnalysisLoading.asStateFlow()
+
+    // Subscription & Paywall
+    val subscription: StateFlow<UserSubscription> = subscriptionRepository.currentSubscriptionFlow
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            UserSubscription(false, null, 0L, "")
+        )
+
+    private val _isVerifyingTx = MutableStateFlow(false)
+    val isVerifyingTx: StateFlow<Boolean> = _isVerifyingTx.asStateFlow()
+
+    private val _verificationMessage = MutableStateFlow<String?>(null)
+    val verificationMessage: StateFlow<String?> = _verificationMessage.asStateFlow()
+
+    private val _isVerificationSuccess = MutableStateFlow(false)
+    val isVerificationSuccess: StateFlow<Boolean> = _isVerificationSuccess.asStateFlow()
+
+    // API Keys & Settings
+    private val _cmcApiKey = MutableStateFlow("")
+    val cmcApiKey: StateFlow<String> = _cmcApiKey.asStateFlow()
+
+    private val _bscApiKey = MutableStateFlow("")
+    val bscApiKey: StateFlow<String> = _bscApiKey.asStateFlow()
+
+    private val _isSandboxMode = MutableStateFlow(false)
+    val isSandboxMode: StateFlow<Boolean> = _isSandboxMode.asStateFlow()
+
+    private var refreshJob: Job? = null
+
+    init {
+        // Initial fetch and start 60s periodic loop
+        loadCoins()
+        startPeriodicRefresh()
+    }
+
+    fun navigateTo(screen: Screen) {
+        _currentScreen.value = screen
+    }
+
+    fun selectCoin(coin: CryptoCoin) {
+        _selectedCoin.value = coin
+        _currentScreen.value = Screen.CoinDetail(coin)
+        loadTechnicalAnalysis(coin, _currentTimeframe.value)
+    }
+
+    fun setTimeframe(timeframe: String) {
+        _currentTimeframe.value = timeframe
+        _selectedCoin.value?.let { coin ->
+            loadTechnicalAnalysis(coin, timeframe)
+        }
+    }
+
+    fun setLanguage(language: Language) {
+        _currentLanguage.value = language
+    }
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun toggleFavoritesOnly() {
+        _onlyFavorites.value = !_onlyFavorites.value
+    }
+
+    fun toggleFavorite(symbol: String) {
+        viewModelScope.launch {
+            cryptoRepository.toggleFavorite(symbol)
+        }
+    }
+
+    fun setCmcApiKey(key: String) {
+        _cmcApiKey.value = key
+        loadCoins()
+    }
+
+    fun setBscApiKey(key: String) {
+        _bscApiKey.value = key
+    }
+
+    fun setSandboxMode(enabled: Boolean) {
+        _isSandboxMode.value = enabled
+    }
+
+    fun loadCoins() {
+        viewModelScope.launch {
+            cryptoRepository.refreshCoins(_cmcApiKey.value)
+        }
+    }
+
+    fun loadTechnicalAnalysis(coin: CryptoCoin, timeframe: String) {
+        viewModelScope.launch {
+            _isAnalysisLoading.value = true
+            try {
+                val result = cryptoRepository.getTechnicalAnalysis(coin, timeframe)
+                _analysisResult.value = result
+            } catch (e: Exception) {
+                // Synthesize fallback on error
+                val candles = cryptoRepository.remoteDataSource.generateSynthesizedCandles(coin.symbol, coin.priceUsd)
+                _analysisResult.value = com.example.engine.TechnicalAnalysisEngine.analyze(coin.symbol, coin.priceUsd, candles)
+            } finally {
+                _isAnalysisLoading.value = false
+            }
+        }
+    }
+
+    fun verifySubscription(txHash: String, plan: SubscriptionPlan) {
+        viewModelScope.launch {
+            _isVerifyingTx.value = true
+            _verificationMessage.value = null
+            _isVerificationSuccess.value = false
+
+            val result = subscriptionRepository.verifyAndActivate(
+                txHash = txHash,
+                plan = plan,
+                bscApiKey = _bscApiKey.value,
+                isSandbox = _isSandboxMode.value
+            )
+
+            _isVerifyingTx.value = false
+            if (result.isSuccess) {
+                _isVerificationSuccess.value = true
+                _verificationMessage.value = StringsDictionary.get("verification_success", _currentLanguage.value)
+            } else {
+                _isVerificationSuccess.value = false
+                _verificationMessage.value = result.exceptionOrNull()?.message
+                    ?: StringsDictionary.get("verification_failed", _currentLanguage.value)
+            }
+        }
+    }
+
+    fun activateInstantSandboxAccess(plan: SubscriptionPlan) {
+        val testHash = "0x" + System.currentTimeMillis().toString(16).padStart(64, 'a')
+        viewModelScope.launch {
+            _isVerifyingTx.value = true
+            val result = subscriptionRepository.verifyAndActivate(
+                txHash = testHash,
+                plan = plan,
+                isSandbox = true
+            )
+            _isVerifyingTx.value = false
+            if (result.isSuccess) {
+                _isVerificationSuccess.value = true
+                _verificationMessage.value = "Sandbox access granted for ${plan.durationDays} days!"
+            }
+        }
+    }
+
+    fun clearVerificationStatus() {
+        _verificationMessage.value = null
+        _isVerificationSuccess.value = false
+    }
+
+    private fun startPeriodicRefresh() {
+        refreshJob?.cancel()
+        refreshJob = viewModelScope.launch {
+            while (true) {
+                delay(60_000) // 60 seconds data refresh
+                cryptoRepository.refreshCoins(_cmcApiKey.value)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        refreshJob?.cancel()
+    }
+}
