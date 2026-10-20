@@ -107,8 +107,8 @@ fun WelcomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.rigour_logo),
-                    contentDescription = "Rigour Logo",
+                    painter = painterResource(id = R.drawable.rigor_logo),
+                    contentDescription = "Rigor Logo",
                     modifier = Modifier
                         .size(54.dp)
                         .clip(RoundedCornerShape(14.dp))

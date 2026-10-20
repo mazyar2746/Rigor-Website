@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -33,14 +34,20 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.data.model.CryptoCoin
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
@@ -65,9 +72,29 @@ fun MarketDashboardScreen(
     onToggleFavoriteCoin: (String) -> Unit,
     onSelectCoin: (CryptoCoin) -> Unit,
     isLoading: Boolean,
+    isLoadingMore: Boolean,
+    hasMore: Boolean,
+    onLoadMore: () -> Unit,
     onRefresh: () -> Unit,
     lang: Language
 ) {
+    val listState = rememberLazyListState()
+
+    // Infinite scroll detection: triggers loading next page when user scrolls near the end
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val totalItems = listState.layoutInfo.totalItemsCount
+            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            totalItems > 0 && lastVisible >= totalItems - 6 && !isLoadingMore && !isLoading && hasMore && searchQuery.isEmpty() && !onlyFavorites
+        }
+    }
+
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore) {
+            onLoadMore()
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -122,17 +149,17 @@ fun MarketDashboardScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Filters and Refresh Row
+        // Filters, Count Badge, and Refresh Row
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 FilterChip(
                     selected = !onlyFavorites,
                     onClick = { if (onlyFavorites) onToggleFavorites() },
-                    label = { Text("All Coins", fontSize = 12.sp) },
+                    label = { Text("All Coins (${coins.size})", fontSize = 12.sp) },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = RigourCyan.copy(alpha = 0.2f),
                         selectedLabelColor = RigourCyan
@@ -189,7 +216,7 @@ fun MarketDashboardScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Cryptocurrencies List
+        // Cryptocurrencies List with Infinite Scroll
         if (coins.isEmpty() && !isLoading) {
             Box(
                 modifier = Modifier
@@ -205,6 +232,7 @@ fun MarketDashboardScreen(
             }
         } else {
             LazyColumn(
+                state = listState,
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -217,6 +245,49 @@ fun MarketDashboardScreen(
                         onClick = { onSelectCoin(coin) }
                     )
                 }
+
+                // Infinite Scroll Loader Footer
+                if (isLoadingMore) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 14.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = RigourCyan,
+                                    strokeWidth = 2.dp
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    text = "Loading next batch from Hybrid API...",
+                                    color = Color(0xFF94A3B8),
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                        }
+                    }
+                } else if (hasMore && searchQuery.isEmpty() && !onlyFavorites && coins.size >= 25) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Scroll down to load up to 1,000+ coins",
+                                color = Color.Gray,
+                                fontSize = 11.sp
+                            )
+                        }
+                    }
+                }
+
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -251,30 +322,42 @@ fun CoinListItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Rank and Coin Monogram/Icon
+            // Rank and Coin Icon/Monogram
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "${coin.rank}",
                     color = Color.Gray,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.width(22.dp)
+                    modifier = Modifier.width(26.dp)
                 )
 
-                Box(
-                    modifier = Modifier
-                        .size(38.dp)
-                        .clip(CircleShape)
-                        .background(RigourCyan.copy(alpha = 0.15f))
-                        .border(1.dp, RigourCyan.copy(alpha = 0.3f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = coin.symbol.take(3),
-                        color = RigourCyan,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold
+                if (coin.iconUrl.isNotEmpty()) {
+                    AsyncImage(
+                        model = coin.iconUrl,
+                        contentDescription = "${coin.name} Icon",
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(RigourSurfaceVariant),
+                        contentScale = ContentScale.Fit
                     )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(RigourCyan.copy(alpha = 0.15f))
+                            .border(1.dp, RigourCyan.copy(alpha = 0.3f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = coin.symbol.take(3),
+                            color = RigourCyan,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(10.dp))

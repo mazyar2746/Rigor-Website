@@ -60,6 +60,12 @@ data class TechnicalAnalysisResult(
     val candles: List<Candle>
 )
 
+data class CoinSignalData(
+    val coin: CryptoCoin,
+    val analysis: TechnicalAnalysisResult,
+    val isProSignal: Boolean = analysis.confidencePercent >= 75 || analysis.overallSignal == SignalType.STRONG_BUY || analysis.overallSignal == SignalType.STRONG_SELL
+)
+
 enum class SubscriptionPlan(
     val id: String,
     val usdtAmount: Double,

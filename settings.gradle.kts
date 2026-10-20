@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Rigour"
+rootProject.name = "Rigor"
 
 include(":app")

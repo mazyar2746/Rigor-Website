@@ -1,6 +1,6 @@
-# Rigour — Institutional Cryptocurrency Analysis Platform
+# Rigor — Institutional Cryptocurrency Analysis Platform
 
-Rigour is an institutional-grade cryptocurrency analysis Android application built with **Jetpack Compose**, **Kotlin**, and modern reactive architecture.
+Rigor is an institutional-grade cryptocurrency analysis Android application built with **Jetpack Compose**, **Kotlin**, and modern reactive architecture.
 
 ## Features Overview
 
@@ -51,7 +51,7 @@ If you have a CoinMarketCap Pro API Key:
   ```
   CMC_PRO_API_KEY=your_cmc_pro_api_key_here
   ```
-- *Note:* If no key is provided, Rigour automatically uses high-speed public market feeds without any disruption.
+- *Note:* If no key is provided, Rigor automatically uses high-speed public market feeds without any disruption.
 
 ### 2. BscScan API Key (Optional)
 For high-rate on-chain transaction receipt querying:

@@ -72,6 +72,7 @@ import com.example.ui.screens.ContactUsScreen
 import com.example.ui.screens.MarketDashboardScreen
 import com.example.ui.screens.SettingsScreen
 import com.example.ui.screens.WelcomeScreen
+import com.example.ui.screens.SignalsScreen
 import com.example.ui.screens.SubscriptionScreen
 import com.example.ui.theme.RigourBackground
 import com.example.ui.theme.RigourBullish
@@ -106,11 +107,16 @@ fun RigourApp(viewModel: RigourViewModel) {
     val onlyFavorites by viewModel.onlyFavorites.collectAsStateWithLifecycle()
     val favoriteSymbols by viewModel.favoriteSymbols.collectAsStateWithLifecycle()
     val isMarketLoading by viewModel.isMarketLoading.collectAsStateWithLifecycle()
+    val isLoadingMore by viewModel.isLoadingMore.collectAsStateWithLifecycle()
+    val hasMore by viewModel.hasMore.collectAsStateWithLifecycle()
 
     val selectedCoin by viewModel.selectedCoin.collectAsStateWithLifecycle()
     val currentTimeframe by viewModel.currentTimeframe.collectAsStateWithLifecycle()
     val analysisResult by viewModel.analysisResult.collectAsStateWithLifecycle()
     val isAnalysisLoading by viewModel.isAnalysisLoading.collectAsStateWithLifecycle()
+
+    val signals by viewModel.signals.collectAsStateWithLifecycle()
+    val isSignalsLoading by viewModel.isSignalsLoading.collectAsStateWithLifecycle()
 
     val subscription by viewModel.subscription.collectAsStateWithLifecycle()
     val isVerifyingTx by viewModel.isVerifyingTx.collectAsStateWithLifecycle()
@@ -132,6 +138,7 @@ fun RigourApp(viewModel: RigourViewModel) {
             when (currentScreen) {
                 is Screen.CoinDetail -> viewModel.navigateTo(Screen.Markets)
                 is Screen.Welcome -> viewModel.navigateTo(Screen.Markets)
+                is Screen.Signals -> viewModel.navigateTo(Screen.Markets)
                 is Screen.Subscription -> viewModel.navigateTo(Screen.Markets)
                 is Screen.ContactUs -> viewModel.navigateTo(Screen.Markets)
                 is Screen.Settings -> viewModel.navigateTo(Screen.Markets)
@@ -145,8 +152,8 @@ fun RigourApp(viewModel: RigourViewModel) {
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Image(
-                                painter = painterResource(id = R.drawable.rigour_logo),
-                                contentDescription = "Rigour Logo",
+                                painter = painterResource(id = R.drawable.rigor_logo),
+                                contentDescription = "Rigor Logo",
                                 modifier = Modifier
                                     .size(32.dp)
                                     .clip(RoundedCornerShape(8.dp))
@@ -232,11 +239,11 @@ fun RigourApp(viewModel: RigourViewModel) {
                     contentColor = Color.White,
                     modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
                 ) {
-                    val welcomeSelected = currentScreen is Screen.Welcome
                     val marketsSelected = currentScreen is Screen.Markets || currentScreen is Screen.CoinDetail
+                    val signalsSelected = currentScreen is Screen.Signals
                     val subSelected = currentScreen is Screen.Subscription
-                    val contactSelected = currentScreen is Screen.ContactUs
-                    val settingsSelected = currentScreen is Screen.Settings
+                    val welcomeSelected = currentScreen is Screen.Welcome
+                    val settingsSelected = currentScreen is Screen.Settings || currentScreen is Screen.ContactUs
 
                     val itemColors = NavigationBarItemDefaults.colors(
                         selectedIconColor = RigourCyan,
@@ -247,21 +254,21 @@ fun RigourApp(viewModel: RigourViewModel) {
                     )
 
                     NavigationBarItem(
-                        selected = welcomeSelected,
-                        onClick = { viewModel.navigateTo(Screen.Welcome) },
-                        icon = { Icon(Icons.Default.Home, contentDescription = "Overview") },
-                        label = { Text(StringsDictionary.get("nav_welcome", currentLanguage), fontSize = 10.sp) },
-                        colors = itemColors,
-                        modifier = Modifier.testTag("nav_item_overview")
-                    )
-
-                    NavigationBarItem(
                         selected = marketsSelected,
                         onClick = { viewModel.navigateTo(Screen.Markets) },
                         icon = { Icon(Icons.Default.TrendingUp, contentDescription = "Markets") },
                         label = { Text(StringsDictionary.get("nav_markets", currentLanguage), fontSize = 10.sp) },
                         colors = itemColors,
                         modifier = Modifier.testTag("nav_item_markets")
+                    )
+
+                    NavigationBarItem(
+                        selected = signalsSelected,
+                        onClick = { viewModel.navigateTo(Screen.Signals) },
+                        icon = { Icon(Icons.Default.AutoGraph, contentDescription = "Signals") },
+                        label = { Text(StringsDictionary.get("nav_signals", currentLanguage), fontSize = 10.sp) },
+                        colors = itemColors,
+                        modifier = Modifier.testTag("nav_item_signals")
                     )
 
                     NavigationBarItem(
@@ -280,12 +287,12 @@ fun RigourApp(viewModel: RigourViewModel) {
                     )
 
                     NavigationBarItem(
-                        selected = contactSelected,
-                        onClick = { viewModel.navigateTo(Screen.ContactUs) },
-                        icon = { Icon(Icons.Default.Email, contentDescription = "Contact") },
-                        label = { Text(StringsDictionary.get("nav_contact", currentLanguage), fontSize = 10.sp) },
+                        selected = welcomeSelected,
+                        onClick = { viewModel.navigateTo(Screen.Welcome) },
+                        icon = { Icon(Icons.Default.Home, contentDescription = "Overview") },
+                        label = { Text(StringsDictionary.get("nav_welcome", currentLanguage), fontSize = 10.sp) },
                         colors = itemColors,
-                        modifier = Modifier.testTag("nav_item_contact")
+                        modifier = Modifier.testTag("nav_item_overview")
                     )
 
                     NavigationBarItem(
@@ -325,8 +332,23 @@ fun RigourApp(viewModel: RigourViewModel) {
                             onToggleFavoriteCoin = { viewModel.toggleFavorite(it) },
                             onSelectCoin = { viewModel.selectCoin(it) },
                             isLoading = isMarketLoading,
+                            isLoadingMore = isLoadingMore,
+                            hasMore = hasMore,
+                            onLoadMore = { viewModel.loadMoreCoins() },
                             onRefresh = { viewModel.loadCoins() },
                             lang = currentLanguage
+                        )
+                    }
+
+                    is Screen.Signals -> {
+                        SignalsScreen(
+                            signals = signals,
+                            isLoading = isSignalsLoading,
+                            subscription = subscription,
+                            lang = currentLanguage,
+                            onRefresh = { viewModel.computeSignals() },
+                            onSelectCoin = { viewModel.selectCoin(it) },
+                            onNavigateToSubscription = { viewModel.navigateTo(Screen.Subscription) }
                         )
                     }
 

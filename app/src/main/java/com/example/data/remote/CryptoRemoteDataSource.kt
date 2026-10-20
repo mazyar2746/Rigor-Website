@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit
 
 class CryptoRemoteDataSource(
     private val client: OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(8, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(12, TimeUnit.SECONDS)
         .addInterceptor { chain ->
             val original = chain.request()
             val requestWithUserAgent = original.newBuilder()
@@ -26,11 +26,11 @@ class CryptoRemoteDataSource(
         .build()
 ) {
 
-    // CoinMarketCap Pro API Endpoint for listings
-    suspend fun fetchCmcListings(apiKey: String, limit: Int = 30): List<CryptoCoin>? = withContext(Dispatchers.IO) {
+    // CoinMarketCap Pro API Endpoint for listings (supports pagination via start & limit)
+    suspend fun fetchCmcListings(apiKey: String, start: Int = 1, limit: Int = 100): List<CryptoCoin>? = withContext(Dispatchers.IO) {
         if (apiKey.isBlank()) return@withContext null
         try {
-            val url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=$limit&convert=USD"
+            val url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=$start&limit=$limit&convert=USD"
             val request = Request.Builder()
                 .url(url)
                 .addHeader("X-CMC_PRO_API_KEY", apiKey)
@@ -49,18 +49,19 @@ class CryptoRemoteDataSource(
 
             for (i in 0 until dataArray.length()) {
                 val obj = dataArray.getJSONObject(i)
-                val id = obj.getString("id")
-                val name = obj.getString("name")
-                val symbol = obj.getString("symbol")
-                val quote = obj.getJSONObject("quote").getJSONObject("USD")
-                val price = quote.optDouble("price", 0.0)
-                val change24h = quote.optDouble("percent_change_24h", 0.0)
-                val volume24h = quote.optDouble("volume_24h", 0.0)
-                val marketCap = quote.optDouble("market_cap", 0.0)
+                val id = obj.optString("id", "")
+                val name = obj.optString("name", "")
+                val symbol = obj.optString("symbol", "").uppercase()
+                val quote = obj.optJSONObject("quote")?.optJSONObject("USD")
+                val price = quote?.optDouble("price", 0.0) ?: 0.0
+                val change24h = quote?.optDouble("percent_change_24h", 0.0) ?: 0.0
+                val volume24h = quote?.optDouble("volume_24h", 0.0) ?: 0.0
+                val marketCap = quote?.optDouble("market_cap", 0.0) ?: 0.0
+                val cmcRank = obj.optInt("cmc_rank", start + i)
 
                 coins.add(
                     CryptoCoin(
-                        id = id,
+                        id = id.ifEmpty { symbol.lowercase() },
                         name = name,
                         symbol = symbol,
                         priceUsd = price,
@@ -69,8 +70,8 @@ class CryptoRemoteDataSource(
                         marketCap = marketCap,
                         high24h = price * (1.0 + (if (change24h > 0) change24h / 100 * 0.6 else 0.015)),
                         low24h = price * (1.0 - (if (change24h < 0) -change24h / 100 * 0.6 else 0.015)),
-                        rank = i + 1,
-                        iconUrl = "https://s2.coinmarketcap.com/static/img/coins/64x64/$id.png"
+                        rank = cmcRank,
+                        iconUrl = if (id.isNotEmpty()) "https://s2.coinmarketcap.com/static/img/coins/64x64/$id.png" else ""
                     )
                 )
             }
@@ -81,134 +82,38 @@ class CryptoRemoteDataSource(
         }
     }
 
-    // Public live market feed with automatic multi-tier fallback (Binance US -> Binance Global -> CoinGecko -> Preset)
-    suspend fun fetchPublicMarketCoins(): List<CryptoCoin> = withContext(Dispatchers.IO) {
-        // 1. Try Binance US (accessible from US cloud environments)
-        val binanceUsResult = fetchFromBinanceTicker("https://api.binance.us/api/v3/ticker/24hr")
-        if (!binanceUsResult.isNullOrEmpty()) {
-            return@withContext binanceUsResult
-        }
-
-        // 2. Try Binance Global
-        val binanceGlobalResult = fetchFromBinanceTicker("https://api.binance.com/api/v3/ticker/24hr")
-        if (!binanceGlobalResult.isNullOrEmpty()) {
-            return@withContext binanceGlobalResult
-        }
-
-        // 3. Try CoinGecko Public Markets API
-        val coinGeckoResult = fetchFromCoinGecko()
-        if (!coinGeckoResult.isNullOrEmpty()) {
-            return@withContext coinGeckoResult
-        }
-
-        // 4. Stable default preset coins
-        getPresetFallbackCoins()
-    }
-
-    private fun fetchFromBinanceTicker(endpoint: String): List<CryptoCoin>? {
-        return try {
-            val request = Request.Builder().url(endpoint).build()
-            val response = client.newCall(request).execute()
-            if (!response.isSuccessful) return null
-
-            val body = response.body?.string() ?: return null
-            val array = JSONArray(body)
-
-            val prioritizedSymbols = listOf(
-                "BTCUSDT" to ("Bitcoin" to "BTC"),
-                "ETHUSDT" to ("Ethereum" to "ETH"),
-                "BNBUSDT" to ("BNB" to "BNB"),
-                "SOLUSDT" to ("Solana" to "SOL"),
-                "XRPUSDT" to ("XRP" to "XRP"),
-                "DOGEUSDT" to ("Dogecoin" to "DOGE"),
-                "ADAUSDT" to ("Cardano" to "ADA"),
-                "AVAXUSDT" to ("Avalanche" to "AVAX"),
-                "LINKUSDT" to ("Chainlink" to "LINK"),
-                "SUIUSDT" to ("Sui" to "SUI"),
-                "NEARUSDT" to ("NEAR Protocol" to "NEAR"),
-                "DOTUSDT" to ("Polkadot" to "DOT"),
-                "TRXUSDT" to ("TRON" to "TRX"),
-                "MATICUSDT" to ("Polygon" to "MATIC"),
-                "LTCUSDT" to ("Litecoin" to "LTC"),
-                "UNIUSDT" to ("Uniswap" to "UNI"),
-                "APTUSDT" to ("Aptos" to "APT"),
-                "SHIBUSDT" to ("Shiba Inu" to "SHIB"),
-                "ATOMUSDT" to ("Cosmos" to "ATOM")
-            )
-
-            val map = mutableMapOf<String, JSONObject>()
-            for (i in 0 until array.length()) {
-                val item = array.getJSONObject(i)
-                val pair = item.optString("symbol")
-                if (pair.isNotEmpty()) {
-                    map[pair] = item
-                }
-            }
-
-            val result = mutableListOf<CryptoCoin>()
-            var rank = 1
-
-            for ((pair, info) in prioritizedSymbols) {
-                val item = map[pair]
-                if (item != null) {
-                    val price = item.optDouble("lastPrice", 0.0)
-                    val change = item.optDouble("priceChangePercent", 0.0)
-                    val volume = item.optDouble("quoteVolume", 0.0)
-                    val high = item.optDouble("highPrice", price * 1.02)
-                    val low = item.optDouble("lowPrice", price * 0.98)
-
-                    result.add(
-                        CryptoCoin(
-                            id = info.second.lowercase(),
-                            name = info.first,
-                            symbol = info.second,
-                            priceUsd = price,
-                            change24h = change,
-                            volume24h = volume,
-                            marketCap = volume * (40 - rank),
-                            high24h = high,
-                            low24h = low,
-                            rank = rank++,
-                            iconUrl = ""
-                        )
-                    )
-                }
-            }
-            if (result.isNotEmpty()) result else null
-        } catch (e: Exception) {
-            Log.d("CryptoRemote", "Binance endpoint $endpoint unavailable: ${e.message}")
-            null
-        }
-    }
-
-    private fun fetchFromCoinGecko(): List<CryptoCoin>? {
-        return try {
-            val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=1&sparkline=false"
+    // CoinGecko Markets API for high-volume paginated listings (250 coins per page, up to 1000+)
+    suspend fun fetchCoinGeckoPage(page: Int, perPage: Int = 250): List<CryptoCoin>? = withContext(Dispatchers.IO) {
+        try {
+            val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=$perPage&page=$page&sparkline=false"
             val request = Request.Builder().url(url).build()
             val response = client.newCall(request).execute()
-            if (!response.isSuccessful) return null
+            if (!response.isSuccessful) {
+                Log.w("CryptoRemote", "CoinGecko page $page returned status ${response.code}")
+                return@withContext null
+            }
 
-            val body = response.body?.string() ?: return null
+            val body = response.body?.string() ?: return@withContext null
             val array = JSONArray(body)
             val result = mutableListOf<CryptoCoin>()
 
             for (i in 0 until array.length()) {
                 val item = array.getJSONObject(i)
-                val id = item.getString("id")
-                val name = item.getString("name")
-                val symbol = item.getString("symbol").uppercase()
+                val id = item.optString("id", "")
+                val name = item.optString("name", "")
+                val symbol = item.optString("symbol", "").uppercase()
                 val price = item.optDouble("current_price", 0.0)
                 val change = item.optDouble("price_change_percentage_24h", 0.0)
                 val volume = item.optDouble("total_volume", 0.0)
                 val mcap = item.optDouble("market_cap", 0.0)
                 val high = item.optDouble("high_24h", price * 1.02)
                 val low = item.optDouble("low_24h", price * 0.98)
-                val rank = item.optInt("market_cap_rank", i + 1)
+                val rank = item.optInt("market_cap_rank", (page - 1) * perPage + i + 1)
                 val icon = item.optString("image", "")
 
                 result.add(
                     CryptoCoin(
-                        id = id,
+                        id = id.ifEmpty { symbol.lowercase() },
                         name = name,
                         symbol = symbol,
                         priceUsd = price,
@@ -222,17 +127,67 @@ class CryptoRemoteDataSource(
                     )
                 )
             }
-            if (result.isNotEmpty()) result else null
+            result
         } catch (e: Exception) {
-            Log.d("CryptoRemote", "CoinGecko fallback unavailable: ${e.message}")
+            Log.d("CryptoRemote", "CoinGecko page $page exception: ${e.message}")
             null
         }
     }
 
-    // Fetch real candlestick data with Binance.US, Binance Global, and synthesized backup
+    // Binance.US full ticker (returns 600+ real-time market pairs)
+    suspend fun fetchBinanceUsAllTickers(): List<CryptoCoin>? = withContext(Dispatchers.IO) {
+        try {
+            val url = "https://api.binance.us/api/v3/ticker/24hr"
+            val request = Request.Builder().url(url).build()
+            val response = client.newCall(request).execute()
+            if (!response.isSuccessful) return@withContext null
+
+            val body = response.body?.string() ?: return@withContext null
+            val array = JSONArray(body)
+            val result = mutableListOf<CryptoCoin>()
+
+            var currentRank = 1
+            for (i in 0 until array.length()) {
+                val item = array.getJSONObject(i)
+                val pair = item.optString("symbol", "")
+                if (pair.endsWith("USDT") || pair.endsWith("USD")) {
+                    val symbol = pair.replace("USDT", "").replace("USD", "").uppercase()
+                    val price = item.optDouble("lastPrice", 0.0)
+                    if (price <= 0.0) continue
+
+                    val change = item.optDouble("priceChangePercent", 0.0)
+                    val volume = item.optDouble("quoteVolume", 0.0)
+                    val high = item.optDouble("highPrice", price * 1.02)
+                    val low = item.optDouble("lowPrice", price * 0.98)
+
+                    result.add(
+                        CryptoCoin(
+                            id = symbol.lowercase(),
+                            name = symbol,
+                            symbol = symbol,
+                            priceUsd = price,
+                            change24h = change,
+                            volume24h = volume,
+                            marketCap = volume * 25.0,
+                            high24h = high,
+                            low24h = low,
+                            rank = currentRank++,
+                            iconUrl = ""
+                        )
+                    )
+                }
+            }
+            if (result.isNotEmpty()) result else null
+        } catch (e: Exception) {
+            Log.d("CryptoRemote", "Binance.US ticker fetch error: ${e.message}")
+            null
+        }
+    }
+
+    // Fetch real candlestick data for charts & technical analysis
     suspend fun fetchCandles(symbol: String, interval: String = "1h", limit: Int = 40): List<Candle> =
         withContext(Dispatchers.IO) {
-            val cleanSymbol = symbol.replace("USDT", "").uppercase()
+            val cleanSymbol = symbol.replace("USDT", "").replace("USD", "").uppercase()
             val pair = "${cleanSymbol}USDT"
 
             val klineEndpoints = listOf(
@@ -294,7 +249,7 @@ class CryptoRemoteDataSource(
         return candles
     }
 
-    private fun getPresetFallbackCoins(): List<CryptoCoin> {
+    fun getPresetFallbackCoins(): List<CryptoCoin> {
         return listOf(
             CryptoCoin("btc", "Bitcoin", "BTC", 68420.50, 2.85, 28900000000.0, 1340000000000.0, 69100.0, 67200.0, 1),
             CryptoCoin("eth", "Ethereum", "ETH", 2640.20, 1.95, 14500000000.0, 318000000000.0, 2690.0, 2580.0, 2),

@@ -1,6 +1,6 @@
 {
-  "name": "Rigour",
-  "description": "Professional cryptocurrency analysis, RSI, MACD & Bollinger Bands signal engine, live CoinMarketCap quotes, multi-language support, and BEP20 USDT subscription system.",
+  "name": "Rigor",
+  "description": "Professional cryptocurrency analysis, RSI, MACD & Bollinger Bands signal engine, live CoinMarketCap & CoinGecko quotes, multi-language support, and BEP20 USDT subscription system.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -18,3 +18,19 @@ data class FavoriteCoinEntity(
     @PrimaryKey val symbol: String,
     val addedAt: Long = System.currentTimeMillis()
 )
+
+@Entity(tableName = "cached_coins")
+data class CachedCoinEntity(
+    @PrimaryKey val symbol: String,
+    val id: String,
+    val name: String,
+    val priceUsd: Double,
+    val change24h: Double,
+    val volume24h: Double,
+    val marketCap: Double,
+    val high24h: Double,
+    val low24h: Double,
+    val rank: Int,
+    val iconUrl: String,
+    val cachedAt: Long = System.currentTimeMillis()
+)

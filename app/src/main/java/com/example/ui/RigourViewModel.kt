@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.local.RigourDatabase
+import com.example.data.model.CoinSignalData
 import com.example.data.model.CryptoCoin
 import com.example.data.model.SubscriptionPlan
 import com.example.data.model.TechnicalAnalysisResult
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 sealed class Screen {
     object Welcome : Screen()
     object Markets : Screen()
+    object Signals : Screen()
     data class CoinDetail(val coin: CryptoCoin) : Screen()
     object Subscription : Screen()
     object ContactUs : Screen()
@@ -34,7 +36,7 @@ sealed class Screen {
 class RigourViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = RigourDatabase.getInstance(application)
-    private val cryptoRepository = CryptoRepository(database.favoritesDao())
+    private val cryptoRepository = CryptoRepository(database.favoritesDao(), database.coinCacheDao())
     private val subscriptionRepository = SubscriptionRepository(database.subscriptionDao())
 
     // App Navigation
@@ -52,9 +54,11 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
     private val _onlyFavorites = MutableStateFlow(false)
     val onlyFavorites: StateFlow<Boolean> = _onlyFavorites.asStateFlow()
 
-    // Crypto Market Data
+    // Crypto Market Data & Pagination
     val coins: StateFlow<List<CryptoCoin>> = cryptoRepository.coins
     val isMarketLoading: StateFlow<Boolean> = cryptoRepository.isLoading
+    val isLoadingMore: StateFlow<Boolean> = cryptoRepository.isLoadingMore
+    val hasMore: StateFlow<Boolean> = cryptoRepository.hasMore
     val lastUpdated: StateFlow<Long> = cryptoRepository.lastUpdated
     val favoriteSymbols: StateFlow<List<String>> = cryptoRepository.favoriteSymbols
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
@@ -91,6 +95,13 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
     private val _isAnalysisLoading = MutableStateFlow(false)
     val isAnalysisLoading: StateFlow<Boolean> = _isAnalysisLoading.asStateFlow()
 
+    // Dedicated AI Trading Signals Stream
+    private val _signals = MutableStateFlow<List<CoinSignalData>>(emptyList())
+    val signals: StateFlow<List<CoinSignalData>> = _signals.asStateFlow()
+
+    private val _isSignalsLoading = MutableStateFlow(false)
+    val isSignalsLoading: StateFlow<Boolean> = _isSignalsLoading.asStateFlow()
+
     // Subscription & Paywall
     val subscription: StateFlow<UserSubscription> = subscriptionRepository.currentSubscriptionFlow
         .stateIn(
@@ -121,13 +132,45 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
     private var refreshJob: Job? = null
 
     init {
-        // Initial fetch and start 60s periodic loop
-        loadCoins()
+        viewModelScope.launch {
+            cryptoRepository.initializeFromCache()
+            cryptoRepository.refreshCoins(_cmcApiKey.value)
+            computeSignals()
+        }
         startPeriodicRefresh()
+    }
+
+    fun loadMoreCoins() {
+        viewModelScope.launch {
+            cryptoRepository.loadNextBatch(_cmcApiKey.value)
+        }
+    }
+
+    fun computeSignals() {
+        viewModelScope.launch {
+            _isSignalsLoading.value = true
+            val currentCoins = coins.value.take(25)
+            val list = mutableListOf<CoinSignalData>()
+            for (coin in currentCoins) {
+                try {
+                    val analysis = cryptoRepository.getTechnicalAnalysis(coin, "1h")
+                    list.add(CoinSignalData(coin, analysis))
+                } catch (e: Exception) {
+                    val candles = cryptoRepository.remoteDataSource.generateSynthesizedCandles(coin.symbol, coin.priceUsd)
+                    val analysis = com.example.engine.TechnicalAnalysisEngine.analyze(coin.symbol, coin.priceUsd, candles)
+                    list.add(CoinSignalData(coin, analysis))
+                }
+            }
+            _signals.value = list
+            _isSignalsLoading.value = false
+        }
     }
 
     fun navigateTo(screen: Screen) {
         _currentScreen.value = screen
+        if (screen is Screen.Signals && _signals.value.isEmpty()) {
+            computeSignals()
+        }
     }
 
     fun selectCoin(coin: CryptoCoin) {

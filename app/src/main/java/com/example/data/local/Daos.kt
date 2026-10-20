@@ -40,3 +40,22 @@ interface FavoritesDao {
     @Query("SELECT EXISTS(SELECT 1 FROM favorite_coins WHERE symbol = :symbol)")
     suspend fun isFavorite(symbol: String): Boolean
 }
+
+@Dao
+interface CoinCacheDao {
+
+    @Query("SELECT * FROM cached_coins ORDER BY rank ASC")
+    suspend fun getAllCachedCoins(): List<CachedCoinEntity>
+
+    @Query("SELECT * FROM cached_coins ORDER BY rank ASC")
+    fun getAllCachedCoinsFlow(): Flow<List<CachedCoinEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdateCoins(coins: List<CachedCoinEntity>)
+
+    @Query("SELECT COUNT(*) FROM cached_coins")
+    suspend fun getCount(): Int
+
+    @Query("DELETE FROM cached_coins")
+    suspend fun clearCache()
+}

@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [VerifiedTxEntity::class, FavoriteCoinEntity::class],
-    version = 1,
+    entities = [VerifiedTxEntity::class, FavoriteCoinEntity::class, CachedCoinEntity::class],
+    version = 2,
     exportSchema = false
 )
 abstract class RigourDatabase : RoomDatabase() {
     abstract fun subscriptionDao(): SubscriptionDao
     abstract fun favoritesDao(): FavoritesDao
+    abstract fun coinCacheDao(): CoinCacheDao
 
     companion object {
         @Volatile
@@ -23,7 +24,7 @@ abstract class RigourDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     RigourDatabase::class.java,
-                    "rigour_crypto.db"
+                    "rigor_crypto.db"
                 ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 instance
