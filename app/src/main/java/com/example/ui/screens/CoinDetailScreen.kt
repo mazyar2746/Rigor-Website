@@ -20,8 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.CryptoCoin
+import com.example.data.model.MarketDataProvenance
 import com.example.data.model.TechnicalAnalysisResult
 import com.example.data.model.UserSubscription
 import com.example.i18n.Language
@@ -218,6 +223,114 @@ fun CoinDetailScreen(
             }
 
             Spacer(modifier = Modifier.height(14.dp))
+
+            // Market Data Provenance Status Badge
+            if (analysisResult != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val (badgeBg, badgeBorder, badgeText, badgeIcon, label) = when (analysisResult.provenance) {
+                        MarketDataProvenance.LIVE_EXCHANGE -> {
+                            Triple(
+                                RigourBullish.copy(alpha = 0.15f),
+                                RigourBullish.copy(alpha = 0.4f),
+                                RigourBullish
+                            ) to (Icons.Default.CheckCircle to (analysisResult.dataSourceNotice ?: "Live Market Data"))
+                        }
+                        MarketDataProvenance.CACHED_EXCHANGE -> {
+                            Triple(
+                                RigourCyan.copy(alpha = 0.15f),
+                                RigourCyan.copy(alpha = 0.4f),
+                                RigourCyan
+                            ) to (Icons.Default.History to (analysisResult.dataSourceNotice ?: "Cached Market Data"))
+                        }
+                        MarketDataProvenance.SYNTHETIC -> {
+                            Triple(
+                                RigourGold.copy(alpha = 0.15f),
+                                RigourGold.copy(alpha = 0.5f),
+                                RigourGold
+                            ) to (Icons.Default.Warning to "SIMULATION PREVIEW (Signals Locked)")
+                        }
+                        MarketDataProvenance.UNAVAILABLE -> {
+                            Triple(
+                                Color.Gray.copy(alpha = 0.15f),
+                                Color.Gray.copy(alpha = 0.4f),
+                                Color.LightGray
+                            ) to (Icons.Default.Info to "MARKET DATA UNAVAILABLE")
+                        }
+                    }.let { (colors, iconAndLabel) ->
+                        arrayOf(colors.first, colors.second, colors.third, iconAndLabel.first, iconAndLabel.second)
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(badgeBg as Color)
+                            .border(1.dp, badgeBorder as Color, RoundedCornerShape(8.dp))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = badgeIcon as androidx.compose.ui.graphics.vector.ImageVector,
+                                contentDescription = null,
+                                tint = badgeText as Color,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = label as String,
+                                color = badgeText,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = "TF: $currentTimeframe",
+                        color = Color.Gray,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                // Explicit simulation warning banner: Never mislead user about synthetic data
+                if (analysisResult.provenance == MarketDataProvenance.SYNTHETIC) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 10.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(RigourGold.copy(alpha = 0.10f))
+                            .border(1.dp, RigourGold.copy(alpha = 0.4f), RoundedCornerShape(10.dp))
+                            .padding(10.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.Top) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = null,
+                                tint = RigourGold,
+                                modifier = Modifier.size(16.dp).padding(top = 2.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = if (lang == Language.PERSIAN) {
+                                    "توجه: داده‌های تاریخی صرافی برای جفت‌ارز ${coin.symbol} موقتاً در دسترس نیست. این نمودار صرفاً شبیه‌سازی نمایشی است. جهت حفاظت از سرمایه شما، سیگنال‌ها و تارگت‌های قیمتی قفل شده‌اند."
+                                } else {
+                                    "Notice: Live exchange candlestick history is currently unavailable for ${coin.symbol}. Displaying synthetic simulation for chart preview only. Trading signals and targets are locked to protect trading capital."
+                                },
+                                color = RigourGold,
+                                fontSize = 11.sp,
+                                lineHeight = 16.sp
+                            )
+                        }
+                    }
+                }
+            }
 
             // Candlestick Chart with Bollinger Bands
             if (analysisResult != null) {

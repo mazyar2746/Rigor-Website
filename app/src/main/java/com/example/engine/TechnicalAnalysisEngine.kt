@@ -1,6 +1,8 @@
 package com.example.engine
 
+import android.util.Log
 import com.example.data.model.Candle
+import com.example.data.model.MarketDataProvenance
 import com.example.data.model.SignalType
 import com.example.data.model.TechnicalAnalysisResult
 import kotlin.math.abs
@@ -9,27 +11,114 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+/**
+ * Rigor Quantitative Technical Analysis Engine.
+ * Implements classical Floor Pivot Points, 14-period Wilder RSI,
+ * (12, 26, 9) MACD, and 20-period 2σ Bollinger Bands with strict
+ * price unit normalization and mathematically verified risk targets.
+ */
 object TechnicalAnalysisEngine {
+
+    private const val TAG = "TechAnalysisEngine"
+
+    private fun logE(tag: String, msg: String) {
+        try {
+            Log.e(tag, msg)
+        } catch (_: Throwable) {
+            System.err.println("ERROR [$tag] $msg")
+        }
+    }
+
+    private fun logW(tag: String, msg: String) {
+        try {
+            Log.w(tag, msg)
+        } catch (_: Throwable) {
+            println("WARN [$tag] $msg")
+        }
+    }
 
     fun analyze(
         symbol: String,
         currentPrice: Double,
-        candles: List<Candle>
+        candles: List<Candle>,
+        provenance: MarketDataProvenance = MarketDataProvenance.LIVE_EXCHANGE,
+        sourceExchange: String? = null
     ): TechnicalAnalysisResult {
-        val closes = candles.map { it.close }
-        val highs = candles.map { it.high }
-        val lows = candles.map { it.low }
+        // Defensive validation of input currentPrice
+        if (currentPrice <= 0.0 || currentPrice.isNaN() || currentPrice.isInfinite()) {
+            logE(TAG, "[$symbol] Invalid currentPrice: $currentPrice. Aborting analysis.")
+            return createUnavailableResult(symbol, currentPrice, candles, MarketDataProvenance.UNAVAILABLE, "Invalid asset price.")
+        }
 
+        // Defensive validation of candlestick history: empty candles must NOT generate fake signals
+        if (candles.isEmpty()) {
+            logW(TAG, "[$symbol] Candlestick history is empty. Aborting analysis.")
+            return createUnavailableResult(symbol, currentPrice, emptyList(), MarketDataProvenance.UNAVAILABLE, "Candlestick data unavailable.")
+        }
+
+        // Normalize and unit-align candle series
+        val normalizedCandles = normalizeCandles(symbol, currentPrice, candles)
+        if (normalizedCandles.isEmpty()) {
+            logW(TAG, "[$symbol] Normalized candle series is empty. Aborting analysis.")
+            return createUnavailableResult(symbol, currentPrice, emptyList(), MarketDataProvenance.UNAVAILABLE, "Candlestick data invalid.")
+        }
+
+        // CRITICAL REQUIREMENT: Synthetic data must NEVER masquerade as real market data or generate trading signals
+        if (provenance == MarketDataProvenance.SYNTHETIC) {
+            logW(TAG, "[$symbol] Synthetic data provenance detected. Gating analysis: real signals locked.")
+            val closes = normalizedCandles.map { it.close }
+            val bbData = calculateBollingerBands(closes, period = 20, multiplier = 2.0)
+            return TechnicalAnalysisResult(
+                coinSymbol = symbol,
+                currentPrice = currentPrice,
+                rsi = 50.0,
+                rsiSignal = SignalType.NEUTRAL,
+                rsiDescription = "Simulation Preview: Technical indicators disabled to protect trading capital.",
+                macdLine = 0.0,
+                macdSignalLine = 0.0,
+                macdHistogram = 0.0,
+                macdSignal = SignalType.NEUTRAL,
+                macdDescription = "Simulation Preview: Technical indicators disabled to protect trading capital.",
+                bbUpper = bbData.upper,
+                bbMiddle = bbData.middle,
+                bbLower = bbData.lower,
+                bbSignal = SignalType.NEUTRAL,
+                bbDescription = "Simulation Preview: Synthetic envelope only. No trading signals generated.",
+                overallSignal = SignalType.NEUTRAL,
+                confidencePercent = 0,
+                shortTermTarget = Double.NaN,
+                mediumTermTarget = Double.NaN,
+                stopLoss = Double.NaN,
+                resistance2 = Double.NaN,
+                resistance1 = Double.NaN,
+                pivotPoint = Double.NaN,
+                support1 = Double.NaN,
+                support2 = Double.NaN,
+                candles = normalizedCandles,
+                provenance = MarketDataProvenance.SYNTHETIC,
+                dataSourceNotice = "⚠️ SIMULATION PREVIEW: Generated price series. Real market history unavailable."
+            )
+        }
+
+        if (provenance == MarketDataProvenance.UNAVAILABLE) {
+            return createUnavailableResult(symbol, currentPrice, candles, MarketDataProvenance.UNAVAILABLE, "Market data unavailable.")
+        }
+
+        val closes = normalizedCandles.map { it.close }
+
+        // Indicator 1: 14-period Wilder's Smoothed RSI
         val rsiValue = calculateRSI(closes, period = 14)
         val (rsiSignal, rsiDesc) = evaluateRSI(rsiValue)
 
+        // Indicator 2: MACD (12, 26, 9)
         val macdData = calculateMACD(closes, fastPeriod = 12, slowPeriod = 26, signalPeriod = 9)
         val (macdSignal, macdDesc) = evaluateMACD(macdData.macdLine, macdData.signalLine, macdData.histogram)
 
+        // Indicator 3: Bollinger Bands (20 SMA, 2.0 stdDev)
         val bbData = calculateBollingerBands(closes, period = 20, multiplier = 2.0)
-        val (bbSignal, bbDesc) = evaluateBollinger(currentPrice, bbData.upper, bbData.lower)
+        val (bbSignal, bbDesc) = evaluateBollinger(currentPrice, bbData.upper, bbData.middle, bbData.lower)
 
-        // Combine indicators for confluence
+        // Combine indicators for confluence scoring
         var buyPoints = 0.0
         var sellPoints = 0.0
 
@@ -68,45 +157,101 @@ object TechnicalAnalysisEngine {
 
         val confidence = min(98, max(52, (50 + abs(net) * 12).toInt()))
 
-        // Support and Resistance calculation using Classical Pivot Points
-        val recentHigh = highs.takeLast(20).maxOrNull() ?: (currentPrice * 1.04)
-        val recentLow = lows.takeLast(20).minOrNull() ?: (currentPrice * 0.96)
-        val pivot = (recentHigh + recentLow + currentPrice) / 3.0
-        val r1 = 2 * pivot - recentLow
-        val s1 = 2 * pivot - recentHigh
-        val r2 = pivot + (recentHigh - recentLow)
-        val s2 = pivot - (recentHigh - recentLow)
-
-        // Targets calculation based on momentum & volatility
-        val volatility = (bbData.upper - bbData.lower) / (bbData.middle.coerceAtLeast(0.0001))
-        val momentumMultiplier = when (overallSignal) {
-            SignalType.STRONG_BUY -> 1.0 + (volatility * 0.6).coerceIn(0.02, 0.12)
-            SignalType.BUY -> 1.0 + (volatility * 0.35).coerceIn(0.015, 0.08)
-            SignalType.STRONG_SELL -> 1.0 - (volatility * 0.6).coerceIn(0.02, 0.12)
-            SignalType.SELL -> 1.0 - (volatility * 0.35).coerceIn(0.015, 0.08)
-            SignalType.NEUTRAL -> 1.008
+        // Classical Floor Pivot Points calculated from the reference completed candle
+        // Formula: PP = (H + L + C) / 3, R1 = 2*PP - L, S1 = 2*PP - H, R2 = PP + (H - L), S2 = PP - (H - L)
+        val refCandle = if (normalizedCandles.size >= 2) {
+            normalizedCandles[normalizedCandles.size - 2]
+        } else {
+            normalizedCandles.last()
         }
 
-        val shortTerm = if (overallSignal == SignalType.BUY || overallSignal == SignalType.STRONG_BUY) {
-            max(currentPrice * 1.015, min(r1, currentPrice * momentumMultiplier))
-        } else if (overallSignal == SignalType.SELL || overallSignal == SignalType.STRONG_SELL) {
-            min(currentPrice * 0.985, max(s1, currentPrice * momentumMultiplier))
-        } else {
-            currentPrice * 1.012
+        val rawH = refCandle.high
+        val rawL = refCandle.low
+        val rawC = refCandle.close
+
+        val h = maxOf(rawH, rawL, rawC)
+        val l = minOf(rawH, rawL, rawC).coerceAtLeast(1e-12)
+        val c = rawC.coerceIn(l, h)
+
+        val pivot = (h + l + c) / 3.0
+        val r1 = (2.0 * pivot) - l
+        val s1 = (2.0 * pivot) - h
+        val r2 = pivot + (h - l)
+        val s2 = pivot - (h - l)
+
+        // Mathematical invariant sanity check: R2 >= R1 >= PP >= S1 >= S2
+        if (!(r2 >= r1 && r1 >= pivot && pivot >= s1 && s1 >= s2)) {
+            logW(TAG, "[$symbol] Pivot ordering invariant violation: R2=$r2, R1=$r1, PP=$pivot, S1=$s1, S2=$s2 with h=$h, l=$l, c=$c")
         }
 
-        val mediumTerm = if (overallSignal == SignalType.BUY || overallSignal == SignalType.STRONG_BUY) {
-            max(shortTerm * 1.025, r2)
-        } else if (overallSignal == SignalType.SELL || overallSignal == SignalType.STRONG_SELL) {
-            min(shortTerm * 0.975, s2)
+        // Relative volatility from Bollinger Bandwidth: (Upper - Lower) / Middle
+        val volatility = if (bbData.middle > 0.0) {
+            ((bbData.upper - bbData.lower) / bbData.middle).coerceIn(0.005, 0.50)
         } else {
-            currentPrice * 1.035
+            0.02
         }
 
-        val stopLoss = if (overallSignal == SignalType.BUY || overallSignal == SignalType.STRONG_BUY) {
-            min(currentPrice * 0.965, max(s1 * 0.99, bbData.lower * 0.985))
-        } else {
-            max(currentPrice * 1.035, r1 * 1.01)
+        // Projected Price Targets with direction consistency
+        val shortTerm = when (overallSignal) {
+            SignalType.STRONG_BUY, SignalType.BUY -> {
+                val momentumTarget = currentPrice * (1.0 + (volatility * 0.5).coerceIn(0.015, 0.08))
+                if (r1 > currentPrice) {
+                    min(r1, momentumTarget).coerceAtLeast(currentPrice * 1.01)
+                } else {
+                    momentumTarget.coerceAtLeast(currentPrice * 1.01)
+                }
+            }
+            SignalType.STRONG_SELL, SignalType.SELL -> {
+                val momentumTarget = currentPrice * (1.0 - (volatility * 0.5).coerceIn(0.015, 0.08))
+                if (s1 < currentPrice && s1 > 0.0) {
+                    max(s1, momentumTarget).coerceAtMost(currentPrice * 0.99)
+                } else {
+                    momentumTarget.coerceAtMost(currentPrice * 0.99)
+                }
+            }
+            SignalType.NEUTRAL -> {
+                currentPrice * (1.0 + (volatility * 0.25).coerceIn(0.01, 0.03))
+            }
+        }
+
+        val mediumTerm = when (overallSignal) {
+            SignalType.STRONG_BUY, SignalType.BUY -> {
+                val momentumTarget = shortTerm * (1.0 + (volatility * 0.7).coerceIn(0.025, 0.12))
+                if (r2 > shortTerm) {
+                    max(r2, momentumTarget).coerceAtLeast(shortTerm * 1.015)
+                } else {
+                    momentumTarget.coerceAtLeast(shortTerm * 1.015)
+                }
+            }
+            SignalType.STRONG_SELL, SignalType.SELL -> {
+                val momentumTarget = shortTerm * (1.0 - (volatility * 0.7).coerceIn(0.025, 0.12))
+                if (s2 < shortTerm && s2 > 0.0) {
+                    min(s2, momentumTarget).coerceAtMost(shortTerm * 0.985)
+                } else {
+                    momentumTarget.coerceAtMost(shortTerm * 0.985)
+                }
+            }
+            SignalType.NEUTRAL -> {
+                shortTerm * (1.0 + (volatility * 0.4).coerceIn(0.02, 0.05))
+            }
+        }
+
+        // Recommended Stop-Loss based on trade direction and support/resistance structure
+        val stopLoss = when (overallSignal) {
+            SignalType.STRONG_BUY, SignalType.BUY, SignalType.NEUTRAL -> {
+                // Long trade stop-loss placed BELOW entry price
+                val supportLevel = if (s1 > 0.0 && s1 < currentPrice) s1 else currentPrice * 0.97
+                val lowerBand = if (bbData.lower > 0.0 && bbData.lower < currentPrice) bbData.lower else currentPrice * 0.97
+                val structuralStop = min(supportLevel * 0.995, lowerBand * 0.995)
+                structuralStop.coerceIn(currentPrice * 0.94, currentPrice * 0.985)
+            }
+            SignalType.STRONG_SELL, SignalType.SELL -> {
+                // Short trade stop-loss placed ABOVE entry price
+                val resistLevel = if (r1 > currentPrice) r1 else currentPrice * 1.03
+                val upperBand = if (bbData.upper > currentPrice) bbData.upper else currentPrice * 1.03
+                val structuralStop = max(resistLevel * 1.005, upperBand * 1.005)
+                structuralStop.coerceIn(currentPrice * 1.015, currentPrice * 1.06)
+            }
         }
 
         return TechnicalAnalysisResult(
@@ -135,7 +280,87 @@ object TechnicalAnalysisEngine {
             pivotPoint = pivot,
             support1 = s1,
             support2 = s2,
-            candles = candles
+            candles = normalizedCandles,
+            provenance = provenance,
+            dataSourceNotice = if (provenance == MarketDataProvenance.LIVE_EXCHANGE) {
+                "Live Market Data (${sourceExchange ?: "Exchange Verified"})"
+            } else {
+                "Cached Market Data (${sourceExchange ?: "Historical"})"
+            }
+        )
+    }
+
+    /**
+     * Normalizes candles to match the unit and denomination of currentPrice.
+     * Prevents cross-unit distortions (e.g. 1000SHIB vs SHIB, or fallback candle basePrice mismatch).
+     */
+    private fun normalizeCandles(symbol: String, currentPrice: Double, candles: List<Candle>): List<Candle> {
+        if (candles.isEmpty()) {
+            return emptyList()
+        }
+
+        val lastClose = candles.last().close
+        if (lastClose <= 0.0 || lastClose.isNaN()) {
+            logW(TAG, "[$symbol] Invalid candle close: $lastClose. Rejecting candles.")
+            return emptyList()
+        }
+
+        val ratio = lastClose / currentPrice
+        // Detect significant unit scale discrepancies (e.g. 1000x multiplier or mismatched currencies)
+        if (ratio > 5.0 || ratio < 0.2) {
+            val scaleFactor = currentPrice / lastClose
+            logW(TAG, "[$symbol] Unit mismatch detected (candle close=$lastClose, currentPrice=$currentPrice, ratio=$ratio). Normalizing candles by scale factor $scaleFactor.")
+            return candles.map { c ->
+                Candle(
+                    timestamp = c.timestamp,
+                    open = c.open * scaleFactor,
+                    high = c.high * scaleFactor,
+                    low = c.low * scaleFactor,
+                    close = c.close * scaleFactor,
+                    volume = c.volume
+                )
+            }
+        }
+
+        return candles
+    }
+
+    fun createUnavailableResult(
+        symbol: String,
+        currentPrice: Double,
+        candles: List<Candle>,
+        provenance: MarketDataProvenance = MarketDataProvenance.UNAVAILABLE,
+        reason: String = "Data insufficient for technical analysis."
+    ): TechnicalAnalysisResult {
+        return TechnicalAnalysisResult(
+            coinSymbol = symbol,
+            currentPrice = currentPrice,
+            rsi = 50.0,
+            rsiSignal = SignalType.NEUTRAL,
+            rsiDescription = reason,
+            macdLine = 0.0,
+            macdSignalLine = 0.0,
+            macdHistogram = 0.0,
+            macdSignal = SignalType.NEUTRAL,
+            macdDescription = reason,
+            bbUpper = Double.NaN,
+            bbMiddle = Double.NaN,
+            bbLower = Double.NaN,
+            bbSignal = SignalType.NEUTRAL,
+            bbDescription = reason,
+            overallSignal = SignalType.NEUTRAL,
+            confidencePercent = 0,
+            shortTermTarget = Double.NaN,
+            mediumTermTarget = Double.NaN,
+            stopLoss = Double.NaN,
+            resistance2 = Double.NaN,
+            resistance1 = Double.NaN,
+            pivotPoint = Double.NaN,
+            support1 = Double.NaN,
+            support2 = Double.NaN,
+            candles = candles,
+            provenance = provenance,
+            dataSourceNotice = reason
         )
     }
 
@@ -163,7 +388,7 @@ object TechnicalAnalysisEngine {
             avgLoss = (avgLoss * (period - 1) + currentLoss) / period
         }
 
-        if (avgLoss == 0.0) return 100.0
+        if (avgLoss == 0.0) return if (avgGain == 0.0) 50.0 else 100.0
         val rs = avgGain / avgLoss
         return (100.0 - (100.0 / (1.0 + rs))).coerceIn(0.0, 100.0)
     }
@@ -214,12 +439,13 @@ object TechnicalAnalysisEngine {
     }
 
     private fun evaluateMACD(macd: Double, signal: Double, hist: Double): Pair<SignalType, String> {
+        val magnitudeRef = maxOf(abs(macd), abs(signal), 1e-9)
         return when {
-            hist > 0 && macd > signal && hist > abs(macd * 0.1) ->
+            hist > 0 && macd > signal && hist > magnitudeRef * 0.1 ->
                 SignalType.STRONG_BUY to "Bullish expansion: MACD line accelerating above signal line."
             hist > 0 && macd > signal ->
                 SignalType.BUY to "Bullish crossover confirmed. Upward trend developing."
-            hist < 0 && macd < signal && abs(hist) > abs(macd * 0.1) ->
+            hist < 0 && macd < signal && abs(hist) > magnitudeRef * 0.1 ->
                 SignalType.STRONG_SELL to "Bearish expansion: MACD plunging below signal line."
             hist < 0 && macd < signal ->
                 SignalType.SELL to "Bearish crossover detected. Downward momentum active."
@@ -253,33 +479,42 @@ object TechnicalAnalysisEngine {
     ): BollingerOutput {
         if (prices.size < period) {
             val avg = if (prices.isNotEmpty()) prices.average() else 0.0
-            return BollingerOutput(avg * 1.05, avg, avg * 0.95)
+            return BollingerOutput(avg * 1.05, avg, (avg * 0.95).coerceAtLeast(0.0))
         }
 
         val subset = prices.takeLast(period)
         val sma = subset.average()
         val variance = subset.map { (it - sma).pow(2.0) }.average()
-        val stdDev = sqrt(variance)
+        val stdDev = sqrt(max(0.0, variance))
 
         return BollingerOutput(
             upper = sma + (multiplier * stdDev),
             middle = sma,
-            lower = sma - (multiplier * stdDev)
+            lower = max(0.0, sma - (multiplier * stdDev))
         )
     }
 
-    private fun evaluateBollinger(price: Double, upper: Double, lower: Double): Pair<SignalType, String> {
+    private fun evaluateBollinger(
+        price: Double,
+        upper: Double,
+        middle: Double,
+        lower: Double
+    ): Pair<SignalType, String> {
+        if (price <= 0.0 || upper <= 0.0 || lower < 0.0 || upper.isNaN() || lower.isNaN()) {
+            return SignalType.NEUTRAL to "Bollinger envelope data insufficient."
+        }
+
         return when {
             price <= lower ->
-                SignalType.STRONG_BUY to "Price pierced lower 2σ band. Strong mean reversion support."
+                SignalType.STRONG_BUY to "Price pierced lower 2σ band. Potential mean reversion support zone."
             price <= lower * 1.01 ->
                 SignalType.BUY to "Price testing lower band support. Oversold dynamic."
             price >= upper ->
-                SignalType.STRONG_SELL to "Price pierced upper 2σ band. Overextended at resistance."
+                SignalType.STRONG_SELL to "Price pierced upper 2σ band. Overextended near resistance zone."
             price >= upper * 0.99 ->
                 SignalType.SELL to "Price testing upper band resistance. Exhaustion risk."
             else ->
-                SignalType.NEUTRAL to "Price oscillating comfortably within Bollinger envelope."
+                SignalType.NEUTRAL to "Price oscillating within Bollinger envelope."
         }
     }
 }

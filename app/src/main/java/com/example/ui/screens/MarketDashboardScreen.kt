@@ -421,9 +421,5 @@ fun CoinListItem(
 }
 
 fun formatPrice(price: Double): String {
-    return when {
-        price >= 1.0 -> String.format(Locale.US, "$%,.2f", price)
-        price >= 0.01 -> String.format(Locale.US, "$%.4f", price)
-        else -> String.format(Locale.US, "$%.6f", price)
-    }
+    return com.example.ui.util.PriceFormatter.formatPrice(price)
 }

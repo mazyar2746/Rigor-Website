@@ -80,7 +80,7 @@ fun WelcomeScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.rigour_hero),
-                contentDescription = "Rigour Crypto Dashboard Banner",
+                contentDescription = "Rigor Crypto Dashboard Banner",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )

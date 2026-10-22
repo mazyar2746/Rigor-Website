@@ -31,6 +31,19 @@ enum class SignalType {
     STRONG_SELL
 }
 
+enum class MarketDataProvenance {
+    LIVE_EXCHANGE,
+    CACHED_EXCHANGE,
+    SYNTHETIC,
+    UNAVAILABLE
+}
+
+data class CandleResult(
+    val candles: List<Candle>,
+    val provenance: MarketDataProvenance,
+    val sourceExchange: String? = null
+)
+
 data class TechnicalAnalysisResult(
     val coinSymbol: String,
     val currentPrice: Double,
@@ -57,7 +70,9 @@ data class TechnicalAnalysisResult(
     val pivotPoint: Double,
     val support1: Double,
     val support2: Double,
-    val candles: List<Candle>
+    val candles: List<Candle>,
+    val provenance: MarketDataProvenance = MarketDataProvenance.LIVE_EXCHANGE,
+    val dataSourceNotice: String? = null
 )
 
 data class CoinSignalData(

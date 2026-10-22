@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.data.model.MarketDataProvenance
 import com.example.data.model.SignalType
 import com.example.data.model.TechnicalAnalysisResult
 import com.example.i18n.Language
@@ -61,32 +62,44 @@ fun SignalConfluenceCard(
     lang: Language,
     modifier: Modifier = Modifier
 ) {
-    val (signalText, signalColor, signalBg) = when (result.overallSignal) {
-        SignalType.STRONG_BUY -> Triple(
-            StringsDictionary.get("signal_strong_buy", lang),
-            RigourBullish,
-            RigourBullish.copy(alpha = 0.15f)
-        )
-        SignalType.BUY -> Triple(
-            StringsDictionary.get("signal_buy", lang),
-            RigourBullish,
-            RigourBullish.copy(alpha = 0.12f)
-        )
-        SignalType.STRONG_SELL -> Triple(
-            StringsDictionary.get("signal_strong_sell", lang),
-            RigourBearish,
-            RigourBearish.copy(alpha = 0.15f)
-        )
-        SignalType.SELL -> Triple(
-            StringsDictionary.get("signal_sell", lang),
-            RigourBearish,
-            RigourBearish.copy(alpha = 0.12f)
-        )
-        SignalType.NEUTRAL -> Triple(
-            StringsDictionary.get("signal_neutral", lang),
+    val (signalText, signalColor, signalBg) = when {
+        result.provenance == MarketDataProvenance.SYNTHETIC -> Triple(
+            if (lang == Language.PERSIAN) "شبیه‌سازی نمایشی" else "SIMULATION PREVIEW",
             RigourGold,
-            RigourGold.copy(alpha = 0.12f)
+            RigourGold.copy(alpha = 0.15f)
         )
+        result.provenance == MarketDataProvenance.UNAVAILABLE -> Triple(
+            if (lang == Language.PERSIAN) "داده‌ها در دسترس نیست" else "DATA UNAVAILABLE",
+            Color.Gray,
+            Color.Gray.copy(alpha = 0.15f)
+        )
+        else -> when (result.overallSignal) {
+            SignalType.STRONG_BUY -> Triple(
+                StringsDictionary.get("signal_strong_buy", lang),
+                RigourBullish,
+                RigourBullish.copy(alpha = 0.15f)
+            )
+            SignalType.BUY -> Triple(
+                StringsDictionary.get("signal_buy", lang),
+                RigourBullish,
+                RigourBullish.copy(alpha = 0.12f)
+            )
+            SignalType.STRONG_SELL -> Triple(
+                StringsDictionary.get("signal_strong_sell", lang),
+                RigourBearish,
+                RigourBearish.copy(alpha = 0.15f)
+            )
+            SignalType.SELL -> Triple(
+                StringsDictionary.get("signal_sell", lang),
+                RigourBearish,
+                RigourBearish.copy(alpha = 0.12f)
+            )
+            SignalType.NEUTRAL -> Triple(
+                StringsDictionary.get("signal_neutral", lang),
+                RigourGold,
+                RigourGold.copy(alpha = 0.12f)
+            )
+        }
     }
 
     Box(
@@ -369,14 +382,14 @@ fun MacdVisualizerCard(
 
                 Row {
                     Text(
-                        text = "MACD: " + String.format(Locale.US, "%.2f", macd),
+                        text = "MACD: " + com.example.ui.util.PriceFormatter.formatIndicator(macd),
                         color = ChartMacdLine,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Sig: " + String.format(Locale.US, "%.2f", signal),
+                        text = "Sig: " + com.example.ui.util.PriceFormatter.formatIndicator(signal),
                         color = ChartSignalLine,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold
@@ -400,7 +413,7 @@ fun MacdVisualizerCard(
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Text(
-                        text = String.format(Locale.US, "%+.3f", histogram),
+                        text = com.example.ui.util.PriceFormatter.formatIndicator(histogram),
                         color = histColor,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold
@@ -464,15 +477,15 @@ fun BollingerVisualizerCard(
             ) {
                 Column {
                     Text("Upper (Res)", color = Color.Gray, fontSize = 10.sp)
-                    Text(String.format(Locale.US, "$%.2f", upper), color = RigourBearish, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(com.example.ui.util.PriceFormatter.formatPrice(upper), color = RigourBearish, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Middle (SMA)", color = Color.Gray, fontSize = 10.sp)
-                    Text(String.format(Locale.US, "$%.2f", middle), color = RigourCyan, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(com.example.ui.util.PriceFormatter.formatPrice(middle), color = RigourCyan, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text("Lower (Supp)", color = Color.Gray, fontSize = 10.sp)
-                    Text(String.format(Locale.US, "$%.2f", lower), color = RigourBullish, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(com.example.ui.util.PriceFormatter.formatPrice(lower), color = RigourBullish, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
 

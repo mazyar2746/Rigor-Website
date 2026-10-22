@@ -1,14 +1,18 @@
 package com.example.data.repository
 
+import android.content.Context
 import android.util.Log
 import com.example.data.local.CachedCoinEntity
 import com.example.data.local.CoinCacheDao
 import com.example.data.local.FavoriteCoinEntity
 import com.example.data.local.FavoritesDao
+import com.example.data.model.CandleResult
 import com.example.data.model.CryptoCoin
+import com.example.data.model.MarketDataProvenance
 import com.example.data.model.TechnicalAnalysisResult
 import com.example.data.remote.CryptoRemoteDataSource
 import com.example.engine.TechnicalAnalysisEngine
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +22,8 @@ import kotlinx.coroutines.withContext
 class CryptoRepository(
     private val favoritesDao: FavoritesDao,
     private val coinCacheDao: CoinCacheDao,
-    val remoteDataSource: CryptoRemoteDataSource = CryptoRemoteDataSource()
+    val remoteDataSource: CryptoRemoteDataSource = CryptoRemoteDataSource(),
+    private val context: Context? = null
 ) {
 
     private val _coins = MutableStateFlow<List<CryptoCoin>>(emptyList())
@@ -45,7 +50,17 @@ class CryptoRepository(
         try {
             val cached = coinCacheDao.getAllCachedCoins()
             if (cached.isNotEmpty()) {
-                _coins.value = cached.map { it.toModel() }
+                val models = cached.map { it.toModel() }
+                _coins.value = models
+                Log.d("CryptoRepo", "Loaded ${models.size} coins from local Room cache")
+            } else if (context != null) {
+                // Initialize from bundled catalog of 1,214 coins
+                val bundled = remoteDataSource.loadBundledCatalog(context)
+                if (bundled.isNotEmpty()) {
+                    _coins.value = bundled
+                    saveToCache(bundled)
+                    Log.d("CryptoRepo", "Pre-populated Room with ${bundled.size} bundled tokens")
+                }
             }
         } catch (e: Exception) {
             Log.d("CryptoRepo", "Cache read failed: ${e.message}")
@@ -58,11 +73,17 @@ class CryptoRepository(
         _hasMore.value = true
 
         try {
-            // First load from local DB if in-memory list is empty
+            // First load from local DB or bundled assets if in-memory list is empty
             if (_coins.value.isEmpty()) {
                 val cached = coinCacheDao.getAllCachedCoins()
                 if (cached.isNotEmpty()) {
                     _coins.value = cached.map { it.toModel() }
+                } else if (context != null) {
+                    val bundled = remoteDataSource.loadBundledCatalog(context)
+                    if (bundled.isNotEmpty()) {
+                        _coins.value = bundled
+                        saveToCache(bundled)
+                    }
                 }
             }
 
@@ -75,30 +96,36 @@ class CryptoRepository(
             // Step 2: CoinGecko Page 1 (Top 250 coins)
             val geckoCoins = remoteDataSource.fetchCoinGeckoPage(page = 1, perPage = 250)
 
-            // Step 3: Binance.US tickers as backup if both are unavailable
-            val binanceCoins = if (cmcCoins.isNullOrEmpty() && geckoCoins.isNullOrEmpty()) {
-                remoteDataSource.fetchBinanceUsAllTickers()
+            // Step 3: Binance.US tickers (600+ real-time tickers)
+            val binanceCoins = remoteDataSource.fetchBinanceUsAllTickers()
+
+            // Step 4: MEXC real-time tickers for high-volume market depth (1,400+ coins)
+            val mexcCoins = if ((binanceCoins?.size ?: 0) < 500) {
+                remoteDataSource.fetchMexcAllTickers()
             } else null
 
-            // Merge & Deduplicate
-            val mergedList = mergeCoinLists(
+            // Merge & Deduplicate all live sources
+            val freshCoins = mergeCoinLists(
                 primary = cmcCoins ?: emptyList(),
                 secondary = geckoCoins ?: emptyList(),
-                tertiary = binanceCoins ?: emptyList()
+                tertiary = (binanceCoins ?: emptyList()) + (mexcCoins ?: emptyList())
             )
 
-            if (mergedList.isNotEmpty()) {
-                _coins.value = mergedList
+            if (freshCoins.isNotEmpty()) {
+                // Preserves full 1214+ roster, updates live prices and stats without wiping list!
+                val updatedList = updateOrMergeCoins(_coins.value, freshCoins)
+                _coins.value = updatedList
                 _lastUpdated.value = System.currentTimeMillis()
-                saveToCache(mergedList)
+                saveToCache(updatedList)
             } else if (_coins.value.isEmpty()) {
-                val fallback = remoteDataSource.getPresetFallbackCoins()
+                val fallback = if (context != null) remoteDataSource.loadBundledCatalog(context) else remoteDataSource.getPresetFallbackCoins()
                 _coins.value = fallback
             }
         } catch (e: Exception) {
             Log.w("CryptoRepo", "Refresh coins error: ${e.message}")
             if (_coins.value.isEmpty()) {
-                _coins.value = remoteDataSource.getPresetFallbackCoins()
+                val fallback = if (context != null) remoteDataSource.loadBundledCatalog(context) else remoteDataSource.getPresetFallbackCoins()
+                _coins.value = fallback
             }
         } finally {
             _isLoading.value = false
@@ -106,7 +133,10 @@ class CryptoRepository(
     }
 
     suspend fun loadNextBatch(cmcApiKey: String = "") = withContext(Dispatchers.IO) {
-        if (_isLoadingMore.value || !_hasMore.value || currentPage >= maxPages) return@withContext
+        if (_isLoadingMore.value || !_hasMore.value || currentPage >= maxPages || _coins.value.size >= 1214) {
+            _hasMore.value = false
+            return@withContext
+        }
         _isLoadingMore.value = true
 
         try {
@@ -114,28 +144,15 @@ class CryptoRepository(
             Log.d("CryptoRepo", "Loading coin page $nextPage...")
 
             val newCoins = remoteDataSource.fetchCoinGeckoPage(page = nextPage, perPage = 250)
-                ?: if (nextPage == 2) remoteDataSource.fetchBinanceUsAllTickers() else null
+                ?: remoteDataSource.fetchMexcAllTickers()
 
             if (!newCoins.isNullOrEmpty()) {
                 currentPage = nextPage
-                val existingMap = _coins.value.associateBy { it.symbol.uppercase() }.toMutableMap()
+                val updated = updateOrMergeCoins(_coins.value, newCoins)
+                _coins.value = updated
+                saveToCache(updated)
 
-                for (coin in newCoins) {
-                    val key = coin.symbol.uppercase()
-                    if (!existingMap.containsKey(key)) {
-                        existingMap[key] = coin
-                    }
-                }
-
-                // Re-rank sequentially
-                val updatedList = existingMap.values.sortedBy { it.rank }.mapIndexed { index, coin ->
-                    coin.copy(rank = index + 1)
-                }
-
-                _coins.value = updatedList
-                saveToCache(updatedList)
-
-                if (newCoins.size < 20 || currentPage >= maxPages) {
+                if (newCoins.size < 20 || currentPage >= maxPages || updated.size >= 1214) {
                     _hasMore.value = false
                 }
             } else {
@@ -143,8 +160,43 @@ class CryptoRepository(
             }
         } catch (e: Exception) {
             Log.w("CryptoRepo", "Load next batch error: ${e.message}")
+            _hasMore.value = false
         } finally {
             _isLoadingMore.value = false
+        }
+    }
+
+    private fun updateOrMergeCoins(
+        currentList: List<CryptoCoin>,
+        freshList: List<CryptoCoin>
+    ): List<CryptoCoin> {
+        if (currentList.isEmpty()) return freshList
+        if (freshList.isEmpty()) return currentList
+
+        val freshMap = freshList.associateBy { it.symbol.trim().uppercase() }
+        val updatedCurrent = currentList.map { coin ->
+            val fresh = freshMap[coin.symbol.trim().uppercase()]
+            if (fresh != null) {
+                coin.copy(
+                    priceUsd = fresh.priceUsd,
+                    change24h = fresh.change24h,
+                    volume24h = if (fresh.volume24h > 0) fresh.volume24h else coin.volume24h,
+                    marketCap = if (fresh.marketCap > 0) fresh.marketCap else coin.marketCap,
+                    high24h = if (fresh.high24h > 0) fresh.high24h else coin.high24h,
+                    low24h = if (fresh.low24h > 0) fresh.low24h else coin.low24h,
+                    iconUrl = if (fresh.iconUrl.isNotEmpty()) fresh.iconUrl else coin.iconUrl
+                )
+            } else {
+                coin
+            }
+        }
+
+        val existingSymbols = currentList.map { it.symbol.trim().uppercase() }.toSet()
+        val newAdditions = freshList.filter { it.symbol.trim().uppercase() !in existingSymbols }
+
+        val combined = updatedCurrent + newAdditions
+        return combined.mapIndexed { index, coin ->
+            coin.copy(rank = index + 1)
         }
     }
 
@@ -157,16 +209,19 @@ class CryptoRepository(
 
         // 1. Insert primary (e.g. CMC)
         for (coin in primary) {
-            mergedMap[coin.symbol.uppercase()] = coin
+            val key = coin.symbol.trim().uppercase()
+            if (key.isNotEmpty()) {
+                mergedMap[key] = coin.copy(symbol = key)
+            }
         }
 
-        // 2. Insert secondary (CoinGecko page 1)
+        // 2. Insert secondary (CoinGecko)
         for (coin in secondary) {
-            val key = coin.symbol.uppercase()
+            val key = coin.symbol.trim().uppercase()
+            if (key.isEmpty()) continue
             if (!mergedMap.containsKey(key)) {
-                mergedMap[key] = coin
+                mergedMap[key] = coin.copy(symbol = key)
             } else {
-                // If primary lacked icon, take it from secondary
                 val existing = mergedMap[key]!!
                 if (existing.iconUrl.isEmpty() && coin.iconUrl.isNotEmpty()) {
                     mergedMap[key] = existing.copy(iconUrl = coin.iconUrl)
@@ -174,11 +229,12 @@ class CryptoRepository(
             }
         }
 
-        // 3. Insert tertiary (Binance.US)
+        // 3. Insert tertiary (Binance.US / MEXC)
         for (coin in tertiary) {
-            val key = coin.symbol.uppercase()
+            val key = coin.symbol.trim().uppercase()
+            if (key.isEmpty()) continue
             if (!mergedMap.containsKey(key)) {
-                mergedMap[key] = coin
+                mergedMap[key] = coin.copy(symbol = key)
             }
         }
 
@@ -189,9 +245,9 @@ class CryptoRepository(
 
     private suspend fun saveToCache(coins: List<CryptoCoin>) {
         try {
-            val entities = coins.take(1000).map { coin ->
+            val entities = coins.take(2500).map { coin ->
                 CachedCoinEntity(
-                    symbol = coin.symbol,
+                    symbol = coin.symbol.trim().uppercase(),
                     id = coin.id,
                     name = coin.name,
                     priceUsd = coin.priceUsd,
@@ -210,9 +266,43 @@ class CryptoRepository(
         }
     }
 
+    // Thread-safe in-memory cache for verified exchange candles (retained for up to 30 minutes)
+    private val candleCache = ConcurrentHashMap<String, Pair<Long, CandleResult>>()
+
     suspend fun getTechnicalAnalysis(coin: CryptoCoin, timeframe: String = "1h"): TechnicalAnalysisResult {
-        val candles = remoteDataSource.fetchCandles(coin.symbol, interval = timeframe, limit = 40)
-        return TechnicalAnalysisEngine.analyze(coin.symbol, coin.priceUsd, candles)
+        val cacheKey = "${coin.symbol.trim().uppercase()}_$timeframe"
+        val liveResult = remoteDataSource.fetchCandlesWithProvenance(
+            symbol = coin.symbol,
+            interval = timeframe,
+            limit = 40,
+            basePrice = coin.priceUsd
+        )
+
+        val resolvedCandleResult = if (liveResult.provenance == MarketDataProvenance.LIVE_EXCHANGE) {
+            candleCache[cacheKey] = Pair(System.currentTimeMillis(), liveResult)
+            liveResult
+        } else {
+            // Live exchange failed. Check if we have recent cached exchange candles (within 30 mins)
+            val cached = candleCache[cacheKey]
+            val maxCacheAgeMs = 30 * 60 * 1000L
+            if (cached != null && (System.currentTimeMillis() - cached.first) < maxCacheAgeMs && cached.second.candles.isNotEmpty()) {
+                CandleResult(
+                    candles = cached.second.candles,
+                    provenance = MarketDataProvenance.CACHED_EXCHANGE,
+                    sourceExchange = "${cached.second.sourceExchange ?: "Exchange"} (Cached)"
+                )
+            } else {
+                liveResult
+            }
+        }
+
+        return TechnicalAnalysisEngine.analyze(
+            symbol = coin.symbol,
+            currentPrice = coin.priceUsd,
+            candles = resolvedCandleResult.candles,
+            provenance = resolvedCandleResult.provenance,
+            sourceExchange = resolvedCandleResult.sourceExchange
+        )
     }
 
     suspend fun toggleFavorite(symbol: String) {

@@ -53,9 +53,11 @@ fun CandlestickChartCanvas(
     }
 
     val displayCandles = candles.takeLast(32)
-    val highestPrice = max(displayCandles.maxOf { it.high }, bbUpper)
-    val lowestPrice = min(displayCandles.minOf { it.low }, bbLower)
-    val priceRange = (highestPrice - lowestPrice).coerceAtLeast(0.0001)
+    val candleHigh = displayCandles.maxOfOrNull { it.high } ?: 1.0
+    val candleLow = displayCandles.minOfOrNull { it.low } ?: 1.0
+    val highestPrice = if (bbUpper.isNaN() || bbUpper <= 0.0) candleHigh else max(candleHigh, bbUpper)
+    val lowestPrice = if (bbLower.isNaN() || bbLower <= 0.0) candleLow else min(candleLow, bbLower)
+    val priceRange = (highestPrice - lowestPrice).coerceAtLeast((lowestPrice * 0.005).coerceAtLeast(1e-12))
 
     Box(
         modifier = modifier
@@ -167,7 +169,7 @@ fun CandlestickChartCanvas(
                 .padding(end = 4.dp, top = 2.dp)
         ) {
             Text(
-                text = String.format(Locale.US, "$%.2f", highestPrice),
+                text = com.example.ui.util.PriceFormatter.formatPrice(highestPrice),
                 color = Color.Gray,
                 fontSize = 10.sp
             )
@@ -178,7 +180,7 @@ fun CandlestickChartCanvas(
                 .padding(end = 4.dp)
         ) {
             Text(
-                text = String.format(Locale.US, "$%.2f", bbMiddle),
+                text = com.example.ui.util.PriceFormatter.formatPrice(bbMiddle),
                 color = ChartBollingerLine,
                 fontSize = 10.sp
             )
@@ -189,7 +191,7 @@ fun CandlestickChartCanvas(
                 .padding(end = 4.dp, bottom = 2.dp)
         ) {
             Text(
-                text = String.format(Locale.US, "$%.2f", lowestPrice),
+                text = com.example.ui.util.PriceFormatter.formatPrice(lowestPrice),
                 color = Color.Gray,
                 fontSize = 10.sp
             )

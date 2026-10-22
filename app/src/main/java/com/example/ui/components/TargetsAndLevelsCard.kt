@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.data.model.MarketDataProvenance
+import com.example.data.model.SignalType
 import com.example.data.model.TechnicalAnalysisResult
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
@@ -28,8 +30,8 @@ import com.example.ui.theme.RigourBearish
 import com.example.ui.theme.RigourBullish
 import com.example.ui.theme.RigourCardBorder
 import com.example.ui.theme.RigourCyan
-import com.example.ui.theme.RigourGold
 import com.example.ui.theme.RigourSurfaceVariant
+import com.example.ui.util.PriceFormatter
 import java.util.Locale
 
 @Composable
@@ -38,10 +40,25 @@ fun TargetsAndLevelsCard(
     lang: Language,
     modifier: Modifier = Modifier
 ) {
-    val currentPrice = result.currentPrice.coerceAtLeast(0.00001)
-    val shortPct = ((result.shortTermTarget - currentPrice) / currentPrice) * 100.0
-    val medPct = ((result.mediumTermTarget - currentPrice) / currentPrice) * 100.0
-    val slPct = ((result.stopLoss - currentPrice) / currentPrice) * 100.0
+    val currentPrice = result.currentPrice
+    val isSellSignal = result.overallSignal == SignalType.SELL || result.overallSignal == SignalType.STRONG_SELL
+
+    val shortPct = if (currentPrice > 0.0 && !result.shortTermTarget.isNaN()) {
+        ((result.shortTermTarget - currentPrice) / currentPrice) * 100.0
+    } else 0.0
+
+    val medPct = if (currentPrice > 0.0 && !result.mediumTermTarget.isNaN()) {
+        ((result.mediumTermTarget - currentPrice) / currentPrice) * 100.0
+    } else 0.0
+
+    // For short trades, stopping out above entry price represents a risk loss
+    val slPct = if (currentPrice > 0.0 && !result.stopLoss.isNaN()) {
+        if (isSellSignal) {
+            - ((result.stopLoss - currentPrice) / currentPrice) * 100.0
+        } else {
+            ((result.stopLoss - currentPrice) / currentPrice) * 100.0
+        }
+    } else 0.0
 
     Box(
         modifier = modifier
@@ -59,58 +76,93 @@ fun TargetsAndLevelsCard(
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            val isSyntheticOrUnavailable = result.provenance == MarketDataProvenance.SYNTHETIC || result.provenance == MarketDataProvenance.UNAVAILABLE
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TargetBox(
-                    label = StringsDictionary.get("short_term_target", lang),
-                    price = result.shortTermTarget,
-                    percentChange = shortPct,
-                    color = if (shortPct >= 0) RigourBullish else RigourBearish
-                )
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-                TargetBox(
-                    label = StringsDictionary.get("medium_term_target", lang),
-                    price = result.mediumTermTarget,
-                    percentChange = medPct,
-                    color = if (medPct >= 0) RigourBullish else RigourBearish
-                )
-            }
+            if (isSyntheticOrUnavailable) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFF1E293B))
+                        .border(1.dp, RigourCardBorder, RoundedCornerShape(10.dp))
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = if (result.provenance == MarketDataProvenance.SYNTHETIC) {
+                            if (lang == Language.PERSIAN) {
+                                "تارگت‌های خودکار و حد ضرر برای داده‌های شبیه‌سازی غیرفعال هستند. محاسبه تارگت نیازمند تاریخچه واقعی صرافی است."
+                            } else {
+                                "Automated price targets & stop-loss are disabled for synthetic preview. Requires verified exchange market data."
+                            }
+                        } else {
+                            if (lang == Language.PERSIAN) {
+                                "داده‌های بازار جهت محاسبه تارگت‌ها کافی نمی‌باشد."
+                            } else {
+                                "Market data insufficient for target calculation."
+                            }
+                        },
+                        color = Color.LightGray,
+                        fontSize = 12.sp,
+                        lineHeight = 16.sp
+                    )
+                }
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    TargetBox(
+                        label = StringsDictionary.get("short_term_target", lang),
+                        price = result.shortTermTarget,
+                        percentChange = shortPct,
+                        color = if (shortPct >= 0) RigourBullish else RigourBearish
+                    )
+                    Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                    TargetBox(
+                        label = StringsDictionary.get("medium_term_target", lang),
+                        price = result.mediumTermTarget,
+                        percentChange = medPct,
+                        color = if (medPct >= 0) RigourBullish else RigourBearish
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            // Stop-Loss
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color(0xFF261922))
-                    .border(1.dp, RigourBearish.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = StringsDictionary.get("stop_loss", lang),
-                    color = Color.LightGray,
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = String.format(Locale.US, "$%.2f (%+.1f%%)", result.stopLoss, slPct),
-                    color = RigourBearish,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                // Recommended Stop-Loss with direction-appropriate loss percentage
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFF261922))
+                        .border(1.dp, RigourBearish.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = StringsDictionary.get("stop_loss", lang),
+                        color = Color.LightGray,
+                        fontSize = 12.sp
+                    )
+                    val stopLossText = if (result.stopLoss.isNaN() || result.stopLoss <= 0.0) {
+                        "--"
+                    } else {
+                        "${PriceFormatter.formatPrice(result.stopLoss)} (${String.format(Locale.US, "%+.1f%%", slPct)})"
+                    }
+                    Text(
+                        text = stopLossText,
+                        color = RigourBearish,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(color = Color(0xFF334155))
             Spacer(modifier = Modifier.height(14.dp))
 
-            // Classical Support and Resistance Pivot Matrix
+            // Classical Floor Support and Resistance Pivot Matrix (R2 >= R1 >= PP >= S1 >= S2)
             Text(
                 text = StringsDictionary.get("support_resistance", lang),
                 color = Color.White,
@@ -146,13 +198,13 @@ private fun TargetBox(
             Text(text = label, color = Color.Gray, fontSize = 11.sp)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = String.format(Locale.US, "$%.2f", price),
+                text = PriceFormatter.formatPrice(price),
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = String.format(Locale.US, "%+.2f%%", percentChange),
+                text = PriceFormatter.formatPercentage(percentChange),
                 color = color,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold
@@ -182,7 +234,7 @@ private fun LevelRow(
             fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal
         )
         Text(
-            text = String.format(Locale.US, "$%.2f", price),
+            text = PriceFormatter.formatPrice(price),
             color = color,
             fontSize = 12.sp,
             fontWeight = if (isBold) FontWeight.Bold else FontWeight.Medium

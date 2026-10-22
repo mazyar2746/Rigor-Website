@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.local.RigourDatabase
 import com.example.data.model.CoinSignalData
 import com.example.data.model.CryptoCoin
+import com.example.data.model.MarketDataProvenance
 import com.example.data.model.SubscriptionPlan
 import com.example.data.model.TechnicalAnalysisResult
 import com.example.data.model.UserSubscription
@@ -36,7 +37,7 @@ sealed class Screen {
 class RigourViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = RigourDatabase.getInstance(application)
-    private val cryptoRepository = CryptoRepository(database.favoritesDao(), database.coinCacheDao())
+    private val cryptoRepository = CryptoRepository(database.favoritesDao(), database.coinCacheDao(), context = application)
     private val subscriptionRepository = SubscriptionRepository(database.subscriptionDao())
 
     // App Navigation
@@ -149,16 +150,19 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
     fun computeSignals() {
         viewModelScope.launch {
             _isSignalsLoading.value = true
-            val currentCoins = coins.value.take(25)
+            val currentCoins = coins.value.take(30)
             val list = mutableListOf<CoinSignalData>()
             for (coin in currentCoins) {
                 try {
                     val analysis = cryptoRepository.getTechnicalAnalysis(coin, "1h")
-                    list.add(CoinSignalData(coin, analysis))
+                    // CRITICAL: Real trading signals must NEVER be generated from synthetic or unavailable candles!
+                    if (analysis.provenance == MarketDataProvenance.LIVE_EXCHANGE || analysis.provenance == MarketDataProvenance.CACHED_EXCHANGE) {
+                        list.add(CoinSignalData(coin, analysis))
+                    } else {
+                        android.util.Log.d("RigourVM", "Skipping ${coin.symbol} from signals feed due to synthetic/unavailable provenance (${analysis.provenance})")
+                    }
                 } catch (e: Exception) {
-                    val candles = cryptoRepository.remoteDataSource.generateSynthesizedCandles(coin.symbol, coin.priceUsd)
-                    val analysis = com.example.engine.TechnicalAnalysisEngine.analyze(coin.symbol, coin.priceUsd, candles)
-                    list.add(CoinSignalData(coin, analysis))
+                    android.util.Log.w("RigourVM", "Failed to compute signals for ${coin.symbol}: ${e.message}")
                 }
             }
             _signals.value = list
@@ -230,9 +234,14 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
                 val result = cryptoRepository.getTechnicalAnalysis(coin, timeframe)
                 _analysisResult.value = result
             } catch (e: Exception) {
-                // Synthesize fallback on error
-                val candles = cryptoRepository.remoteDataSource.generateSynthesizedCandles(coin.symbol, coin.priceUsd)
-                _analysisResult.value = com.example.engine.TechnicalAnalysisEngine.analyze(coin.symbol, coin.priceUsd, candles)
+                // Return explicitly marked unavailable result, NOT disguised signals
+                _analysisResult.value = com.example.engine.TechnicalAnalysisEngine.createUnavailableResult(
+                    symbol = coin.symbol,
+                    currentPrice = coin.priceUsd,
+                    candles = emptyList(),
+                    provenance = MarketDataProvenance.UNAVAILABLE,
+                    reason = "Market data unavailable: ${e.message}"
+                )
             } finally {
                 _isAnalysisLoading.value = false
             }

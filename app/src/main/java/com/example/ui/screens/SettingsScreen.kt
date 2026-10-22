@@ -163,7 +163,7 @@ fun SettingsScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = "Rigour Pro Status",
+                            text = "Rigor Pro Status",
                             color = Color.White,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
@@ -265,7 +265,7 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Rigour features live fallback endpoints that work out of the box. You may also provide custom API keys below:",
+                    text = "Rigor features live fallback endpoints that work out of the box. You may also provide custom API keys below:",
                     color = Color.Gray,
                     fontSize = 11.sp,
                     lineHeight = 15.sp
@@ -351,7 +351,7 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Rigour Institutional Analytics v1.0.0",
+                text = "Rigor Institutional Analytics v1.0.0",
                 color = Color.DarkGray,
                 fontSize = 11.sp
             )

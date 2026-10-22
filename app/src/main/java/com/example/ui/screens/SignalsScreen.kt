@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.data.model.CoinSignalData
 import com.example.data.model.CryptoCoin
+import com.example.data.model.MarketDataProvenance
 import com.example.data.model.SignalType
 import com.example.data.model.UserSubscription
 import com.example.i18n.Language
@@ -581,11 +582,22 @@ fun SignalItemCard(
                                 }
                             }
                         }
-                        Text(
-                            text = coin.name,
-                            color = Color.Gray,
-                            fontSize = 11.sp
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = coin.name,
+                                color = Color.Gray,
+                                fontSize = 11.sp
+                            )
+                            if (analysis.provenance == MarketDataProvenance.CACHED_EXCHANGE) {
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "• CACHED",
+                                    color = RigourCyan,
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -621,7 +633,7 @@ fun SignalItemCard(
                         fontSize = 10.sp
                     )
                     Text(
-                        text = "$${formatPrice(coin.priceUsd)}",
+                        text = com.example.ui.util.PriceFormatter.formatPrice(coin.priceUsd),
                         color = Color.White,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold
@@ -760,7 +772,7 @@ fun SignalItemCard(
                             fontSize = 10.sp
                         )
                         Text(
-                            text = "$${formatPrice(analysis.shortTermTarget)}",
+                            text = com.example.ui.util.PriceFormatter.formatPrice(analysis.shortTermTarget),
                             color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
@@ -774,7 +786,7 @@ fun SignalItemCard(
                             fontSize = 10.sp
                         )
                         Text(
-                            text = "$${formatPrice(analysis.mediumTermTarget)}",
+                            text = com.example.ui.util.PriceFormatter.formatPrice(analysis.mediumTermTarget),
                             color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
@@ -788,7 +800,7 @@ fun SignalItemCard(
                             fontSize = 10.sp
                         )
                         Text(
-                            text = "$${formatPrice(analysis.stopLoss)}",
+                            text = com.example.ui.util.PriceFormatter.formatPrice(analysis.stopLoss),
                             color = Color.White,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold

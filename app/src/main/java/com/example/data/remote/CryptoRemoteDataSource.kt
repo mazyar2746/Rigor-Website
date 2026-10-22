@@ -1,8 +1,11 @@
 package com.example.data.remote
 
+import android.content.Context
 import android.util.Log
 import com.example.data.model.Candle
+import com.example.data.model.CandleResult
 import com.example.data.model.CryptoCoin
+import com.example.data.model.MarketDataProvenance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -145,37 +148,44 @@ class CryptoRemoteDataSource(
             val body = response.body?.string() ?: return@withContext null
             val array = JSONArray(body)
             val result = mutableListOf<CryptoCoin>()
+            val seenSymbols = mutableSetOf<String>()
 
             var currentRank = 1
             for (i in 0 until array.length()) {
                 val item = array.getJSONObject(i)
                 val pair = item.optString("symbol", "")
-                if (pair.endsWith("USDT") || pair.endsWith("USD")) {
-                    val symbol = pair.replace("USDT", "").replace("USD", "").uppercase()
-                    val price = item.optDouble("lastPrice", 0.0)
-                    if (price <= 0.0) continue
-
-                    val change = item.optDouble("priceChangePercent", 0.0)
-                    val volume = item.optDouble("quoteVolume", 0.0)
-                    val high = item.optDouble("highPrice", price * 1.02)
-                    val low = item.optDouble("lowPrice", price * 0.98)
-
-                    result.add(
-                        CryptoCoin(
-                            id = symbol.lowercase(),
-                            name = symbol,
-                            symbol = symbol,
-                            priceUsd = price,
-                            change24h = change,
-                            volume24h = volume,
-                            marketCap = volume * 25.0,
-                            high24h = high,
-                            low24h = low,
-                            rank = currentRank++,
-                            iconUrl = ""
-                        )
-                    )
+                val symbol = when {
+                    pair.endsWith("USDT") -> pair.removeSuffix("USDT").trim().uppercase()
+                    pair.endsWith("USD") -> pair.removeSuffix("USD").trim().uppercase()
+                    else -> continue
                 }
+                if (symbol.length < 2 || symbol == "USD" || symbol == "USDT" || symbol == "USDC") continue
+                if (seenSymbols.contains(symbol)) continue
+                seenSymbols.add(symbol)
+
+                val price = item.optDouble("lastPrice", 0.0)
+                if (price <= 0.0) continue
+
+                val change = item.optDouble("priceChangePercent", 0.0)
+                val volume = item.optDouble("quoteVolume", 0.0)
+                val high = item.optDouble("highPrice", price * 1.02)
+                val low = item.optDouble("lowPrice", price * 0.98)
+
+                result.add(
+                    CryptoCoin(
+                        id = symbol.lowercase(),
+                        name = symbol,
+                        symbol = symbol,
+                        priceUsd = price,
+                        change24h = change,
+                        volume24h = volume,
+                        marketCap = if (volume > 0) volume * 35.0 else price * 1000000.0,
+                        high24h = high,
+                        low24h = low,
+                        rank = currentRank++,
+                        iconUrl = ""
+                    )
+                )
             }
             if (result.isNotEmpty()) result else null
         } catch (e: Exception) {
@@ -184,63 +194,257 @@ class CryptoRemoteDataSource(
         }
     }
 
-    // Fetch real candlestick data for charts & technical analysis
-    suspend fun fetchCandles(symbol: String, interval: String = "1h", limit: Int = 40): List<Candle> =
-        withContext(Dispatchers.IO) {
-            val cleanSymbol = symbol.replace("USDT", "").replace("USD", "").uppercase()
-            val pair = "${cleanSymbol}USDT"
+    // High-capacity MEXC 24hr tickers (1,400+ real-time USDT pairs with zero rate limits)
+    suspend fun fetchMexcAllTickers(): List<CryptoCoin>? = withContext(Dispatchers.IO) {
+        try {
+            val url = "https://api.mexc.com/api/v3/ticker/24hr"
+            val request = Request.Builder().url(url).build()
+            val response = client.newCall(request).execute()
+            if (!response.isSuccessful) return@withContext null
 
-            val klineEndpoints = listOf(
-                "https://api.binance.us/api/v3/klines?symbol=$pair&interval=$interval&limit=$limit",
-                "https://api.binance.com/api/v3/klines?symbol=$pair&interval=$interval&limit=$limit"
-            )
+            val body = response.body?.string() ?: return@withContext null
+            val array = JSONArray(body)
+            val result = mutableListOf<CryptoCoin>()
+            val seenSymbols = mutableSetOf<String>()
 
-            for (endpoint in klineEndpoints) {
-                try {
-                    val request = Request.Builder().url(endpoint).build()
-                    val response = client.newCall(request).execute()
+            var currentRank = 1
+            for (i in 0 until array.length()) {
+                val item = array.getJSONObject(i)
+                val pair = item.optString("symbol", "")
+                if (!pair.endsWith("USDT")) continue
+                val symbol = pair.removeSuffix("USDT").trim().uppercase()
+                if (symbol.length < 2 || symbol == "USD" || symbol == "USDT" || symbol == "USDC") continue
+                if (seenSymbols.contains(symbol)) continue
+                seenSymbols.add(symbol)
 
-                    if (response.isSuccessful) {
-                        val body = response.body?.string() ?: continue
-                        val array = JSONArray(body)
-                        val candles = mutableListOf<Candle>()
+                val price = item.optDouble("lastPrice", 0.0)
+                if (price <= 0.0) continue
 
-                        for (i in 0 until array.length()) {
-                            val row = array.getJSONArray(i)
-                            candles.add(
-                                Candle(
-                                    timestamp = row.getLong(0),
-                                    open = row.getString(1).toDouble(),
-                                    high = row.getString(2).toDouble(),
-                                    low = row.getString(3).toDouble(),
-                                    close = row.getString(4).toDouble(),
-                                    volume = row.getString(5).toDouble()
-                                )
-                            )
-                        }
-                        if (candles.isNotEmpty()) return@withContext candles
-                    }
-                } catch (e: Exception) {
-                    Log.d("CryptoRemote", "Kline fetch attempt on $endpoint skipped: ${e.message}")
-                }
+                val change = item.optDouble("priceChangePercent", 0.0)
+                val volume = item.optDouble("quoteVolume", 0.0)
+                val high = item.optDouble("highPrice", price * 1.02)
+                val low = item.optDouble("lowPrice", price * 0.98)
+
+                result.add(
+                    CryptoCoin(
+                        id = symbol.lowercase(),
+                        name = symbol,
+                        symbol = symbol,
+                        priceUsd = price,
+                        change24h = change,
+                        volume24h = volume,
+                        marketCap = if (volume > 0) volume * 25.0 else price * 1000000.0,
+                        high24h = high,
+                        low24h = low,
+                        rank = currentRank++,
+                        iconUrl = "https://assets.coincap.io/assets/icons/${symbol.lowercase()}@2x.png"
+                    )
+                )
             }
-            generateSynthesizedCandles(symbol, 100.0)
+            if (result.isNotEmpty()) result else null
+        } catch (e: Exception) {
+            Log.d("CryptoRemote", "MEXC ticker fetch error: ${e.message}")
+            null
+        }
+    }
+
+    // Load pre-bundled catalog of 1,214 cryptocurrencies from APK assets
+    fun loadBundledCatalog(context: Context): List<CryptoCoin> {
+        return try {
+            val jsonString = context.assets.open("crypto_catalog.json").bufferedReader().use { it.readText() }
+            val array = JSONArray(jsonString)
+            val list = mutableListOf<CryptoCoin>()
+            for (i in 0 until array.length()) {
+                val obj = array.getJSONObject(i)
+                list.add(
+                    CryptoCoin(
+                        id = obj.optString("id", ""),
+                        name = obj.optString("name", ""),
+                        symbol = obj.optString("symbol", "").trim().uppercase(),
+                        priceUsd = obj.optDouble("priceUsd", 0.0),
+                        change24h = obj.optDouble("change24h", 0.0),
+                        volume24h = obj.optDouble("volume24h", 0.0),
+                        marketCap = obj.optDouble("marketCap", 0.0),
+                        high24h = obj.optDouble("high24h", 0.0),
+                        low24h = obj.optDouble("low24h", 0.0),
+                        rank = obj.optInt("rank", i + 1),
+                        iconUrl = obj.optString("iconUrl", "")
+                    )
+                )
+            }
+            list
+        } catch (e: Exception) {
+            Log.e("CryptoRemote", "Error reading bundled crypto_catalog.json: ${e.message}")
+            getPresetFallbackCoins()
+        }
+    }
+
+    // Fetch real candlestick data with multi-exchange fallback, provenance tagging, and safe retry
+    suspend fun fetchCandlesWithProvenance(
+        symbol: String,
+        interval: String = "1h",
+        limit: Int = 40,
+        basePrice: Double = 0.0
+    ): CandleResult = withContext(Dispatchers.IO) {
+        val clean = symbol.replace("USDT", "").replace("USD", "").replace("-", "").trim().uppercase()
+        val mexcInterval = when (interval.lowercase()) {
+            "1h", "60m" -> "60m"
+            "4h" -> "4h"
+            "1d" -> "1d"
+            "1w" -> "1W"
+            else -> "60m"
+        }
+        val kucoinInterval = when (interval.lowercase()) {
+            "1h", "60m" -> "1hour"
+            "4h" -> "4hour"
+            "1d" -> "1day"
+            "1w" -> "1week"
+            else -> "1hour"
         }
 
+        // Strategy 1: MEXC Kline API (high-volume spot data, no IP blocks)
+        try {
+            val mexcUrl = "https://api.mexc.com/api/v3/klines?symbol=${clean}USDT&interval=$mexcInterval&limit=$limit"
+            val request = Request.Builder().url(mexcUrl).header("User-Agent", "Mozilla/5.0").build()
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                val body = response.body?.string()
+                if (body != null && body.startsWith("[")) {
+                    val array = JSONArray(body)
+                    val candles = mutableListOf<Candle>()
+                    for (i in 0 until array.length()) {
+                        val row = array.getJSONArray(i)
+                        val t = row.getLong(0)
+                        val o = row.getString(1).toDoubleOrNull() ?: continue
+                        val h = row.getString(2).toDoubleOrNull() ?: continue
+                        val l = row.getString(3).toDoubleOrNull() ?: continue
+                        val c = row.getString(4).toDoubleOrNull() ?: continue
+                        val v = row.getString(5).toDoubleOrNull() ?: 0.0
+                        if (o > 0 && h > 0 && l > 0 && c > 0) {
+                            candles.add(Candle(t, o, maxOf(h, o, c), minOf(l, o, c), c, v))
+                        }
+                    }
+                    if (candles.isNotEmpty()) {
+                        Log.i("CryptoRemote", "Loaded ${candles.size} klines for $clean from MEXC")
+                        return@withContext CandleResult(candles, MarketDataProvenance.LIVE_EXCHANGE, "MEXC")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("CryptoRemote", "MEXC kline failed for $clean: ${e.message}")
+        }
+
+        // Strategy 2: KuCoin Candles API (order: [time, open, close, high, low, volume, turnover])
+        try {
+            val kucoinUrl = "https://api.kucoin.com/api/v1/market/candles?type=$kucoinInterval&symbol=${clean}-USDT"
+            val request = Request.Builder().url(kucoinUrl).header("User-Agent", "Mozilla/5.0").build()
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                val body = response.body?.string()
+                if (body != null) {
+                    val json = JSONObject(body)
+                    val data = json.optJSONArray("data")
+                    if (data != null && data.length() > 0) {
+                        val candles = mutableListOf<Candle>()
+                        val count = minOf(data.length(), limit)
+                        // KuCoin returns newest first, so iterate in reverse for chronological order
+                        for (i in count - 1 downTo 0) {
+                            val row = data.getJSONArray(i)
+                            val t = row.getLong(0) * 1000L
+                            val o = row.getString(1).toDoubleOrNull() ?: continue
+                            val c = row.getString(2).toDoubleOrNull() ?: continue
+                            val h = row.getString(3).toDoubleOrNull() ?: continue
+                            val l = row.getString(4).toDoubleOrNull() ?: continue
+                            val v = row.getString(5).toDoubleOrNull() ?: 0.0
+                            if (o > 0 && h > 0 && l > 0 && c > 0) {
+                                candles.add(Candle(t, o, maxOf(h, o, c), minOf(l, o, c), c, v))
+                            }
+                        }
+                        if (candles.isNotEmpty()) {
+                            Log.i("CryptoRemote", "Loaded ${candles.size} klines for $clean from KuCoin")
+                            return@withContext CandleResult(candles, MarketDataProvenance.LIVE_EXCHANGE, "KuCoin")
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("CryptoRemote", "KuCoin kline failed for $clean: ${e.message}")
+        }
+
+        // Strategy 3: Binance.US (try USDT first, then USD)
+        for (suffix in listOf("USDT", "USD")) {
+            try {
+                val binanceUrl = "https://api.binance.us/api/v3/klines?symbol=${clean}$suffix&interval=$interval&limit=$limit"
+                val request = Request.Builder().url(binanceUrl).header("User-Agent", "Mozilla/5.0").build()
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val body = response.body?.string()
+                    if (body != null && body.startsWith("[")) {
+                        val array = JSONArray(body)
+                        val candles = mutableListOf<Candle>()
+                        for (i in 0 until array.length()) {
+                            val row = array.getJSONArray(i)
+                            val t = row.getLong(0)
+                            val o = row.getString(1).toDoubleOrNull() ?: continue
+                            val h = row.getString(2).toDoubleOrNull() ?: continue
+                            val l = row.getString(3).toDoubleOrNull() ?: continue
+                            val c = row.getString(4).toDoubleOrNull() ?: continue
+                            val v = row.getString(5).toDoubleOrNull() ?: 0.0
+                            if (o > 0 && h > 0 && l > 0 && c > 0) {
+                                candles.add(Candle(t, o, maxOf(h, o, c), minOf(l, o, c), c, v))
+                            }
+                        }
+                        if (candles.isNotEmpty()) {
+                            Log.i("CryptoRemote", "Loaded ${candles.size} klines for $clean from Binance.US ($suffix)")
+                            return@withContext CandleResult(candles, MarketDataProvenance.LIVE_EXCHANGE, "Binance.US")
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("CryptoRemote", "Binance.US kline ($suffix) failed for $clean: ${e.message}")
+            }
+        }
+
+        // Fallback: If exchange data failed, provide synthetic preview marked strictly with SYNTHETIC provenance
+        if (basePrice > 0.0 && !basePrice.isNaN() && !basePrice.isInfinite()) {
+            Log.d("CryptoRemote", "Generating SYNTHETIC fallback candles for $clean with basePrice=$basePrice")
+            val syntheticCandles = generateSynthesizedCandles(clean, basePrice)
+            CandleResult(syntheticCandles, MarketDataProvenance.SYNTHETIC, "Deterministic Simulation")
+        } else {
+            Log.w("CryptoRemote", "No market candles available for $clean and basePrice is invalid ($basePrice)")
+            CandleResult(emptyList(), MarketDataProvenance.UNAVAILABLE, null)
+        }
+    }
+
+    // Convenience wrapper for backward compatibility
+    suspend fun fetchCandles(
+        symbol: String,
+        interval: String = "1h",
+        limit: Int = 40,
+        basePrice: Double = 0.0
+    ): List<Candle> {
+        return fetchCandlesWithProvenance(symbol, interval, limit, basePrice).candles
+    }
+
     fun generateSynthesizedCandles(symbol: String, basePrice: Double): List<Candle> {
+        if (basePrice <= 0.0 || basePrice.isNaN() || basePrice.isInfinite()) {
+            Log.w("CryptoRemote", "generateSynthesizedCandles rejected invalid basePrice: $basePrice for $symbol")
+            return emptyList()
+        }
         val candles = mutableListOf<Candle>()
         var current = basePrice
         val now = System.currentTimeMillis()
         val hourMs = 3600000L
+        val minPriceFloor = (basePrice * 0.1).coerceAtLeast(1e-12)
 
         val seed = symbol.hashCode().toDouble()
         for (i in 34 downTo 0) {
             val t = now - (i * hourMs)
-            val variation = kotlin.math.sin((i + seed) * 0.4) * 0.018 + (kotlin.math.cos(i * 0.7) * 0.012)
+            val variation = kotlin.math.sin((i + seed) * 0.4) * 0.015 + (kotlin.math.cos(i * 0.7) * 0.010)
             val open = current
-            val close = (current * (1.0 + variation)).coerceAtLeast(0.0001)
+            val close = (current * (1.0 + variation)).coerceAtLeast(minPriceFloor)
             val high = maxOf(open, close) * (1.0 + kotlin.math.abs(variation) * 0.5)
-            val low = minOf(open, close) * (1.0 - kotlin.math.abs(variation) * 0.5)
+            val low = (minOf(open, close) * (1.0 - kotlin.math.abs(variation) * 0.5)).coerceAtLeast(minPriceFloor)
             val volume = 1500000.0 + kotlin.math.abs(variation) * 10000000.0
 
             candles.add(Candle(t, open, high, low, close, volume))
