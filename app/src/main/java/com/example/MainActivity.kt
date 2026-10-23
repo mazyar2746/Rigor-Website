@@ -140,7 +140,7 @@ fun RigourApp(viewModel: RigourViewModel) {
                 is Screen.Welcome -> viewModel.navigateTo(Screen.Markets)
                 is Screen.Signals -> viewModel.navigateTo(Screen.Markets)
                 is Screen.Subscription -> viewModel.navigateTo(Screen.Markets)
-                is Screen.ContactUs -> viewModel.navigateTo(Screen.Markets)
+                is Screen.ContactUs -> viewModel.navigateTo(Screen.Settings)
                 is Screen.Settings -> viewModel.navigateTo(Screen.Markets)
                 Screen.Markets -> {}
             }
@@ -382,13 +382,17 @@ fun RigourApp(viewModel: RigourViewModel) {
                     }
 
                     is Screen.ContactUs -> {
-                        ContactUsScreen(lang = currentLanguage)
+                        ContactUsScreen(
+                            lang = currentLanguage,
+                            onBack = { viewModel.navigateTo(Screen.Settings) }
+                        )
                     }
 
                     is Screen.Settings -> {
                         SettingsScreen(
                             currentLanguage = currentLanguage,
                             onOpenLanguageDialog = { showLanguageDialog = true },
+                            onNavigateToContact = { viewModel.navigateTo(Screen.ContactUs) },
                             cmcApiKey = cmcApiKey,
                             onSaveCmcApiKey = { viewModel.setCmcApiKey(it) },
                             bscApiKey = bscApiKey,

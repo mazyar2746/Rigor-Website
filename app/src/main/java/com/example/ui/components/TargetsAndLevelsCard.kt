@@ -96,9 +96,9 @@ fun TargetsAndLevelsCard(
                             }
                         } else {
                             if (lang == Language.PERSIAN) {
-                                "داده‌های بازار جهت محاسبه تارگت‌ها کافی نمی‌باشد."
+                                "ارائه تحلیل در این زمان ممکن نیست. به دلیل عدم برقراری ارتباط با صرافی‌ها، جهت حفظ سلامت مالی، از ارائه تحلیل فیک خودداری می‌شود."
                             } else {
-                                "Market data insufficient for target calculation."
+                                "Analysis is not available at this time. Live exchange feed disconnected; synthetic analysis is forbidden."
                             }
                         },
                         color = Color.LightGray,
@@ -155,6 +155,34 @@ fun TargetsAndLevelsCard(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold
                     )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Target Methodology & Risk Management Explanation Box
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFF0F172A))
+                        .border(1.dp, RigourCyan.copy(alpha = 0.25f), RoundedCornerShape(8.dp))
+                        .padding(10.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = StringsDictionary.get("targets_methodology_title", lang),
+                            color = RigourCyan,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(3.dp))
+                        Text(
+                            text = StringsDictionary.get("targets_methodology_desc", lang),
+                            color = Color(0xFF94A3B8),
+                            fontSize = 10.sp,
+                            lineHeight = 14.sp
+                        )
+                    }
                 }
             }
 

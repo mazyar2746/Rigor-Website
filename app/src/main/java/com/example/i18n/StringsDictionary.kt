@@ -114,7 +114,12 @@ object StringsDictionary {
             "settings_api_key_title" to "CoinMarketCap API Key",
             "settings_api_key_desc" to "Optional: Use your personal Pro key for direct CMC endpoints.",
             "settings_save" to "Save Settings",
-            "refresh_data" to "Refresh Market Data"
+            "refresh_data" to "Refresh Market Data",
+            "rigor_pro_status" to "Rigor Pro Status",
+            "targets_methodology_title" to "Price Target Methodology & Risk Limits",
+            "targets_methodology_desc" to "Short-term (1.5%–8%) and medium-term (3.5%–25%) targets are mathematically constrained by Pivot Confluence and Bollinger Bandwidth to ensure realistic profit taking and prevent astronomical or anomalous projections.",
+            "contact_us_btn" to "Contact Us & Official Support",
+            "contact_us_email_card" to "Official Support Email"
         ),
 
         Language.PERSIAN to mapOf(
@@ -222,7 +227,12 @@ object StringsDictionary {
             "settings_api_key_title" to "کلید API کوین‌مارکت‌کپ",
             "settings_api_key_desc" to "اختیاری: برای استفاده مستقیم از API شخصی CMC پرو.",
             "settings_save" to "ذخیره تنظیمات",
-            "refresh_data" to "بروزرسانی داده‌ها"
+            "refresh_data" to "بروزرسانی داده‌ها",
+            "rigor_pro_status" to "وضعیت اشتراک ریگور پرو (Rigor Pro Status)",
+            "targets_methodology_title" to "منطق محاسبه اهداف و مدیریت ریسک",
+            "targets_methodology_desc" to "اهداف کوتاه‌مدت (۱.۵٪ تا ۸٪) و میان‌مدت (۳.۵٪ تا ۲۵٪) بر پایه تلاقی سطوح پیوت و فشردگی باندهای بولینگر با محدودیت‌های واقع‌گرایانه محاسبه شده‌اند تا از تارگت‌های نجومی، غیرواقعی و غیرممکن جلوگیری شود.",
+            "contact_us_btn" to "ارتباط با ما و پشتیبانی رسمی",
+            "contact_us_email_card" to "ایمیل پشتیبانی رسمی"
         ),
 
         Language.ARABIC to mapOf(

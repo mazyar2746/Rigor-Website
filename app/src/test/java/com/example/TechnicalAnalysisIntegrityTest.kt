@@ -328,4 +328,46 @@ class TechnicalAnalysisIntegrityTest {
         assertFalse(cachedResult.pivotPoint.isNaN())
         assertTrue(cachedResult.pivotPoint > 0.0)
     }
+
+    @Test
+    fun testShibAstronomicalTargetBugPrevented() {
+        val shibPrice = 0.00000512
+        // Extreme volatile wick candles that previously produced 970,000,000% targets
+        val candles = mutableListOf<Candle>()
+        for (i in 0 until 35) {
+            val p = shibPrice * (1.0 + (i * 0.01))
+            candles.add(Candle(i * 3600000L, p, p * 1.5, p * 0.8, p, 10000000.0))
+        }
+
+        val result = TechnicalAnalysisEngine.analyze("SHIB", shibPrice, candles)
+
+        // Verify target gain is bounded within realistic limits (max 25%), never 970M%
+        val shortGainPct = ((result.shortTermTarget - shibPrice) / shibPrice) * 100.0
+        val medGainPct = ((result.mediumTermTarget - shibPrice) / shibPrice) * 100.0
+
+        assertTrue("SHIB short gain must not exceed 8%: $shortGainPct%", shortGainPct <= 8.5)
+        assertTrue("SHIB medium gain must not exceed 25%: $medGainPct%", medGainPct <= 25.5)
+        assertTrue("SHIB medium gain must be positive", medGainPct > 0.0)
+        assertFalse("SHIB medium gain must never be astronomical (e.g. 970M%)", medGainPct > 100.0)
+
+        // Verify Support 1 is >= Support 2
+        assertTrue("Support 1 (${result.support1}) must be >= Support 2 (${result.support2})", result.support1 >= result.support2)
+        assertTrue("Pivot (${result.pivotPoint}) must be >= Support 1 (${result.support1})", result.pivotPoint >= result.support1)
+        assertTrue("Resistance 1 (${result.resistance1}) must be >= Pivot (${result.pivotPoint})", result.resistance1 >= result.pivotPoint)
+        assertTrue("Resistance 2 (${result.resistance2}) must be >= Resistance 1 (${result.resistance1})", result.resistance2 >= result.resistance1)
+    }
+
+    @Test
+    fun testUnavailableCandlesProducesExactPersianMessage() {
+        val unavailableResult = TechnicalAnalysisEngine.analyze(
+            symbol = "TEST",
+            currentPrice = 100.0,
+            candles = emptyList(),
+            provenance = MarketDataProvenance.UNAVAILABLE
+        )
+
+        assertEquals("ارائه تحلیل در این زمان ممکن نیست", unavailableResult.dataSourceNotice)
+        assertEquals("ارائه تحلیل در این زمان ممکن نیست", unavailableResult.rsiDescription)
+        assertEquals(MarketDataProvenance.UNAVAILABLE, unavailableResult.provenance)
+    }
 }

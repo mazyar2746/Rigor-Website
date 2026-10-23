@@ -1,6 +1,7 @@
 package com.example.engine
 
 import android.util.Log
+import com.example.config.RigorConfig
 import com.example.data.model.Candle
 import com.example.data.model.MarketDataProvenance
 import com.example.data.model.SignalType
@@ -47,20 +48,20 @@ object TechnicalAnalysisEngine {
         // Defensive validation of input currentPrice
         if (currentPrice <= 0.0 || currentPrice.isNaN() || currentPrice.isInfinite()) {
             logE(TAG, "[$symbol] Invalid currentPrice: $currentPrice. Aborting analysis.")
-            return createUnavailableResult(symbol, currentPrice, candles, MarketDataProvenance.UNAVAILABLE, "Invalid asset price.")
+            return createUnavailableResult(symbol, currentPrice, candles, MarketDataProvenance.UNAVAILABLE, "ارائه تحلیل در این زمان ممکن نیست")
         }
 
         // Defensive validation of candlestick history: empty candles must NOT generate fake signals
         if (candles.isEmpty()) {
             logW(TAG, "[$symbol] Candlestick history is empty. Aborting analysis.")
-            return createUnavailableResult(symbol, currentPrice, emptyList(), MarketDataProvenance.UNAVAILABLE, "Candlestick data unavailable.")
+            return createUnavailableResult(symbol, currentPrice, emptyList(), MarketDataProvenance.UNAVAILABLE, "ارائه تحلیل در این زمان ممکن نیست")
         }
 
         // Normalize and unit-align candle series
         val normalizedCandles = normalizeCandles(symbol, currentPrice, candles)
         if (normalizedCandles.isEmpty()) {
             logW(TAG, "[$symbol] Normalized candle series is empty. Aborting analysis.")
-            return createUnavailableResult(symbol, currentPrice, emptyList(), MarketDataProvenance.UNAVAILABLE, "Candlestick data invalid.")
+            return createUnavailableResult(symbol, currentPrice, emptyList(), MarketDataProvenance.UNAVAILABLE, "ارائه تحلیل در این زمان ممکن نیست")
         }
 
         // CRITICAL REQUIREMENT: Synthetic data must NEVER masquerade as real market data or generate trading signals
@@ -101,7 +102,7 @@ object TechnicalAnalysisEngine {
         }
 
         if (provenance == MarketDataProvenance.UNAVAILABLE) {
-            return createUnavailableResult(symbol, currentPrice, candles, MarketDataProvenance.UNAVAILABLE, "Market data unavailable.")
+            return createUnavailableResult(symbol, currentPrice, candles, MarketDataProvenance.UNAVAILABLE, "ارائه تحلیل در این زمان ممکن نیست")
         }
 
         val closes = normalizedCandles.map { it.close }
@@ -174,10 +175,17 @@ object TechnicalAnalysisEngine {
         val c = rawC.coerceIn(l, h)
 
         val pivot = (h + l + c) / 3.0
-        val r1 = (2.0 * pivot) - l
-        val s1 = (2.0 * pivot) - h
-        val r2 = pivot + (h - l)
-        val s2 = pivot - (h - l)
+        val rawR1 = (2.0 * pivot) - l
+        val rawS1 = (2.0 * pivot) - h
+        val rawR2 = pivot + (h - l)
+        val rawS2 = pivot - (h - l)
+
+        // Mathematical physical invariants: R2 >= R1 >= PP >= S1 >= S2
+        // Support 1 is the immediate closest support below pivot, Support 2 is the deeper level.
+        val r2 = max(rawR2, rawR1)
+        val r1 = min(rawR2, rawR1).coerceAtLeast(pivot)
+        val s1 = max(rawS1, rawS2).coerceAtMost(pivot)
+        val s2 = min(rawS1, rawS2)
 
         // Mathematical invariant sanity check: R2 >= R1 >= PP >= S1 >= S2
         if (!(r2 >= r1 && r1 >= pivot && pivot >= s1 && s1 >= s2)) {
@@ -191,48 +199,55 @@ object TechnicalAnalysisEngine {
             0.02
         }
 
-        // Projected Price Targets with direction consistency
+        // Projected Price Targets with direction consistency and bounded realistic momentum
+        // Prevents astronomical projections (e.g. 970M%) on micro-cap or high-wick tokens
         val shortTerm = when (overallSignal) {
             SignalType.STRONG_BUY, SignalType.BUY -> {
-                val momentumTarget = currentPrice * (1.0 + (volatility * 0.5).coerceIn(0.015, 0.08))
-                if (r1 > currentPrice) {
-                    min(r1, momentumTarget).coerceAtLeast(currentPrice * 1.01)
+                val shortGain = (volatility * 0.5).coerceIn(RigorConfig.MIN_SHORT_TERM_GAIN_PCT, RigorConfig.MAX_SHORT_TERM_GAIN_PCT)
+                val baseTarget = currentPrice * (1.0 + shortGain)
+                if (r1 > currentPrice && r1 <= currentPrice * (1.0 + RigorConfig.MAX_SHORT_TERM_GAIN_PCT)) {
+                    min(r1, baseTarget)
                 } else {
-                    momentumTarget.coerceAtLeast(currentPrice * 1.01)
-                }
+                    baseTarget
+                }.coerceIn(currentPrice * (1.0 + RigorConfig.MIN_SHORT_TERM_GAIN_PCT), currentPrice * (1.0 + RigorConfig.MAX_SHORT_TERM_GAIN_PCT))
             }
             SignalType.STRONG_SELL, SignalType.SELL -> {
-                val momentumTarget = currentPrice * (1.0 - (volatility * 0.5).coerceIn(0.015, 0.08))
-                if (s1 < currentPrice && s1 > 0.0) {
-                    max(s1, momentumTarget).coerceAtMost(currentPrice * 0.99)
+                val shortDrop = (volatility * 0.5).coerceIn(RigorConfig.MIN_SHORT_TERM_GAIN_PCT, RigorConfig.MAX_SHORT_TERM_GAIN_PCT)
+                val baseTarget = currentPrice * (1.0 - shortDrop)
+                if (s1 < currentPrice && s1 >= currentPrice * (1.0 - RigorConfig.MAX_SHORT_TERM_GAIN_PCT) && s1 > 0.0) {
+                    max(s1, baseTarget)
                 } else {
-                    momentumTarget.coerceAtMost(currentPrice * 0.99)
-                }
+                    baseTarget
+                }.coerceIn(currentPrice * (1.0 - RigorConfig.MAX_SHORT_TERM_GAIN_PCT), currentPrice * (1.0 - RigorConfig.MIN_SHORT_TERM_GAIN_PCT))
             }
             SignalType.NEUTRAL -> {
-                currentPrice * (1.0 + (volatility * 0.25).coerceIn(0.01, 0.03))
+                val neutralGain = (volatility * 0.25).coerceIn(0.01, 0.025)
+                currentPrice * (1.0 + neutralGain)
             }
         }
 
         val mediumTerm = when (overallSignal) {
             SignalType.STRONG_BUY, SignalType.BUY -> {
-                val momentumTarget = shortTerm * (1.0 + (volatility * 0.7).coerceIn(0.025, 0.12))
-                if (r2 > shortTerm) {
-                    max(r2, momentumTarget).coerceAtLeast(shortTerm * 1.015)
+                val medGain = (volatility * 1.2).coerceIn(RigorConfig.MIN_MEDIUM_TERM_GAIN_PCT, RigorConfig.MAX_MEDIUM_TERM_GAIN_PCT)
+                val baseTarget = currentPrice * (1.0 + medGain)
+                if (r2 > shortTerm && r2 <= currentPrice * (1.0 + RigorConfig.MAX_MEDIUM_TERM_GAIN_PCT)) {
+                    max(r2, baseTarget)
                 } else {
-                    momentumTarget.coerceAtLeast(shortTerm * 1.015)
-                }
+                    baseTarget
+                }.coerceIn(shortTerm * 1.015, currentPrice * (1.0 + RigorConfig.MAX_MEDIUM_TERM_GAIN_PCT))
             }
             SignalType.STRONG_SELL, SignalType.SELL -> {
-                val momentumTarget = shortTerm * (1.0 - (volatility * 0.7).coerceIn(0.025, 0.12))
-                if (s2 < shortTerm && s2 > 0.0) {
-                    min(s2, momentumTarget).coerceAtMost(shortTerm * 0.985)
+                val medDrop = (volatility * 1.2).coerceIn(RigorConfig.MIN_MEDIUM_TERM_GAIN_PCT, RigorConfig.MAX_MEDIUM_TERM_GAIN_PCT)
+                val baseTarget = currentPrice * (1.0 - medDrop)
+                if (s2 < shortTerm && s2 >= currentPrice * (1.0 - RigorConfig.MAX_MEDIUM_TERM_GAIN_PCT) && s2 > 0.0) {
+                    min(s2, baseTarget)
                 } else {
-                    momentumTarget.coerceAtMost(shortTerm * 0.985)
-                }
+                    baseTarget
+                }.coerceIn(currentPrice * (1.0 - RigorConfig.MAX_MEDIUM_TERM_GAIN_PCT), shortTerm * 0.985)
             }
             SignalType.NEUTRAL -> {
-                shortTerm * (1.0 + (volatility * 0.4).coerceIn(0.02, 0.05))
+                val neutralMedGain = (volatility * 0.4).coerceIn(0.02, 0.05)
+                shortTerm * (1.0 + neutralMedGain)
             }
         }
 
@@ -240,17 +255,23 @@ object TechnicalAnalysisEngine {
         val stopLoss = when (overallSignal) {
             SignalType.STRONG_BUY, SignalType.BUY, SignalType.NEUTRAL -> {
                 // Long trade stop-loss placed BELOW entry price
-                val supportLevel = if (s1 > 0.0 && s1 < currentPrice) s1 else currentPrice * 0.97
-                val lowerBand = if (bbData.lower > 0.0 && bbData.lower < currentPrice) bbData.lower else currentPrice * 0.97
+                val supportLevel = if (s1 > 0.0 && s1 < currentPrice) s1 else currentPrice * (1.0 - RigorConfig.MIN_STOP_LOSS_PCT)
+                val lowerBand = if (bbData.lower > 0.0 && bbData.lower < currentPrice) bbData.lower else currentPrice * (1.0 - RigorConfig.MIN_STOP_LOSS_PCT)
                 val structuralStop = min(supportLevel * 0.995, lowerBand * 0.995)
-                structuralStop.coerceIn(currentPrice * 0.94, currentPrice * 0.985)
+                structuralStop.coerceIn(
+                    currentPrice * (1.0 - RigorConfig.MAX_STOP_LOSS_PCT),
+                    currentPrice * (1.0 - RigorConfig.MIN_STOP_LOSS_PCT)
+                )
             }
             SignalType.STRONG_SELL, SignalType.SELL -> {
                 // Short trade stop-loss placed ABOVE entry price
-                val resistLevel = if (r1 > currentPrice) r1 else currentPrice * 1.03
-                val upperBand = if (bbData.upper > currentPrice) bbData.upper else currentPrice * 1.03
+                val resistLevel = if (r1 > currentPrice) r1 else currentPrice * (1.0 + RigorConfig.MIN_STOP_LOSS_PCT)
+                val upperBand = if (bbData.upper > currentPrice) bbData.upper else currentPrice * (1.0 + RigorConfig.MIN_STOP_LOSS_PCT)
                 val structuralStop = max(resistLevel * 1.005, upperBand * 1.005)
-                structuralStop.coerceIn(currentPrice * 1.015, currentPrice * 1.06)
+                structuralStop.coerceIn(
+                    currentPrice * (1.0 + RigorConfig.MIN_STOP_LOSS_PCT),
+                    currentPrice * (1.0 + RigorConfig.MAX_STOP_LOSS_PCT)
+                )
             }
         }
 
@@ -330,7 +351,7 @@ object TechnicalAnalysisEngine {
         currentPrice: Double,
         candles: List<Candle>,
         provenance: MarketDataProvenance = MarketDataProvenance.UNAVAILABLE,
-        reason: String = "Data insufficient for technical analysis."
+        reason: String = "ارائه تحلیل در این زمان ممکن نیست"
     ): TechnicalAnalysisResult {
         return TechnicalAnalysisResult(
             coinSymbol = symbol,

@@ -2,6 +2,9 @@ package com.example.data.remote
 
 import android.content.Context
 import android.util.Log
+import com.example.config.RigorConfig
+import com.example.data.market.MarketCategory
+import com.example.data.market.MarketDataSource
 import com.example.data.model.Candle
 import com.example.data.model.CandleResult
 import com.example.data.model.CryptoCoin
@@ -16,8 +19,8 @@ import java.util.concurrent.TimeUnit
 
 class CryptoRemoteDataSource(
     private val client: OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(12, TimeUnit.SECONDS)
+        .connectTimeout(RigorConfig.HTTP_CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .readTimeout(RigorConfig.HTTP_READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .addInterceptor { chain ->
             val original = chain.request()
             val requestWithUserAgent = original.newBuilder()
@@ -27,13 +30,29 @@ class CryptoRemoteDataSource(
             chain.proceed(requestWithUserAgent)
         }
         .build()
-) {
+) : MarketDataSource {
+
+    override val category: MarketCategory
+        get() = MarketCategory.CRYPTO
+
+    override suspend fun fetchTickers(): List<CryptoCoin>? {
+        return fetchMexcAllTickers() ?: fetchBinanceUsAllTickers() ?: fetchCoinGeckoPage(1)
+    }
+
+    override suspend fun fetchCandles(
+        symbol: String,
+        interval: String,
+        limit: Int,
+        basePrice: Double
+    ): CandleResult {
+        return fetchCandlesWithProvenance(symbol, interval, limit, basePrice)
+    }
 
     // CoinMarketCap Pro API Endpoint for listings (supports pagination via start & limit)
     suspend fun fetchCmcListings(apiKey: String, start: Int = 1, limit: Int = 100): List<CryptoCoin>? = withContext(Dispatchers.IO) {
         if (apiKey.isBlank()) return@withContext null
         try {
-            val url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=$start&limit=$limit&convert=USD"
+            val url = "${RigorConfig.CMC_PRO_LISTINGS_URL}?start=$start&limit=$limit&convert=USD"
             val request = Request.Builder()
                 .url(url)
                 .addHeader("X-CMC_PRO_API_KEY", apiKey)
@@ -88,7 +107,7 @@ class CryptoRemoteDataSource(
     // CoinGecko Markets API for high-volume paginated listings (250 coins per page, up to 1000+)
     suspend fun fetchCoinGeckoPage(page: Int, perPage: Int = 250): List<CryptoCoin>? = withContext(Dispatchers.IO) {
         try {
-            val url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=$perPage&page=$page&sparkline=false"
+            val url = "${RigorConfig.COINGECKO_MARKETS_URL}?vs_currency=usd&order=market_cap_desc&per_page=$perPage&page=$page&sparkline=false"
             val request = Request.Builder().url(url).build()
             val response = client.newCall(request).execute()
             if (!response.isSuccessful) {
@@ -109,8 +128,8 @@ class CryptoRemoteDataSource(
                 val change = item.optDouble("price_change_percentage_24h", 0.0)
                 val volume = item.optDouble("total_volume", 0.0)
                 val mcap = item.optDouble("market_cap", 0.0)
-                val high = item.optDouble("high_24h", price * 1.02)
-                val low = item.optDouble("low_24h", price * 0.98)
+                val high = item.optDouble("high24h", price * 1.02)
+                val low = item.optDouble("low24h", price * 0.98)
                 val rank = item.optInt("market_cap_rank", (page - 1) * perPage + i + 1)
                 val icon = item.optString("image", "")
 
@@ -140,7 +159,7 @@ class CryptoRemoteDataSource(
     // Binance.US full ticker (returns 600+ real-time market pairs)
     suspend fun fetchBinanceUsAllTickers(): List<CryptoCoin>? = withContext(Dispatchers.IO) {
         try {
-            val url = "https://api.binance.us/api/v3/ticker/24hr"
+            val url = RigorConfig.BINANCE_US_TICKER_24HR_URL
             val request = Request.Builder().url(url).build()
             val response = client.newCall(request).execute()
             if (!response.isSuccessful) return@withContext null
@@ -197,7 +216,7 @@ class CryptoRemoteDataSource(
     // High-capacity MEXC 24hr tickers (1,400+ real-time USDT pairs with zero rate limits)
     suspend fun fetchMexcAllTickers(): List<CryptoCoin>? = withContext(Dispatchers.IO) {
         try {
-            val url = "https://api.mexc.com/api/v3/ticker/24hr"
+            val url = RigorConfig.MEXC_TICKER_24HR_URL
             val request = Request.Builder().url(url).build()
             val response = client.newCall(request).execute()
             if (!response.isSuccessful) return@withContext null
@@ -304,7 +323,7 @@ class CryptoRemoteDataSource(
 
         // Strategy 1: MEXC Kline API (high-volume spot data, no IP blocks)
         try {
-            val mexcUrl = "https://api.mexc.com/api/v3/klines?symbol=${clean}USDT&interval=$mexcInterval&limit=$limit"
+            val mexcUrl = "${RigorConfig.MEXC_KLINES_URL}?symbol=${clean}USDT&interval=$mexcInterval&limit=$limit"
             val request = Request.Builder().url(mexcUrl).header("User-Agent", "Mozilla/5.0").build()
             val response = client.newCall(request).execute()
             if (response.isSuccessful) {
@@ -336,7 +355,7 @@ class CryptoRemoteDataSource(
 
         // Strategy 2: KuCoin Candles API (order: [time, open, close, high, low, volume, turnover])
         try {
-            val kucoinUrl = "https://api.kucoin.com/api/v1/market/candles?type=$kucoinInterval&symbol=${clean}-USDT"
+            val kucoinUrl = "${RigorConfig.KUCOIN_CANDLES_URL}?type=$kucoinInterval&symbol=${clean}-USDT"
             val request = Request.Builder().url(kucoinUrl).header("User-Agent", "Mozilla/5.0").build()
             val response = client.newCall(request).execute()
             if (response.isSuccessful) {
@@ -374,7 +393,7 @@ class CryptoRemoteDataSource(
         // Strategy 3: Binance.US (try USDT first, then USD)
         for (suffix in listOf("USDT", "USD")) {
             try {
-                val binanceUrl = "https://api.binance.us/api/v3/klines?symbol=${clean}$suffix&interval=$interval&limit=$limit"
+                val binanceUrl = "${RigorConfig.BINANCE_US_KLINES_URL}?symbol=${clean}$suffix&interval=$interval&limit=$limit"
                 val request = Request.Builder().url(binanceUrl).header("User-Agent", "Mozilla/5.0").build()
                 val response = client.newCall(request).execute()
                 if (response.isSuccessful) {
@@ -405,25 +424,10 @@ class CryptoRemoteDataSource(
             }
         }
 
-        // Fallback: If exchange data failed, provide synthetic preview marked strictly with SYNTHETIC provenance
-        if (basePrice > 0.0 && !basePrice.isNaN() && !basePrice.isInfinite()) {
-            Log.d("CryptoRemote", "Generating SYNTHETIC fallback candles for $clean with basePrice=$basePrice")
-            val syntheticCandles = generateSynthesizedCandles(clean, basePrice)
-            CandleResult(syntheticCandles, MarketDataProvenance.SYNTHETIC, "Deterministic Simulation")
-        } else {
-            Log.w("CryptoRemote", "No market candles available for $clean and basePrice is invalid ($basePrice)")
-            CandleResult(emptyList(), MarketDataProvenance.UNAVAILABLE, null)
-        }
-    }
-
-    // Convenience wrapper for backward compatibility
-    suspend fun fetchCandles(
-        symbol: String,
-        interval: String = "1h",
-        limit: Int = 40,
-        basePrice: Double = 0.0
-    ): List<Candle> {
-        return fetchCandlesWithProvenance(symbol, interval, limit, basePrice).candles
+        // Fallback: If exchange data failed, strictly return UNAVAILABLE.
+        // Critical requirement: Under NO circumstances generate synthetic candles or fake analysis on disconnection!
+        Log.w("CryptoRemote", "Real candlestick exchange data unavailable for $clean. Rejecting synthetic candle fabrication for financial integrity.")
+        CandleResult(emptyList(), MarketDataProvenance.UNAVAILABLE, null)
     }
 
     fun generateSynthesizedCandles(symbol: String, basePrice: Double): List<Candle> {

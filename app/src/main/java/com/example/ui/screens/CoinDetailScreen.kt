@@ -330,6 +330,39 @@ fun CoinDetailScreen(
                         }
                     }
                 }
+
+                // Disconnection / Market Data Unavailable banner
+                if (analysisResult.provenance == MarketDataProvenance.UNAVAILABLE || analysisResult.candles.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 10.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0xFF3B1D28))
+                            .border(1.dp, RigourBearish.copy(alpha = 0.5f), RoundedCornerShape(10.dp))
+                            .padding(12.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = null,
+                                tint = RigourBearish,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = if (lang == Language.PERSIAN) {
+                                    "ارائه تحلیل در این زمان ممکن نیست. ارتباط با صرافی‌ها برقرار نشد؛ جهت حفظ سلامت مالی، از ارائه تحلیل فیک خودداری می‌شود."
+                                } else {
+                                    "Analysis is not available at this time. Live exchange feeds disconnected; fake or synthetic data is strictly prohibited."
+                                },
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                lineHeight = 16.sp
+                            )
+                        }
+                    }
+                }
             }
 
             // Candlestick Chart with Bollinger Bands

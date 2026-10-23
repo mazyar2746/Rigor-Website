@@ -55,10 +55,13 @@ import com.example.ui.theme.RigourGold
 import com.example.ui.theme.RigourSurface
 import com.example.ui.theme.RigourSurfaceVariant
 
+import androidx.compose.material.icons.filled.Email
+
 @Composable
 fun SettingsScreen(
     currentLanguage: Language,
     onOpenLanguageDialog: () -> Unit,
+    onNavigateToContact: () -> Unit = {},
     cmcApiKey: String,
     onSaveCmcApiKey: (String) -> Unit,
     bscApiKey: String,
@@ -86,6 +89,57 @@ fun SettingsScreen(
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Contact Us & Official Support Card
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(RigourSurface)
+                .border(1.dp, RigourCyan.copy(alpha = 0.4f), RoundedCornerShape(14.dp))
+                .clickable(onClick = onNavigateToContact)
+                .testTag("settings_contact_btn")
+                .padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = null,
+                        tint = RigourCyan,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = StringsDictionary.get("contact_us_btn", currentLanguage),
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "h.nasiri3247@gmail.com",
+                            color = RigourCyan,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -163,16 +217,20 @@ fun SettingsScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = "Rigor Pro Status",
+                            text = StringsDictionary.get("rigor_pro_status", currentLanguage),
                             color = Color.White,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = if (subscription.isActive) {
-                                "Active (${subscription.daysRemaining} days left)"
+                                "${StringsDictionary.get("subscription_active", currentLanguage)} (${subscription.daysRemaining} ${StringsDictionary.get("days_remaining", currentLanguage)})"
                             } else {
-                                "Inactive / Free Preview"
+                                if (currentLanguage == Language.PERSIAN) {
+                                    "غیرفعال / نسخه پیش‌نمایش رایگان"
+                                } else {
+                                    "Inactive / Free Preview"
+                                }
                             },
                             color = if (subscription.isActive) RigourBullish else Color.Gray,
                             fontSize = 12.sp

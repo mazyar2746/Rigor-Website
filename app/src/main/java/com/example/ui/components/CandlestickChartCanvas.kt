@@ -47,7 +47,7 @@ fun CandlestickChartCanvas(
                 .background(RigourSurfaceVariant, RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Text("Loading chart candles...", color = Color.Gray, fontSize = 13.sp)
+            Text("ارائه تحلیل و نمودار در این زمان ممکن نیست (داده‌های صرافی در دسترس نیست)", color = Color.Gray, fontSize = 12.sp)
         }
         return
     }

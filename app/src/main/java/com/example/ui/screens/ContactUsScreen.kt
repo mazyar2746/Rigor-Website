@@ -25,10 +25,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.HelpOutline
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -52,6 +53,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.config.RigorConfig
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
@@ -62,12 +64,13 @@ import com.example.ui.theme.RigourSurfaceVariant
 
 @Composable
 fun ContactUsScreen(
-    lang: Language
+    lang: Language,
+    onBack: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    val officialEmail = "h.nasiri3247@gmail.com"
+    val officialEmail = RigorConfig.OFFICIAL_SUPPORT_EMAIL
 
     var senderName by remember { mutableStateOf("") }
     var subject by remember { mutableStateOf("") }
@@ -80,18 +83,40 @@ fun ContactUsScreen(
             .verticalScroll(scrollState)
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        Text(
-            text = StringsDictionary.get("contact_title", lang),
-            color = Color.White,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "We are dedicated to institutional support and immediate feedback resolution.",
-            color = Color(0xFF94A3B8),
-            fontSize = 13.sp
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier.testTag("contact_back_btn")
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = RigourCyan,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Column {
+                Text(
+                    text = StringsDictionary.get("contact_title", lang),
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = if (lang == Language.PERSIAN) {
+                        "پاسخگویی رسمی و پشتیبانی مستقیم ریگور"
+                    } else {
+                        "Institutional support & official feedback resolution"
+                    },
+                    color = Color(0xFF94A3B8),
+                    fontSize = 12.sp
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -164,8 +189,8 @@ fun ContactUsScreen(
                     onClick = {
                         val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                             data = Uri.parse("mailto:$officialEmail")
-                            putExtra(Intent.EXTRA_SUBJECT, if (subject.isNotBlank()) subject else "Rigour Crypto Support Request")
-                            putExtra(Intent.EXTRA_TEXT, "Hello Rigour Team,\n\n$messageBody\n\nFrom: $senderName")
+                            putExtra(Intent.EXTRA_SUBJECT, if (subject.isNotBlank()) subject else "Rigor Crypto Support Request")
+                            putExtra(Intent.EXTRA_TEXT, "Hello Rigor Team,\n\n$messageBody\n\nFrom: $senderName")
                         }
                         try {
                             context.startActivity(Intent.createChooser(emailIntent, "Send Email via..."))
