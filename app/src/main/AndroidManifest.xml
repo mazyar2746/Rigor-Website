@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="ir.cafebazaar.pardakht.BILLING" />
+
+    <queries>
+        <package android:name="com.farsitel.bazaar" />
+    </queries>
 
     <application
         android:allowBackup="true"

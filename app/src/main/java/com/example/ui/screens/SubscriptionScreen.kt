@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -84,6 +85,7 @@ fun SubscriptionScreen(
     isVerificationSuccess: Boolean,
     onVerifyTx: (String, SubscriptionPlan) -> Unit,
     onActivateSandbox: (SubscriptionPlan) -> Unit,
+    onBazaarSubscribe: () -> Unit = {},
     lang: Language
 ) {
     val context = LocalContext.current
@@ -179,6 +181,103 @@ fun SubscriptionScreen(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Official Cafe Bazaar Poolakey In-App Purchase Card
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            Color(0xFF064E3B),
+                            Color(0xFF0F172A)
+                        )
+                    )
+                )
+                .border(1.5.dp, Color(0xFF10B981).copy(alpha = 0.7f), RoundedCornerShape(16.dp))
+                .padding(16.dp)
+        ) {
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(42.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF10B981).copy(alpha = 0.2f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = null,
+                            tint = Color(0xFF10B981),
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = StringsDictionary.get("bazaar_purchase_title", lang),
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = StringsDictionary.get("bazaar_purchase_desc", lang),
+                            color = Color(0xFFCBD5E1),
+                            fontSize = 11.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                Button(
+                    onClick = onBazaarSubscribe,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(46.dp)
+                        .testTag("bazaar_subscribe_btn"),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981)),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Verified,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = StringsDictionary.get("bazaar_purchase_btn", lang),
+                        color = Color.White,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Section Title: Crypto On-Chain Option
+        Text(
+            text = "Crypto Transfer (BEP20 USDT)",
+            color = Color.White,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "Select plan and transfer on-chain via BNB Smart Chain.",
+            color = Color(0xFF94A3B8),
+            fontSize = 12.sp
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Plan Selector Cards (Monthly 9.99 USDT vs Yearly 85 USDT)
         Row(

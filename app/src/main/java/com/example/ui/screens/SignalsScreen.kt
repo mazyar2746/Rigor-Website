@@ -1,5 +1,7 @@
 package com.example.ui.screens
 
+import com.example.ui.components.CoinIcon
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -530,30 +532,12 @@ fun SignalItemCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (coin.iconUrl.isNotBlank()) {
-                        AsyncImage(
-                            model = coin.iconUrl,
-                            contentDescription = coin.name,
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                        )
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .background(RigourSurfaceVariant),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = coin.symbol.take(3),
-                                color = RigourCyan,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                    CoinIcon(
+                        iconUrl = coin.iconUrl,
+                        symbol = coin.symbol,
+                        name = coin.name,
+                        size = 36.dp
+                    )
 
                     Spacer(modifier = Modifier.width(10.dp))
 

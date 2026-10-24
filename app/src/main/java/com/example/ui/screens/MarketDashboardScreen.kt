@@ -1,4 +1,6 @@
 package com.example.ui.screens
+ 
+import com.example.ui.components.CoinIcon
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -332,33 +334,12 @@ fun CoinListItem(
                     modifier = Modifier.width(26.dp)
                 )
 
-                if (coin.iconUrl.isNotEmpty()) {
-                    AsyncImage(
-                        model = coin.iconUrl,
-                        contentDescription = "${coin.name} Icon",
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(CircleShape)
-                            .background(RigourSurfaceVariant),
-                        contentScale = ContentScale.Fit
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(CircleShape)
-                            .background(RigourCyan.copy(alpha = 0.15f))
-                            .border(1.dp, RigourCyan.copy(alpha = 0.3f), CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = coin.symbol.take(3),
-                            color = RigourCyan,
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
+                CoinIcon(
+                    iconUrl = coin.iconUrl,
+                    symbol = coin.symbol,
+                    name = coin.name,
+                    size = 38.dp
+                )
 
                 Spacer(modifier = Modifier.width(10.dp))
 

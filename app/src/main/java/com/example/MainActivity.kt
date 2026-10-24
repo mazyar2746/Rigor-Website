@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.billing.BillingManager
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
 import com.example.ui.RigourViewModel
@@ -85,21 +86,61 @@ import com.example.ui.theme.RigourTheme
 class MainActivity : ComponentActivity() {
 
     private val viewModel: RigourViewModel by viewModels()
+    private lateinit var billingManager: BillingManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        billingManager = BillingManager(this)
+        billingManager.connect(
+            onConnected = {
+                billingManager.checkActiveSubscriptions { hasActiveSub, purchaseInfo ->
+                    if (hasActiveSub && purchaseInfo != null) {
+                        viewModel.activateBazaarSubscription(purchaseInfo.purchaseToken)
+                    }
+                }
+            }
+        )
+
         setContent {
             RigourTheme {
-                RigourApp(viewModel = viewModel)
+                RigourApp(
+                    viewModel = viewModel,
+                    onBazaarSubscribe = {
+                        billingManager.subscribe(
+                            registry = activityResultRegistry,
+                            sku = BillingManager.SKU_RIGOR_PRO,
+                            onSuccess = { purchaseInfo ->
+                                viewModel.activateBazaarSubscription(purchaseInfo.purchaseToken)
+                            },
+                            onCanceled = {
+                                viewModel.onBazaarPurchaseCanceled()
+                            },
+                            onError = { error ->
+                                viewModel.onBazaarPurchaseError(error)
+                            }
+                        )
+                    }
+                )
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::billingManager.isInitialized) {
+            billingManager.release()
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RigourApp(viewModel: RigourViewModel) {
+fun RigourApp(
+    viewModel: RigourViewModel,
+    onBazaarSubscribe: () -> Unit = {}
+) {
     val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
     val currentLanguage by viewModel.currentLanguage.collectAsStateWithLifecycle()
     val filteredCoins by viewModel.filteredCoins.collectAsStateWithLifecycle()
@@ -377,6 +418,7 @@ fun RigourApp(viewModel: RigourViewModel) {
                             isVerificationSuccess = isVerificationSuccess,
                             onVerifyTx = { txHash, plan -> viewModel.verifySubscription(txHash, plan) },
                             onActivateSandbox = { plan -> viewModel.activateInstantSandboxAccess(plan) },
+                            onBazaarSubscribe = onBazaarSubscribe,
                             lang = currentLanguage
                         )
                     }

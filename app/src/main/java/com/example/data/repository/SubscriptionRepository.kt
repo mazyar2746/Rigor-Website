@@ -75,6 +75,32 @@ class SubscriptionRepository(
         }
     }
 
+    suspend fun activateBazaarSubscription(
+        purchaseToken: String,
+        productId: String = "rigor_pro_subscription",
+        durationDays: Int = 30
+    ): Result<UserSubscription> {
+        val cleanToken = purchaseToken.trim()
+        val expiry = System.currentTimeMillis() + (durationDays * 24L * 60L * 60L * 1000L)
+        val entity = VerifiedTxEntity(
+            txHash = "bazaar_$cleanToken",
+            amountUsdt = 9.99,
+            planId = SubscriptionPlan.MONTHLY.id,
+            verifiedAt = System.currentTimeMillis(),
+            expiryTimestamp = expiry,
+            isSandbox = false
+        )
+        subscriptionDao.insertVerifiedTx(entity)
+        val userSub = UserSubscription(
+            isActive = true,
+            plan = SubscriptionPlan.MONTHLY,
+            expiryTimestamp = expiry,
+            txHash = "bazaar_$cleanToken",
+            isSandbox = false
+        )
+        return Result.success(userSub)
+    }
+
     suspend fun clearSubscription() {
         subscriptionDao.clearAll()
     }

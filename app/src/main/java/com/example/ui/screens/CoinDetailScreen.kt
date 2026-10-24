@@ -1,5 +1,7 @@
 package com.example.ui.screens
 
+import com.example.ui.components.CoinIcon
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -109,18 +111,27 @@ fun CoinDetailScreen(
                 )
             }
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "${coin.name} (${coin.symbol})",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                CoinIcon(
+                    iconUrl = coin.iconUrl,
+                    symbol = coin.symbol,
+                    name = coin.name,
+                    size = 34.dp
                 )
-                Text(
-                    text = "Rank #${coin.rank}",
-                    color = Color.Gray,
-                    fontSize = 11.sp
-                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Column(horizontalAlignment = Alignment.Start) {
+                    Text(
+                        text = "${coin.name} (${coin.symbol})",
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Rank #${coin.rank}",
+                        color = Color.Gray,
+                        fontSize = 11.sp
+                    )
+                }
             }
 
             IconButton(onClick = onToggleFavorite) {

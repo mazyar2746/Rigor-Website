@@ -11,7 +11,10 @@ enum class Language(
     ARABIC("ar", "العربية", "🇸🇦", true),
     TURKISH("tr", "Türkçe", "🇹🇷", false),
     RUSSIAN("ru", "Русский", "🇷🇺", false),
-    GERMAN("de", "Deutsch", "🇩🇪", false);
+    GERMAN("de", "Deutsch", "🇩🇪", false),
+    CHINESE("zh", "简体中文", "🇨🇳", false),
+    FRENCH("fr", "Français", "🇫🇷", false),
+    PORTUGUESE("pt", "Português", "🇵🇹", false);
 
     companion object {
         fun fromCode(code: String): Language {

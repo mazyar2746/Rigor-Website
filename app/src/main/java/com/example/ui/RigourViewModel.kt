@@ -290,6 +290,31 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun activateBazaarSubscription(purchaseToken: String) {
+        viewModelScope.launch {
+            _isVerifyingTx.value = true
+            val result = subscriptionRepository.activateBazaarSubscription(purchaseToken)
+            _isVerifyingTx.value = false
+            if (result.isSuccess) {
+                _isVerificationSuccess.value = true
+                _verificationMessage.value = StringsDictionary.get("bazaar_purchase_success", _currentLanguage.value)
+            } else {
+                _isVerificationSuccess.value = false
+                _verificationMessage.value = "Failed to activate Cafe Bazaar subscription"
+            }
+        }
+    }
+
+    fun onBazaarPurchaseCanceled() {
+        _verificationMessage.value = "Cafe Bazaar purchase was canceled."
+        _isVerificationSuccess.value = false
+    }
+
+    fun onBazaarPurchaseError(error: String) {
+        _verificationMessage.value = "Cafe Bazaar error: $error"
+        _isVerificationSuccess.value = false
+    }
+
     fun clearVerificationStatus() {
         _verificationMessage.value = null
         _isVerificationSuccess.value = false
