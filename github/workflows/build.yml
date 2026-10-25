@@ -1,0 +1,55 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch: 
+
+jobs:
+  build:
+    name: Build & Package APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Make Gradlew Executable
+        run: chmod +x gradlew
+
+      - name: Build Release APK
+        run: |
+          ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Sign APK with Your Key
+        run: |
+          UNSIGNED_APK=$(find app/build/outputs/apk/release -name "*.apk" | head -1)
+          BT_VERSION=$(ls $ANDROID_HOME/build-tools | sort -V | tail -1)
+          ZIPALIGN="$ANDROID_HOME/build-tools/$BT_VERSION/zipalign"
+          APKSIGNER="$ANDROID_HOME/build-tools/$BT_VERSION/apksigner"
+          
+          $ZIPALIGN -v -p 4 $UNSIGNED_APK app-aligned.apk
+          
+          echo "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" | tr -d ' \n\r' | base64 -d > new-key.jks
+          
+          $APKSIGNER sign --ks new-key.jks \
+            --ks-pass pass:rigornasirihashem \
+            --key-pass pass:rigornasirihashem \
+            --ks-key-alias my-key-alias \
+            --out app-release-signed.apk app-aligned.apk
+            
+          $APKSIGNER verify app-release-signed.apk
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Rigor-Release-APK-Final
+          path: app-release-signed.apk
+          if-no-files-found: error
