@@ -3,6 +3,6 @@
     <item
         android:width="66dp"
         android:height="66dp"
-        android:drawable="@drawable/rigor_logo"
+        android:drawable="@drawable/rigour_logo"
         android:gravity="center" />
 </layer-list>

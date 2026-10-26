@@ -86,41 +86,54 @@ import com.example.ui.theme.RigourTheme
 class MainActivity : ComponentActivity() {
 
     private val viewModel: RigourViewModel by viewModels()
-    private lateinit var billingManager: BillingManager
+    private var billingManager: BillingManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        billingManager = BillingManager(this)
-        billingManager.connect(
-            onConnected = {
-                billingManager.checkActiveSubscriptions { hasActiveSub, purchaseInfo ->
-                    if (hasActiveSub && purchaseInfo != null) {
-                        viewModel.activateBazaarSubscription(purchaseInfo.purchaseToken)
+        try {
+            val manager = BillingManager(this)
+            billingManager = manager
+            manager.connect(
+                onConnected = {
+                    manager.checkActiveSubscriptions { hasActiveSub, purchaseInfo ->
+                        if (hasActiveSub && purchaseInfo != null) {
+                            viewModel.activateBazaarSubscription(purchaseInfo.purchaseToken)
+                        }
                     }
+                },
+                onFailed = { throwable ->
+                    android.util.Log.w("MainActivity", "Cafe Bazaar billing connection: ${throwable.message}")
                 }
-            }
-        )
+            )
+        } catch (t: Throwable) {
+            android.util.Log.e("MainActivity", "Error setting up BillingManager", t)
+        }
 
         setContent {
             RigourTheme {
                 RigourApp(
                     viewModel = viewModel,
                     onBazaarSubscribe = {
-                        billingManager.subscribe(
-                            registry = activityResultRegistry,
-                            sku = BillingManager.SKU_RIGOR_PRO,
-                            onSuccess = { purchaseInfo ->
-                                viewModel.activateBazaarSubscription(purchaseInfo.purchaseToken)
-                            },
-                            onCanceled = {
-                                viewModel.onBazaarPurchaseCanceled()
-                            },
-                            onError = { error ->
-                                viewModel.onBazaarPurchaseError(error)
-                            }
-                        )
+                        val manager = billingManager
+                        if (manager != null) {
+                            manager.subscribe(
+                                registry = activityResultRegistry,
+                                sku = BillingManager.SKU_RIGOR_PRO,
+                                onSuccess = { purchaseInfo ->
+                                    viewModel.activateBazaarSubscription(purchaseInfo.purchaseToken)
+                                },
+                                onCanceled = {
+                                    viewModel.onBazaarPurchaseCanceled()
+                                },
+                                onError = { error ->
+                                    viewModel.onBazaarPurchaseError(error)
+                                }
+                            )
+                        } else {
+                            viewModel.onBazaarPurchaseError("Cafe Bazaar billing is unavailable on this device.")
+                        }
                     }
                 )
             }
@@ -129,8 +142,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::billingManager.isInitialized) {
-            billingManager.release()
+        try {
+            billingManager?.release()
+            billingManager = null
+        } catch (t: Throwable) {
+            android.util.Log.w("MainActivity", "Error releasing billingManager", t)
         }
     }
 }

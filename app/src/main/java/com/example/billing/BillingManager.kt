@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * Typealias to allow both BillingClient and Payment terminology as required.
+ * Typealias to allow Payment terminology as required.
  */
 typealias BillingClient = Payment
 
@@ -31,6 +31,8 @@ sealed class BillingState {
 /**
  * Robust Cafe Bazaar In-App Billing Manager using Poolakey SDK.
  * Manages connections, subscription purchases via Activity Result API, and query of subscribed products.
+ * Includes graceful fallback and crash protection when running on emulators, web previews,
+ * or devices without the Cafe Bazaar application.
  */
 class BillingManager(
     private val context: Context,
@@ -43,15 +45,27 @@ class BillingManager(
             "MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwCnUP5SCfkI4qRLcrj9bS3IrPQzFN76ET0gASVUdwRPyI8PCBYQDCECwjopWPcQM3R2GDq6bNjMRZehmW5A4ekYqDBAmdlMJEMmHtA/57RzAO6IOaLNz4ZlKLnGADyBvfVbHBQNkc3rLAlwfvgZtpdFMyPvrrxJXa2VMOigM+e+IRiVtMXxBwORMOgGFQyzVnuljLFfZA0jH52HamxYrbZVjawF9kheTWhsyv5xc4sCAwEAAQ=="
     }
 
-    private val paymentConfig = PaymentConfiguration(
-        localSecurityCheck = SecurityCheck.Enable(rsaPublicKey = rsaPublicKey),
-        shouldSupportSubscription = true
-    )
+    private val paymentConfig: PaymentConfiguration? = try {
+        PaymentConfiguration(
+            localSecurityCheck = SecurityCheck.Enable(rsaPublicKey = rsaPublicKey),
+            shouldSupportSubscription = true
+        )
+    } catch (t: Throwable) {
+        Log.w(TAG, "Failed to create PaymentConfiguration", t)
+        null
+    }
 
-    val billingClient: BillingClient = Payment(
-        context = context,
-        config = paymentConfig
-    )
+    val billingClient: Payment? = try {
+        paymentConfig?.let { config ->
+            Payment(
+                context = context,
+                config = config
+            )
+        }
+    } catch (t: Throwable) {
+        Log.w(TAG, "Failed to instantiate Poolakey Payment client", t)
+        null
+    }
 
     private var connection: Connection? = null
 
@@ -62,9 +76,18 @@ class BillingManager(
         onConnected: (() -> Unit)? = null,
         onFailed: ((Throwable) -> Unit)? = null
     ) {
+        val client = billingClient
+        if (client == null) {
+            val msg = "Poolakey billing is unavailable on this device (Cafe Bazaar app required)."
+            Log.w(TAG, msg)
+            _billingState.value = BillingState.Error(msg)
+            onFailed?.invoke(IllegalStateException(msg))
+            return
+        }
+
         _billingState.value = BillingState.Connecting
         try {
-            connection = billingClient.connect {
+            connection = client.connect {
                 connectionSucceed {
                     Log.d(TAG, "Cafe Bazaar Poolakey Billing connected successfully")
                     _billingState.value = BillingState.Connected
@@ -81,7 +104,7 @@ class BillingManager(
                     _billingState.value = BillingState.Idle
                 }
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.e(TAG, "Exception during billing connect", e)
             _billingState.value = BillingState.Error(e.message ?: "Unknown billing error")
             onFailed?.invoke(e)
@@ -99,6 +122,14 @@ class BillingManager(
         onCanceled: () -> Unit,
         onError: (String) -> Unit
     ) {
+        val client = billingClient
+        if (client == null) {
+            val msg = "Cafe Bazaar application is required to subscribe via Bazaar."
+            _billingState.value = BillingState.Error(msg)
+            onError(msg)
+            return
+        }
+
         _billingState.value = BillingState.Purchasing(sku)
 
         val purchaseRequest = PurchaseRequest(
@@ -107,7 +138,7 @@ class BillingManager(
         )
 
         try {
-            billingClient.subscribeProduct(
+            client.subscribeProduct(
                 registry = registry,
                 request = purchaseRequest
             ) {
@@ -137,7 +168,7 @@ class BillingManager(
                     onError(msg)
                 }
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             val msg = e.message ?: "Error launching subscription flow"
             Log.e(TAG, "Exception in subscribeProduct", e)
             _billingState.value = BillingState.Error(msg)
@@ -151,8 +182,14 @@ class BillingManager(
     fun checkActiveSubscriptions(
         onResult: (hasActiveSub: Boolean, purchaseInfo: PurchaseInfo?) -> Unit
     ) {
+        val client = billingClient
+        if (client == null) {
+            onResult(false, null)
+            return
+        }
+
         try {
-            billingClient.getSubscribedProducts {
+            client.getSubscribedProducts {
                 querySucceed { purchasedEntities ->
                     val matching = purchasedEntities.firstOrNull { it.productId == SKU_RIGOR_PRO }
                     val hasActive = matching != null
@@ -164,7 +201,7 @@ class BillingManager(
                     onResult(false, null)
                 }
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.w(TAG, "Exception querying active subscriptions", e)
             onResult(false, null)
         }
@@ -174,7 +211,7 @@ class BillingManager(
         try {
             connection?.disconnect()
             connection = null
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.w(TAG, "Error disconnecting billing", e)
         }
     }
