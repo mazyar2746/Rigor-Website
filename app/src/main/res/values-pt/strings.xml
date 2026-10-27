@@ -55,4 +55,26 @@
     <string name="contact_title">Fale Conosco &amp; Suporte</string>
     <string name="contact_email_label">E-mail de Suporte Oficial:</string>
     <string name="contact_us_btn">Fale Conosco &amp; Suporte Oficial</string>
+    <string name="plan_selection_subtitle">Selecione um plano e pague com USDT na BNB Smart Chain (BEP20).</string>
+    <string name="crypto_transfer_bep20">Transferência Cripto (USDT BEP20)</string>
+    <string name="crypto_transfer_desc">Selecione o plano e transfira on-chain via BNB Smart Chain.</string>
+    <string name="network_required">Rede necessária:</string>
+    <string name="deposit_qr_code">QR Code de depósito (USDT BEP20):</string>
+    <string name="anti_replay_desc">As transações são verificadas diretamente via BscScan e pelo estado da blockchain BSC. Replay attacks rejeitados.</string>
+    <string name="demo_reviewer_tool">Ferramenta de demonstração</string>
+    <string name="all_coins_label">Todas as moedas</string>
+    <string name="watchlist_label">Favoritos</string>
+    <string name="plan_period_monthly">/ 30 dias</string>
+    <string name="plan_period_yearly">/ 365 dias</string>
+    <string name="no_coins_found">Nenhuma criptomoeda corresponde à sua pesquisa.</string>
+    <string name="loading_more_coins">Carregando próximo lote...</string>
+    <string name="scroll_down_load_more">Role para baixo para carregar mais de 1.000 moedas</string>
+    <string name="signals_calculating">Calculando sinais de confluência...</string>
+    <string name="signals_none_found">Nenhum sinal encontrado para o filtro selecionado.</string>
+    <string name="pro_active_high_accuracy">Pro Ativo • Alta precisão desbloqueada</string>
+    <string name="standard_vs_pro_comparison">Comparação de precisão Padrão vs Pro</string>
+    <string name="standard_signals">Sinais Padrão</string>
+    <string name="current_price">Preço atual</string>
+    <string name="conviction">Convicção:</string>
+    <string name="pro_locked_details_notice">Pontos de entrada, Alvos 1 e 2 e stop-loss estão disponíveis exclusivamente para membros Pro.</string>
 </resources>

@@ -55,4 +55,26 @@
     <string name="contact_title">Contactez-nous &amp; Support</string>
     <string name="contact_email_label">E-mail de Support Officiel :</string>
     <string name="contact_us_btn">Nous Contacter &amp; Support Officiel</string>
+    <string name="plan_selection_subtitle">Sélectionnez un plan et payez avec USDT sur BNB Smart Chain (BEP20).</string>
+    <string name="crypto_transfer_bep20">Transfert crypto (USDT BEP20)</string>
+    <string name="crypto_transfer_desc">Sélectionnez un plan et transférez on-chain via BNB Smart Chain.</string>
+    <string name="network_required">Réseau requis :</string>
+    <string name="deposit_qr_code">QR Code de dépôt (USDT BEP20) :</string>
+    <string name="anti_replay_desc">Les transactions sont vérifiées directement via BscScan et la blockchain BSC. Attaques par rejeu rejetées.</string>
+    <string name="demo_reviewer_tool">Outil de démo / révision</string>
+    <string name="all_coins_label">Toutes les pièces</string>
+    <string name="watchlist_label">Favoris</string>
+    <string name="plan_period_monthly">/ 30 jours</string>
+    <string name="plan_period_yearly">/ 365 jours</string>
+    <string name="no_coins_found">Aucune cryptomonnaie ne correspond à votre recherche.</string>
+    <string name="loading_more_coins">Chargement du lot suivant...</string>
+    <string name="scroll_down_load_more">Faites défiler vers le bas pour charger plus de 1000 cryptos</string>
+    <string name="signals_calculating">Calcul des signaux de confluence...</string>
+    <string name="signals_none_found">Aucun signal trouvé pour le filtre sélectionné.</string>
+    <string name="pro_active_high_accuracy">Pro actif • Haute précision débloquée</string>
+    <string name="standard_vs_pro_comparison">Comparaison de précision Standard vs Pro</string>
+    <string name="standard_signals">Signaux standard</string>
+    <string name="current_price">Prix actuel</string>
+    <string name="conviction">Conviction :</string>
+    <string name="pro_locked_details_notice">Les points d\'entrée, objectifs 1 et 2 ainsi que le stop-loss sont réservés aux membres Pro.</string>
 </resources>

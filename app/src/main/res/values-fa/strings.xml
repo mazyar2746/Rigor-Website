@@ -55,4 +55,26 @@
     <string name="contact_title">ارتباط با ما و پشتیبانی</string>
     <string name="contact_email_label">ایمیل رسمی پشتیبانی:</string>
     <string name="contact_us_btn">ارتباط با ما و پشتیبانی رسمی</string>
+    <string name="plan_selection_subtitle">یک طرح را انتخاب کرده و با تتر شبکه بی‌ان‌بی اسمارت‌چین (BEP20) پرداخت کنید.</string>
+    <string name="crypto_transfer_bep20">انتقال کریپتو (تتر BEP20)</string>
+    <string name="crypto_transfer_desc">طرح مورد نظر را انتخاب و به صورت مستقیم درون زنجیره انتقال دهید.</string>
+    <string name="network_required">شبکه مورد نیاز:</string>
+    <string name="deposit_qr_code">کیوآرکد واریز (تتر BEP20):</string>
+    <string name="anti_replay_desc">تراکنش‌ها مستقیماً از طریق BscScan و وضعیت بلاک‌چین BSC تأیید می‌شوند. حملات تکرار تراکنش به طور دائم رد می‌گردند.</string>
+    <string name="demo_reviewer_tool">ابزار دمو و بررسی</string>
+    <string name="all_coins_label">همه ارزها</string>
+    <string name="watchlist_label">دیده‌بان</string>
+    <string name="plan_period_monthly">/ ۳۰ روز</string>
+    <string name="plan_period_yearly">/ ۳۶۵ روز</string>
+    <string name="no_coins_found">هیچ ارز دیجیتالی با جستجوی شما مطابقت ندارد.</string>
+    <string name="loading_more_coins">در حال دریافت ارزهای بیشتر...</string>
+    <string name="scroll_down_load_more">برای بارگذاری بیش از ۱۰۰۰ ارز به پایین اسکرول کنید</string>
+    <string name="signals_calculating">در حال محاسبه سیگنال‌های همگرایی...</string>
+    <string name="signals_none_found">هیچ سیگنالی برای فیلتر انتخاب شده یافت نشد.</string>
+    <string name="pro_active_high_accuracy">اشتراک فعال است • دقت بالا آنلاک شده</string>
+    <string name="standard_vs_pro_comparison">تفاوت دقت سیگنال‌های عادی و پرو</string>
+    <string name="standard_signals">سیگنال‌های عادی</string>
+    <string name="current_price">قیمت فعلی</string>
+    <string name="conviction">درجه اطمینان:</string>
+    <string name="pro_locked_details_notice">نقاط ورود، تارگت‌های ۱ و ۲ و حد ضرر منحصراً برای کاربران پرو در دسترس است.</string>
 </resources>

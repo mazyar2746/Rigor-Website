@@ -175,7 +175,7 @@ fun SubscriptionScreen(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Select a plan and pay with USDT on BNB Smart Chain (BEP20).",
+            text = StringsDictionary.get("plan_selection_subtitle", lang),
             color = Color(0xFF94A3B8),
             fontSize = 13.sp
         )
@@ -265,14 +265,14 @@ fun SubscriptionScreen(
 
         // Section Title: Crypto On-Chain Option
         Text(
-            text = "Crypto Transfer (BEP20 USDT)",
+            text = StringsDictionary.get("crypto_transfer_bep20", lang),
             color = Color.White,
             fontSize = 15.sp,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Select plan and transfer on-chain via BNB Smart Chain.",
+            text = StringsDictionary.get("crypto_transfer_desc", lang),
             color = Color(0xFF94A3B8),
             fontSize = 12.sp
         )
@@ -287,7 +287,7 @@ fun SubscriptionScreen(
             PlanCard(
                 title = StringsDictionary.get("pricing_monthly", lang),
                 price = StringsDictionary.get("pricing_monthly_price", lang),
-                period = "/ 30 days",
+                period = StringsDictionary.get("plan_period_monthly", lang),
                 badge = null,
                 isSelected = selectedPlan == SubscriptionPlan.MONTHLY,
                 onClick = { selectedPlan = SubscriptionPlan.MONTHLY },
@@ -297,7 +297,7 @@ fun SubscriptionScreen(
             PlanCard(
                 title = StringsDictionary.get("pricing_yearly", lang),
                 price = StringsDictionary.get("pricing_yearly_price", lang),
-                period = "/ 365 days",
+                period = StringsDictionary.get("plan_period_yearly", lang),
                 badge = StringsDictionary.get("pricing_yearly_badge", lang),
                 isSelected = selectedPlan == SubscriptionPlan.YEARLY,
                 onClick = { selectedPlan = SubscriptionPlan.YEARLY },
@@ -324,7 +324,7 @@ fun SubscriptionScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Network Required:",
+                        text = StringsDictionary.get("network_required", lang),
                         color = Color.Gray,
                         fontSize = 12.sp
                     )
@@ -403,7 +403,7 @@ fun SubscriptionScreen(
 
                 // High-Contrast Procedural QR Code
                 Text(
-                    text = "Deposit QR Code (USDT BEP20):",
+                    text = StringsDictionary.get("deposit_qr_code", lang),
                     color = Color.Gray,
                     fontSize = 11.sp
                 )
@@ -561,7 +561,7 @@ fun SubscriptionScreen(
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "Transactions are verified directly via BscScan and BSC blockchain state. Replay attacks are rejected permanently.",
+                        text = StringsDictionary.get("anti_replay_desc", lang),
                         color = Color.Gray,
                         fontSize = 11.sp,
                         lineHeight = 15.sp
@@ -599,7 +599,11 @@ fun SubscriptionScreen(
                             .background(RigourGold.copy(alpha = 0.2f))
                             .padding(horizontal = 6.dp, vertical = 2.dp)
                     ) {
-                        Text("Demo / Reviewer Tool", color = RigourGold, fontSize = 10.sp)
+                        Text(
+                            text = StringsDictionary.get("demo_reviewer_tool", lang),
+                            color = RigourGold,
+                            fontSize = 10.sp
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.height(4.dp))

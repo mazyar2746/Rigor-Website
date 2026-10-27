@@ -55,4 +55,26 @@
     <string name="contact_title">联系我们与技术支持</string>
     <string name="contact_email_label">官方支持邮箱：</string>
     <string name="contact_us_btn">联系我们与官方支持</string>
+    <string name="plan_selection_subtitle">选择方案并通过 BNB Smart Chain (BEP20) 使用 USDT 支付。</string>
+    <string name="crypto_transfer_bep20">加密货币转账 (BEP20 USDT)</string>
+    <string name="crypto_transfer_desc">选择方案并通过 BNB Smart Chain 进行链上转账。</string>
+    <string name="network_required">所需网络:</string>
+    <string name="deposit_qr_code">充值二维码 (USDT BEP20):</string>
+    <string name="anti_replay_desc">交易直接通过 BscScan 和 BSC 区块链状态进行验证，永久拒绝重放攻击。</string>
+    <string name="demo_reviewer_tool">演示/审核工具</string>
+    <string name="all_coins_label">所有代币</string>
+    <string name="watchlist_label">自选列表</string>
+    <string name="plan_period_monthly">/ 30 天</string>
+    <string name="plan_period_yearly">/ 365 天</string>
+    <string name="no_coins_found">未找到符合您搜索的加密货币。</string>
+    <string name="loading_more_coins">正在从混合接口加载更多代币...</string>
+    <string name="scroll_down_load_more">向下滚动可加载 1000+ 种代币</string>
+    <string name="signals_calculating">正在计算多指标共振信号...</string>
+    <string name="signals_none_found">未找到符合所选筛选条件的信号。</string>
+    <string name="pro_active_high_accuracy">Pro 已激活 • 高精度信号已解锁</string>
+    <string name="standard_vs_pro_comparison">标准版与 Pro 版准确率对比</string>
+    <string name="standard_signals">标准信号</string>
+    <string name="current_price">当前价格</string>
+    <string name="conviction">置信度:</string>
+    <string name="pro_locked_details_notice">入场点、目标 1 &amp; 2 以及止损点仅向 Pro 会员开放。</string>
 </resources>

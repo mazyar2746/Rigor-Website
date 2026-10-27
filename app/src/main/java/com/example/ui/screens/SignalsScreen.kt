@@ -215,7 +215,7 @@ fun SignalsScreen(
                         CircularProgressIndicator(color = RigourCyan)
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = if (lang == Language.PERSIAN) "در حال محاسبه سیگنال‌های همگرایی..." else "Calculating confluence signals...",
+                            text = StringsDictionary.get("signals_calculating", lang),
                             color = Color.Gray,
                             fontSize = 13.sp
                         )
@@ -231,7 +231,7 @@ fun SignalsScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = if (lang == Language.PERSIAN) "هیچ سیگنالی برای فیلتر انتخاب شده یافت نشد." else "No signals found for selected filter.",
+                        text = StringsDictionary.get("signals_none_found", lang),
                         color = Color.Gray,
                         fontSize = 14.sp
                     )
@@ -314,9 +314,9 @@ fun SignalsExplorationBanner(
                         )
                         Text(
                             text = if (isPro) {
-                                if (lang == Language.PERSIAN) "اشتراک فعال است • دقت بالا آنلاک شده" else "Pro Active • High Accuracy Unlocked"
+                                StringsDictionary.get("pro_active_high_accuracy", lang)
                             } else {
-                                if (lang == Language.PERSIAN) "تفاوت دقت سیگنال‌های عادی و پرو" else "Standard vs Pro Accuracy Comparison"
+                                StringsDictionary.get("standard_vs_pro_comparison", lang)
                             },
                             color = if (isPro) RigourGold else Color.Gray,
                             fontSize = 11.sp
@@ -383,7 +383,7 @@ fun SignalsExplorationBanner(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = if (lang == Language.PERSIAN) "سیگنال‌های عادی" else "Standard Signals",
+                            text = StringsDictionary.get("standard_signals", lang),
                             color = Color.LightGray,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold
@@ -612,7 +612,7 @@ fun SignalItemCard(
             ) {
                 Column {
                     Text(
-                        text = if (lang == Language.PERSIAN) "قیمت فعلی" else "Current Price",
+                        text = StringsDictionary.get("current_price", lang),
                         color = Color.Gray,
                         fontSize = 10.sp
                     )
@@ -633,7 +633,7 @@ fun SignalItemCard(
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = if (lang == Language.PERSIAN) "درجه اطمینان:" else "Conviction:",
+                            text = StringsDictionary.get("conviction", lang),
                             color = Color.LightGray,
                             fontSize = 11.sp
                         )
@@ -715,8 +715,7 @@ fun SignalItemCard(
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = if (lang == Language.PERSIAN) "نقاط ورود، حد سود ۱ و ۲ و حد ضرر این سیگنال فوق‌العاده فقط برای کاربران پرو در دسترس است."
-                            else "Entry points, Target 1 & 2, and stop-loss are exclusively available to Pro members.",
+                            text = StringsDictionary.get("pro_locked_details_notice", lang),
                             color = Color.Gray,
                             fontSize = 11.sp,
                             lineHeight = 15.sp

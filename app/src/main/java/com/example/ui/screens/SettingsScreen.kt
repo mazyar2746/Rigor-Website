@@ -409,7 +409,7 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Rigor Institutional Analytics v1.0.0",
+                text = "Rigor Institutional Analytics v1.0.1",
                 color = Color.DarkGray,
                 fontSize = 11.sp
             )

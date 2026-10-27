@@ -55,4 +55,26 @@
     <string name="contact_title">Contact Us &amp; Support</string>
     <string name="contact_email_label">Official Support Email:</string>
     <string name="contact_us_btn">Contact Us &amp; Official Support</string>
+    <string name="plan_selection_subtitle">Select a plan and pay with USDT on BNB Smart Chain (BEP20).</string>
+    <string name="crypto_transfer_bep20">Crypto Transfer (BEP20 USDT)</string>
+    <string name="crypto_transfer_desc">Select plan and transfer on-chain via BNB Smart Chain.</string>
+    <string name="network_required">Network Required:</string>
+    <string name="deposit_qr_code">Deposit QR Code (USDT BEP20):</string>
+    <string name="anti_replay_desc">Transactions are verified directly via BscScan and BSC blockchain state. Replay attacks are rejected permanently.</string>
+    <string name="demo_reviewer_tool">Demo / Reviewer Tool</string>
+    <string name="all_coins_label">All Coins</string>
+    <string name="watchlist_label">Watchlist</string>
+    <string name="plan_period_monthly">/ 30 days</string>
+    <string name="plan_period_yearly">/ 365 days</string>
+    <string name="no_coins_found">No cryptocurrencies match your search.</string>
+    <string name="loading_more_coins">Loading next batch from Hybrid API...</string>
+    <string name="scroll_down_load_more">Scroll down to load up to 1,000+ coins</string>
+    <string name="signals_calculating">Calculating confluence signals...</string>
+    <string name="signals_none_found">No signals found for selected filter.</string>
+    <string name="pro_active_high_accuracy">Pro Active • High Accuracy Unlocked</string>
+    <string name="standard_vs_pro_comparison">Standard vs Pro Accuracy Comparison</string>
+    <string name="standard_signals">Standard Signals</string>
+    <string name="current_price">Current Price</string>
+    <string name="conviction">Conviction:</string>
+    <string name="pro_locked_details_notice">Entry points, Target 1 &amp; 2, and stop-loss are exclusively available to Pro members.</string>
 </resources>

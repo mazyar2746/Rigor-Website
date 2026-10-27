@@ -161,7 +161,7 @@ fun MarketDashboardScreen(
                 FilterChip(
                     selected = !onlyFavorites,
                     onClick = { if (onlyFavorites) onToggleFavorites() },
-                    label = { Text("All Coins (${coins.size})", fontSize = 12.sp) },
+                    label = { Text("${StringsDictionary.get("all_coins_label", lang)} (${coins.size})", fontSize = 12.sp) },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = RigourCyan.copy(alpha = 0.2f),
                         selectedLabelColor = RigourCyan
@@ -180,7 +180,7 @@ fun MarketDashboardScreen(
                                 modifier = Modifier.size(14.dp)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text("Watchlist (${favoriteSymbols.size})", fontSize = 12.sp)
+                            Text("${StringsDictionary.get("watchlist_label", lang)} (${favoriteSymbols.size})", fontSize = 12.sp)
                         }
                     },
                     colors = FilterChipDefaults.filterChipColors(
@@ -227,7 +227,7 @@ fun MarketDashboardScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "No cryptocurrencies match your search.",
+                    text = StringsDictionary.get("no_coins_found", lang),
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
@@ -265,7 +265,7 @@ fun MarketDashboardScreen(
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                    text = "Loading next batch from Hybrid API...",
+                                    text = StringsDictionary.get("loading_more_coins", lang),
                                     color = Color(0xFF94A3B8),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Medium
@@ -282,7 +282,7 @@ fun MarketDashboardScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Scroll down to load up to 1,000+ coins",
+                                text = StringsDictionary.get("scroll_down_load_more", lang),
                                 color = Color.Gray,
                                 fontSize = 11.sp
                             )
