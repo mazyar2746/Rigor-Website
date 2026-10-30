@@ -408,7 +408,7 @@ fun CoinDetailScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            if ((subscription.isActive || analysisResult.confidencePercent < 85) && analysisResult != null) {
+            if (analysisResult != null && (subscription.isActive || analysisResult.confidencePercent < 85)) {
                 // UNLOCKED PRO EXPERIENCE
                 SignalConfluenceCard(result = analysisResult, lang = lang)
 
