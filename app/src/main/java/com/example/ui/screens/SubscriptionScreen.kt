@@ -44,7 +44,7 @@ fun SubscriptionScreen(
     lang: Language
 ) {
     val scrollState = rememberScrollState()
-    val expiresText = subscription.expiresAt?.let {
+    val expiresText = subscription.expiryTimestamp?.let {
         SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(it))
     } ?: "N/A"
 
