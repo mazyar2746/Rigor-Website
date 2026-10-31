@@ -86,6 +86,9 @@ class ForexViewModel(
                 val newRows = mutableListOf<ForexRow>()
                 for (pair in filtered) {
                     val timeSeriesResult = repository.getTimeSeries(pair.symbol, interval)
+                    if (timeSeriesResult is ForexResult.Failure) {
+                        android.util.Log.e("FOREX_DEBUG", "Failed for ${pair.symbol}: ${timeSeriesResult.error}")
+                    }
                     
                     if (timeSeriesResult is ForexResult.Success) {
                         val timeSeries = timeSeriesResult.data
