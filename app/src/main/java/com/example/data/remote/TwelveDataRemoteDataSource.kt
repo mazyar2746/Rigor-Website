@@ -1,32 +1,23 @@
 package com.example.data.remote
 
-import com.example.config.RigorConfig
 import com.example.data.forex.*
-import com.example.data.model.Candle
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
-import java.util.concurrent.TimeUnit
+import org.json.JSONObject
+import java.net.URL
 
-class TwelveDataRemoteDataSource(
-    private val apiKey: String = RigorConfig.TWELVE_DATA_API_KEY,
-    private val api: TwelveDataApi = createTwelveDataApi()
-) : ForexRepository {
+class TwelveDataRemoteDataSource : ForexRepository {
 
-    private val majorSymbols = listOf(
+    private val apiKey = "DTJqY832icm5SKjSfwPtJTd27oZH70s"
+    private val baseUrl = "https://api-v4.fcsapi.com"
+
+    private val majorPairs = listOf(
         "EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD", "USD/CAD", "USD/CHF", "NZD/USD"
     )
 
     override suspend fun getForexPairs(): ForexResult<List<ForexPair>> = withContext(Dispatchers.IO) {
-        if (apiKey.isBlank()) return@withContext ForexResult.Failure(ForexError.InvalidApiKey("Missing Key"))
         try {
-            val pairs = majorSymbols.map { symbol ->
+            val pairs = majorPairs.map { symbol ->
                 ForexPair(
                     symbol = symbol,
                     baseCurrency = symbol.substringBefore("/"),
@@ -41,26 +32,34 @@ class TwelveDataRemoteDataSource(
     }
 
     override suspend fun getQuote(symbol: String): ForexResult<ForexQuote> = withContext(Dispatchers.IO) {
-        if (apiKey.isBlank()) return@withContext ForexResult.Failure(ForexError.InvalidApiKey("Missing Key"))
         try {
-            val response = api.quote(apiKey, symbol)
-            if (response.status == "error") return@withContext ForexResult.Failure(ForexError.Provider(response.message ?: "Error"))
+            val cleanSymbol = symbol.replace("/", "")
+            val url = "$baseUrl/forex/latest?symbol=$cleanSymbol&access_key=$apiKey"
+            val response = URL(url).readText()
+            val json = JSONObject(response)
             
-            val close = response.close?.toDoubleOrNull() ?: return@withContext ForexResult.Failure(ForexError.Parsing("No close"))
+            if (json.getBoolean("status") == false) {
+                return@withContext ForexResult.Failure(ForexError.Provider(json.optString("msg", "Unknown error")))
+            }
+            
+            val data = json.getJSONArray("response").getJSONObject(0)
+            val active = data.getJSONObject("active")
+            
+            val close = active.getDouble("c")
             
             ForexResult.Success(ForexQuote(
-                symbol = response.symbol ?: symbol,
-                name = response.name ?: symbol,
-                exchange = response.exchange ?: "Forex",
-                open = response.open?.toDoubleOrNull() ?: close,
-                high = response.high?.toDoubleOrNull() ?: close,
-                low = response.low?.toDoubleOrNull() ?: close,
+                symbol = symbol,
+                name = data.optString("ticker", symbol),
+                exchange = "FCS API",
+                open = active.optDouble("o", close),
+                high = active.optDouble("h", close),
+                low = active.optDouble("l", close),
                 close = close,
-                previousClose = response.previousClose?.toDoubleOrNull() ?: close,
-                change = response.change?.toDoubleOrNull() ?: 0.0,
-                percentChange = response.percentChange?.toDoubleOrNull() ?: 0.0,
-                timestamp = response.timestamp ?: (System.currentTimeMillis() / 1000L),
-                isMarketOpen = response.isMarketOpen ?: false,
+                previousClose = close,
+                change = active.optDouble("ch", 0.0),
+                percentChange = active.optDouble("chp", 0.0),
+                timestamp = System.currentTimeMillis() / 1000L,
+                isMarketOpen = true,
                 fiftyTwoWeekLow = null,
                 fiftyTwoWeekHigh = null
             ))
@@ -70,44 +69,64 @@ class TwelveDataRemoteDataSource(
     }
 
     override suspend fun getTimeSeries(symbol: String, interval: ForexInterval): ForexResult<ForexTimeSeries> = withContext(Dispatchers.IO) {
-        if (apiKey.isBlank()) return@withContext ForexResult.Failure(ForexError.InvalidApiKey("Missing Key"))
         try {
-            val response = api.timeSeries(apiKey, symbol, interval.apiValue, 100)
-            if (response.status == "error") return@withContext ForexResult.Failure(ForexError.Provider(response.message ?: "Error"))
+            val cleanSymbol = symbol.replace("/", "")
+            val period = when (interval) {
+                ForexInterval.M1 -> "1m"
+                ForexInterval.M5 -> "5m"
+                ForexInterval.M15 -> "15m"
+                ForexInterval.M30 -> "30m"
+                ForexInterval.H1 -> "1h"
+                ForexInterval.H4 -> "4h"
+                ForexInterval.D1 -> "1d"
+                ForexInterval.W1 -> "1w"
+            }
             
-            val candles = response.values.orEmpty()
-                .mapNotNull { it.toCandleOrNull() }
-                .sortedBy { it.timestamp }
+            val url = "$baseUrl/forex/history?symbol=$cleanSymbol&period=$period&access_key=$apiKey"
+            val response = URL(url).readText()
+            val json = JSONObject(response)
+            
+            if (json.getBoolean("status") == false) {
+                return@withContext ForexResult.Failure(ForexError.Provider(json.optString("msg", "Unknown error")))
+            }
+            
+            val rates = json.getJSONObject("response")
+            val candles = mutableListOf<com.example.data.model.Candle>()
+            
+            val keys = rates.keys()
+            while (keys.hasNext()) {
+                val timestamp = keys.next()
+                val candleData = rates.getJSONObject(timestamp)
                 
+                val o = candleData.optDouble("o", 0.0)
+                val h = candleData.optDouble("h", 0.0)
+                val l = candleData.optDouble("l", 0.0)
+                val c = candleData.optDouble("c", 0.0)
+                val v = candleData.optDouble("v", 0.0)
+                
+                if (o > 0.0 && c > 0.0) {
+                    candles.add(com.example.data.model.Candle(
+                        timestamp = timestamp.toLong() * 1000L,
+                        open = o,
+                        high = h,
+                        low = l,
+                        close = c,
+                        volume = v
+                    ))
+                }
+            }
+            
+            val sortedCandles = candles.sortedBy { it.timestamp }
+            
             ForexResult.Success(ForexTimeSeries(
-                symbol = response.meta?.symbol ?: symbol,
+                symbol = symbol,
                 interval = interval,
-                candles = candles,
-                currencyBase = response.meta?.currencyBase,
-                currencyQuote = response.meta?.currencyQuote
+                candles = sortedCandles,
+                currencyBase = symbol.substringBefore("/"),
+                currencyQuote = symbol.substringAfter("/")
             ))
         } catch (e: Exception) {
             ForexResult.Failure(ForexError.Network(e.message ?: "Err"))
-        }
-    }
-
-    private fun TwelveDataCandleDto.toCandleOrNull(): Candle? {
-        val o = open?.toDoubleOrNull() ?: return null
-        val h = high?.toDoubleOrNull() ?: return null
-        val l = low?.toDoubleOrNull() ?: return null
-        val c = close?.toDoubleOrNull() ?: return null
-        val t = try {
-            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC") }.parse(datetime ?: "")?.time
-        } catch(e: Exception) {
-            null
-        } ?: return null
-        return Candle(t, o, h, l, c, volume?.toDoubleOrNull() ?: 0.0)
-    }
-
-    companion object {
-        internal fun createTwelveDataApi(): TwelveDataApi {
-            val client = okhttp3.OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).build()
-            return Retrofit.Builder().baseUrl("https://api.twelvedata.com/").client(client).addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())).build().create(TwelveDataApi::class.java)
         }
     }
 }
