@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mazyar2746.github.io/Rigor-Website/sitemap.xml
