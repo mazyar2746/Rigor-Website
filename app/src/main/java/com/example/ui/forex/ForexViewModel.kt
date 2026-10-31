@@ -73,17 +73,23 @@ class ForexViewModel(
         refresh()
     }
 
+    private fun writeLog(message: String) {
+        try {
+            val logFile = File("/storage/emulated/0/Download/forex_error.txt")
+            logFile.appendText(message + "\n")
+        } catch (e: Exception) {
+            // Silent fail
+        }
+    }
+
     fun refresh(force: Boolean = false) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             
             val result = repository.getForexPairs()
+            
             if (result is ForexResult.Failure) {
-                try {
-                    val logFile = File("/storage/emulated/0/Download/forex_error.txt")
-                    logFile.appendText("Pairs fetch failed: ${result.error}
-")
-                } catch (e: Exception) { }
+                writeLog("Pairs fetch failed: " + result.error.toString())
             }
             
             if (result is ForexResult.Success) {
@@ -96,10 +102,7 @@ class ForexViewModel(
                     val timeSeriesResult = repository.getTimeSeries(pair.symbol, interval)
                     
                     if (timeSeriesResult is ForexResult.Failure) {
-                        try {
-                            val logFile = File("/storage/emulated/0/Download/forex_error.txt")
-                            logFile.appendText("Failed for ${pair.symbol}: ${timeSeriesResult.error}\n")
-                        } catch (e: Exception) { }
+                        writeLog("TimeSeries failed for " + pair.symbol + ": " + timeSeriesResult.error.toString())
                     }
                     
                     if (timeSeriesResult is ForexResult.Success) {
