@@ -107,7 +107,7 @@ class TwelveDataRemoteDataSource(
     companion object {
         internal fun createTwelveDataApi(): TwelveDataApi {
             val client = okhttp3.OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).build()
-            return Retrofit.Builder().baseUrl(RigorConfig.TWELVE_DATA_BASE_URL).client(client).addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())).build().create(TwelveDataApi::class.java)
+            return Retrofit.Builder().baseUrl("https://api.twelvedata.com/").client(client).addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())).build().create(TwelveDataApi::class.java)
         }
     }
 }
