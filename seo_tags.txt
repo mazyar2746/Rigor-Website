@@ -1,0 +1,9 @@
+    <meta name="description" content="ریگور (RIGOR) - موتور هوشمند تحلیل بازار رمزارزها با استفاده از هوش مصنوعی و اندیکاتورهای پیشرفته. سیگنال‌های خرید و فروش با اطمینان بالا، نقاط ورود و حد ضرر دقیق.">
+    <meta name="keywords" content="تحلیل رمزارز, سیگنال خرید و فروش, بیت کوین, ارز دیجیتال, هوش مصنوعی, RSI, MACD, بولینگر, تحلیل تکنیکال, ریگور, RIGOR">
+    <meta name="author" content="RIGOR Crypto AI">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="RIGOR | موتور هوشمند تحلیل بازار رمزارزها">
+    <meta property="og:description" content="سیگنال‌های خرید و فروش با اطمینان بالا، تحلیل تکنیکال کامل و نقاط ورود دقیق.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mazyar2746.github.io/Rigor-Website/">
+    <meta property="og:image" content="https://mazyar2746.github.io/Rigor-Website/logo.png">
