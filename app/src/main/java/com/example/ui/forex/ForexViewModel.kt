@@ -78,6 +78,13 @@ class ForexViewModel(
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             
             val result = repository.getForexPairs()
+            if (result is ForexResult.Failure) {
+                try {
+                    val logFile = File("/storage/emulated/0/Download/forex_error.txt")
+                    logFile.appendText("Pairs fetch failed: ${result.error}
+")
+                } catch (e: Exception) { }
+            }
             
             if (result is ForexResult.Success) {
                 var filtered = result.data
