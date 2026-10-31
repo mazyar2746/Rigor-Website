@@ -190,12 +190,7 @@ fun RigourApp(
     val bscApiKey by viewModel.bscApiKey.collectAsStateWithLifecycle()
     val isSandboxMode by viewModel.isSandboxMode.collectAsStateWithLifecycle()
 
-        // Forex state
-    LaunchedEffect(selectedMarket) {
-        if (selectedMarket == MarketTab.FOREX) {
-            forexViewModel.startIfNeeded()
-        }
-    }
+        // Forex state    }
 
     var showLanguageDialog by remember { mutableStateOf(false) }
 
