@@ -6,6 +6,8 @@ package com.example.config
  * and technical calculation boundaries to support modular multi-asset expansion.
  */
 object RigorConfig {
+    const val TWELVE_DATA_API_KEY = "YOUR_API_KEY_HERE"
+    const val TWELVE_DATA_BASE_URL = "https://api.twelvedata.com/"
 
     // App & Identity
     const val APP_NAME = "Rigor"
