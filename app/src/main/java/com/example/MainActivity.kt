@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +34,8 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material.icons.filled.Verified
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -65,6 +68,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.billing.BillingManager
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
+import com.example.ui.components.MarketTab
+import com.example.ui.forex.ForexViewModel
+import com.example.ui.screens.ForexMarketScreen
 import com.example.ui.RigourViewModel
 import com.example.ui.Screen
 import com.example.ui.components.LanguageSelectorDialog
@@ -183,6 +189,10 @@ fun RigourApp(
     val cmcApiKey by viewModel.cmcApiKey.collectAsStateWithLifecycle()
     val bscApiKey by viewModel.bscApiKey.collectAsStateWithLifecycle()
     val isSandboxMode by viewModel.isSandboxMode.collectAsStateWithLifecycle()
+
+        // Forex state
+    val forexViewModel: ForexViewModel = viewModel()
+    var selectedMarket by remember { mutableStateOf(MarketTab.CRYPTO) }
 
     var showLanguageDialog by remember { mutableStateOf(false) }
 
@@ -379,22 +389,55 @@ fun RigourApp(
                     }
 
                     is Screen.Markets -> {
-                        MarketDashboardScreen(
-                            coins = filteredCoins,
-                            searchQuery = searchQuery,
-                            onSearchQueryChange = { viewModel.setSearchQuery(it) },
-                            onlyFavorites = onlyFavorites,
-                            onToggleFavorites = { viewModel.toggleFavoritesOnly() },
-                            favoriteSymbols = favoriteSymbols,
-                            onToggleFavoriteCoin = { viewModel.toggleFavorite(it) },
-                            onSelectCoin = { viewModel.selectCoin(it) },
-                            isLoading = isMarketLoading,
-                            isLoadingMore = isLoadingMore,
-                            hasMore = hasMore,
-                            onLoadMore = { viewModel.loadMoreCoins() },
-                            onRefresh = { viewModel.loadCoins() },
-                            lang = currentLanguage
-                        )
+                        Column {
+                            // Toggle between Crypto and Forex
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Button(
+                                    onClick = { selectedMarket = MarketTab.CRYPTO },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = if (selectedMarket == MarketTab.CRYPTO) RigourCyan else Color(0xFF1E293B)
+                                    ),
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text("Crypto", color = Color.White)
+                                }
+                                Button(
+                                    onClick = { selectedMarket = MarketTab.FOREX },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = if (selectedMarket == MarketTab.FOREX) RigourGold else Color(0xFF1E293B)
+                                    ),
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text("Forex", color = Color.White)
+                                }
+                            }
+
+                            if (selectedMarket == MarketTab.CRYPTO) {
+                                MarketDashboardScreen(
+                                    coins = filteredCoins,
+                                    searchQuery = searchQuery,
+                                    onSearchQueryChange = { viewModel.setSearchQuery(it) },
+                                    onlyFavorites = onlyFavorites,
+                                    onToggleFavorites = { viewModel.toggleFavoritesOnly() },
+                                    favoriteSymbols = favoriteSymbols,
+                                    onToggleFavoriteCoin = { viewModel.toggleFavorite(it) },
+                                    onSelectCoin = { viewModel.selectCoin(it) },
+                                    isLoading = isMarketLoading,
+                                    isLoadingMore = isLoadingMore,
+                                    hasMore = hasMore,
+                                    onLoadMore = { viewModel.loadMoreCoins() },
+                                    onRefresh = { viewModel.loadCoins() },
+                                    lang = currentLanguage
+                                )
+                            } else {
+                                ForexMarketScreen(viewModel = forexViewModel)
+                            }
+                        }
                     }
 
                     is Screen.Signals -> {
