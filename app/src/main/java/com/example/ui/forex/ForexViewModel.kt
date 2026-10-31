@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 
 data class ForexRow(
     val pair: ForexPair,
@@ -86,11 +87,11 @@ class ForexViewModel(
                 val newRows = mutableListOf<ForexRow>()
                 for (pair in filtered) {
                     val timeSeriesResult = repository.getTimeSeries(pair.symbol, interval)
+                    
                     if (timeSeriesResult is ForexResult.Failure) {
                         try {
-                            val logFile = java.io.File("/storage/emulated/0/Download/forex_error.txt")
-                            logFile.appendText("Failed for ${pair.symbol}: ${timeSeriesResult.error}
-")
+                            val logFile = File("/storage/emulated/0/Download/forex_error.txt")
+                            logFile.appendText("Failed for ${pair.symbol}: ${timeSeriesResult.error}\n")
                         } catch (e: Exception) { }
                     }
                     
@@ -109,27 +110,17 @@ class ForexViewModel(
                             ((currentPrice - first.close) / first.close) * 100
                         } ?: 0.0
 
-                        // قفل کردن سیگنال‌های بالای ۸۵٪
-                        val isLocked = analysis.confidencePercent >= 85
-                        val displaySignal = if (isLocked) "PRO LOCKED" else analysis.overallSignal.name
-                        val displayConfidence = analysis.confidencePercent
-                        val displayEntry = if (isLocked) "🔒" else String.format("%.5f", analysis.currentPrice)
-                        val displayTarget = if (isLocked) "🔒" else String.format("%.5f", analysis.shortTermTarget)
-                        val displayStop = if (isLocked) "🔒" else String.format("%.5f", analysis.stopLoss)
-                        val displayResist = if (isLocked) "🔒" else String.format("%.5f", analysis.resistance1)
-                        val displaySupport = if (isLocked) "🔒" else String.format("%.5f", analysis.support1)
-
                         newRows.add(ForexRow(
                             pair = pair,
                             price = String.format("%.5f", currentPrice),
                             percentChange = change,
-                            signal = displaySignal,
-                            confidence = displayConfidence,
-                            entry = displayEntry,
-                            target = displayTarget,
-                            stopLoss = displayStop,
-                            resistance1 = displayResist,
-                            support1 = displaySupport,
+                            signal = analysis.overallSignal.name,
+                            confidence = analysis.confidencePercent,
+                            entry = String.format("%.5f", analysis.currentPrice),
+                            target = String.format("%.5f", analysis.shortTermTarget),
+                            stopLoss = String.format("%.5f", analysis.stopLoss),
+                            resistance1 = String.format("%.5f", analysis.resistance1),
+                            support1 = String.format("%.5f", analysis.support1),
                             analysisDescription = analysis.rsiDescription
                         ))
                     }
