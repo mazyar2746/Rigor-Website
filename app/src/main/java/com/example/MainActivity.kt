@@ -196,6 +196,12 @@ fun RigourApp(
     val forexViewModel: ForexViewModel = viewModel()
     var selectedMarket by remember { mutableStateOf(MarketTab.CRYPTO) }
 
+    LaunchedEffect(selectedMarket) {
+        if (selectedMarket == MarketTab.FOREX) {
+            forexViewModel.startIfNeeded()
+        }
+    }
+
     var showLanguageDialog by remember { mutableStateOf(false) }
 
     // RTL support for Persian and Arabic
