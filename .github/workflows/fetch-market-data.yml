@@ -4,19 +4,13 @@ on:
   push:
     branches:
       - feature/iran-stock-analyzer
-  workflow_dispatch:  # اجرای دستی (برای تست)
+  workflow_dispatch:
   schedule:
-    - cron:
-  push:
-    branches:
-      - feature/iran-stock-analyzer '30 14 * * *'  # هر روز ساعت ۱۸:۰۰ به وقت تهران (۱۴:۳۰ UTC)
+    - cron: '30 14 * * *'
 
 jobs:
   fetch-data:
-    runs-on:
-  push:
-    branches:
-      - feature/iran-stock-analyzer ubuntu-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
 
@@ -27,10 +21,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version:
-  push:
-    branches:
-      - feature/iran-stock-analyzer '3.11'
+          python-version: '3.11'
 
       - name: Fetch market data
         run: python scripts/fetch_market_data.py
@@ -42,4 +33,3 @@ jobs:
           git add market_data.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Update market data [skip ci]"
           git push
-# Test trigger
