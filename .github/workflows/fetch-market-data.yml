@@ -30,3 +30,4 @@ jobs:
           git add market_data.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Update market data [skip ci]"
           git push
+# Test trigger
