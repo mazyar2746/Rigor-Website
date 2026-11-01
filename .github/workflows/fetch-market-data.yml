@@ -23,6 +23,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install dependencies
+        run: pip install pytse-client
+
       - name: Fetch market data
         run: python scripts/fetch_market_data.py
 
