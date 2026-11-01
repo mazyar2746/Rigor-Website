@@ -2,17 +2,17 @@ import urllib.request
 import json
 import sys
 
-# آدرس فایل JSON آماده از ریپوی معروف (روزانه آپدیت میشه)
-# این ریپو دیتای OHLC و حجم کل بورس رو داره
-URL = "https://raw.githubusercontent.com/mehdi-torabiv/iran-stock-data/main/data/daily/latest.json"
+# API عمومی و معروف ir-market-data (روزانه آپدیت میشه)
+# این API دیتای OHLC تمام نمادهای بورس رو برمی‌گردونه
+URL = "https://api.ir-market-data.ir/api/v1/stock/daily"
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     "Accept": "application/json"
 }
 
 def main():
-    print("در حال دریافت دیتای بازار از ریپوی آماده...")
+    print("در حال دریافت دیتای بازار از ir-market-data...")
     req = urllib.request.Request(URL, headers=HEADERS)
     
     try:
@@ -23,7 +23,7 @@ def main():
             with open("market_data.json", "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             
-            print(f"✅ دیتا با موفقیت دریافت شد. تعداد نمادها: {len(data) if isinstance(data, list) else 'N/A'}")
+            print(f"✅ دیتا با موفقیت دریافت شد.")
             
     except Exception as e:
         print(f"❌ خطا: {e}", file=sys.stderr)
