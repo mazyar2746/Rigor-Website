@@ -4,19 +4,19 @@
     <meta name="google-site-verification" content="C0b2CLGO1CzvuVnXIMwhQRHSwTE6smpVJJi8r9FEHxg" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ریگور (RIGOR) - موتور هوشمند تحلیل بازار رمزارزها با استفاده از هوش مصنوعی و اندیکاتورهای پیشرفته. سیگنال‌های خرید و فروش با اطمینان بالا، نقاط ورود و حد ضرر دقیق.">
-    <meta name="keywords" content="تحلیل رمزارز, سیگنال خرید و فروش, بیت کوین, ارز دیجیتال, هوش مصنوعی, RSI, MACD, بولینگر, تحلیل تکنیکال, ریگور, RIGOR">
-    <meta name="author" content="RIGOR Crypto AI">
+    <meta name="description" content="ریگور (RIGOR) - پلتفرم هوشمند تحلیل بازارهای مالی (کریپتو و بورس ایران) با استفاده از هوش مصنوعی و اندیکاتورهای پیشرفته.">
+    <meta name="keywords" content="تحلیل رمزارز, بورس ایران, سیگنال خرید و فروش, بیت کوین, ارز دیجیتال, هوش مصنوعی, RSI, MACD, تحلیل تکنیکال, ریگور, RIGOR">
+    <meta name="author" content="RIGOR AI">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="RIGOR | موتور هوشمند تحلیل بازار رمزارزها">
+    <meta property="og:title" content="RIGOR | موتور هوشمند تحلیل بازارهای مالی">
     <meta property="og:description" content="سیگنال‌های خرید و فروش با اطمینان بالا، تحلیل تکنیکال کامل و نقاط ورود دقیق.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mazyar2746.github.io/Rigor-Website/">
     <meta property="og:image" content="https://mazyar2746.github.io/Rigor-Website/logo.png">
-    <title>RIGOR | Crypto Vision AI</title>
+    <title>RIGOR | هوش بازار</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0F172A; --surface: #1E293B; --primary: #06B6D4; --gold: #EAB308; --text: #FFFFFF; --text-muted: #94A3B8; }
+        :root { --bg: #0F172A; --surface: #1E293B; --primary: #06B6D4; --gold: #EAB308; --green: #22C55E; --text: #FFFFFF; --text-muted: #94A3B8; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; }
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
@@ -35,6 +35,11 @@
         .feature-card { background: var(--surface); padding: 30px; border-radius: 16px; border: 1px solid #334155; text-align: center; }
         .feature-card h3 { color: var(--primary); margin-bottom: 15px; font-size: 22px; }
         .feature-card p { color: var(--text-muted); }
+        .feature-card.iran { border-color: var(--green); }
+        .feature-card.iran h3 { color: var(--green); }
+        .coming-soon { text-align: center; padding: 40px 0; border-top: 1px solid var(--surface); }
+        .coming-soon h2 { margin-bottom: 20px; color: var(--text); }
+        .badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin: 5px; border: 1px solid var(--surface); color: var(--text-muted); }
         footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--surface); margin-top: 40px; color: var(--text-muted); }
         footer a { color: var(--primary); text-decoration: none; }
     </style>
@@ -45,28 +50,52 @@
             <div class="logo">RIGOR<span>.</span></div>
             <a href="#download" class="btn btn-primary">دانلود مستقیم</a>
         </header>
+
         <section class="hero">
             <img src="logo.png" alt="Rigor Logo" style="width: 120px; height: 120px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);">
-            <h1>موتور هوشمند تحلیل <span>بازار رمزارزها</span></h1>
-            <p>ریگور با استفاده از الگوریتم‌های پیشرفته و اندیکاتورهای کلاسیک (RSI, MACD, بولینگر) به شما در تصمیم‌گیری‌های بهتر کمک می‌کند. سیگنال‌های با اطمینان بالا، نقاط ورود و حد ضرر دقیق.</p>
+            <h1>موتور هوشمند تحلیل <span>بازارهای مالی</span></h1>
+            <p>ریگور با استفاده از الگوریتم‌های پیشرفته و اندیکاتورهای کلاسیک (RSI, MACD, بولینگر) به شما در تصمیم‌گیری‌های بهتر کمک می‌کند. از رمزارزها تا بازار سهام ایران.</p>
             <a href="#download" class="btn btn-primary">دانلود اپلیکیشن (APK)</a>
             <a href="roadmap.html" class="btn" style="background: transparent; border: 2px solid var(--gold); color: var(--gold); margin-right: 10px;">مشاهده نقشه راه</a>
         </section>
+
         <section class="features">
-            <div class="feature-card"><h3>تحلیل تکنیکال کامل</h3><p>بررسی لحظه‌ای بازار با RSI، MACD، بولینگر، حمایت و مقاومت و نقاط پیوت.</p></div>
-            <div class="feature-card"><h3>سیگنال‌های ۸۵٪</h3><p>دسترسی به سیگنال‌های با اطمینان بالا (نسخه پرو) برای معامله‌گران حرفه‌ای.</p></div>
-            <div class="feature-card"><h3>داده‌های واقعی</h3><p>دریافت اطلاعات کندل‌ها مستقیماً از منابع معتبر جهانی بدون هیچ‌گونه سیگنال فیک.</p></div>
+            <div class="feature-card">
+                <h3>تحلیل تکنیکال کامل</h3>
+                <p>بررسی لحظه‌ای بازار با RSI، MACD، بولینگر، حمایت و مقاومت و نقاط پیوت.</p>
+            </div>
+            <div class="feature-card">
+                <h3>سیگنال‌های ۸۵٪</h3>
+                <p>دسترسی به سیگنال‌های با اطمینان بالا (نسخه پرو) برای معامله‌گران حرفه‌ای.</p>
+            </div>
+            <div class="feature-card iran">
+                <h3>بازار سهام ایران</h3>
+                <p>تحلیل نمادهای بورس تهران و فرابورس، به‌زودی در نسخه‌های بعدی ریگور.</p>
+            </div>
         </section>
+
+        <section class="coming-soon">
+            <h2>چشم‌انداز آینده ریگور</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">ما در حال بررسی و توسعه زیرساخت‌های جدید برای پوشش بازارهای بیشتر هستیم:</p>
+            <div>
+                <span class="badge">فارکس (Forex)</span>
+                <span class="badge">دکس‌های آزاد (DEXs)</span>
+                <span class="badge">بازار سهام ایران</span>
+            </div>
+            <p style="font-size: 12px; margin-top: 15px; color: #64748b;">* به دلیل محدودیت‌های API و تحریم‌ها، زمان‌بندی دقیق این بخش‌ها اعلام نشده است.</p>
+        </section>
+
         <section id="download" style="text-align: center; padding: 40px 0; background: var(--surface); border-radius: 16px; margin-bottom: 40px;">
             <h2 style="margin-bottom: 20px;">همین حالا ریگور را نصب کنید</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">آخرین نسخه اپلیکیشن را از کافه‌بازار دریافت کنید.</p>
-            <a href="#" class="btn btn-primary" onclick="alert('به‌زودی در کافه‌بازار!'); return false;">دانلود از کافه‌بازار</a>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">نسخه پایدار اپلیکیشن (کریپتو) هم‌اکنون در کافه‌بازار در دسترس است.</p>
+            <a href="https://cafebazaar.ir/app/rigour.crypto.aistudio.com" target="_blank" class="btn btn-primary">دانلود از کافه‌بازار</a>
         </section>
+
         <footer>
             <p>© 2026 RIGOR. تمامی حقوق محفوظ است.</p>
             <p>پشتیبانی: <a href="mailto:h.nasiri3247@gmail.com">h.nasiri3247@gmail.com</a></p>
             <p style="margin-top: 10px; font-size: 12px;">ریگور یک ابزار تحلیلی است و تضمین‌کننده سود نیست. تصمیم نهایی بر عهده کاربر است.</p>
-            <p style="margin-top: 10px;"><a href="privacy.html">سیاست حفظ حریم خصوصی</a></p>
+            <p style="margin-top: 10px;"><a href="privacy.html">سیاست حفظ حریم خصوصی</a> | <a href="roadmap.html">نقشه راه</a></p>
         </footer>
     </div>
 </body>
