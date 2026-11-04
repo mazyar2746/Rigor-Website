@@ -114,7 +114,6 @@ fun IranStockDetailScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // قیمت و سیگنال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -135,7 +134,6 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // اطلاعات بنیادی
                     if (fund != null) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
@@ -154,7 +152,6 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // پول هوشمند
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -171,7 +168,6 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // منطق تحلیل
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),

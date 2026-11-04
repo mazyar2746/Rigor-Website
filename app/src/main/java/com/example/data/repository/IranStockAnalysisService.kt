@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 
 data class FullAnalysisResult(
     val technical: TechnicalAnalysisResult,
@@ -25,40 +26,40 @@ class IranStockAnalysisService(private val context: Context) {
 
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
-            // timeout ۱۰ ثانیه‌ای برای جلوگیری از لودینگ بی‌نهایت
-            return@withContext kotlinx.coroutines.withTimeout(10000L) {
-            val jsonString = context.assets.open("market_data.json").bufferedReader().use { it.readText() }
-            val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
-            val dataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
+            withTimeout(10000L) {
+                val jsonString = context.assets.open("market_data.json").bufferedReader().use { it.readText() }
+                val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
+                val dataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
 
-            val stockData = dataMap?.get(stockName) ?: return@withContext null
-            if (stockData.prices.isEmpty()) return@withContext null
+                val stockData = dataMap?.get(stockName) ?: return@withTimeout null
+                if (stockData.prices.isEmpty()) return@withTimeout null
 
-            val candles = stockData.prices.map { price ->
-                Candle(
-                    timestamp = price.dateRaw,
-                    open = price.priceYesterday,
-                    high = price.priceMax,
-                    low = price.priceMin,
-                    close = price.priceClose,
-                    volume = price.volume.toDouble()
+                val candles = stockData.prices.map { price ->
+                    Candle(
+                        timestamp = price.dateRaw,
+                        open = price.priceYesterday,
+                        high = price.priceMax,
+                        low = price.priceMin,
+                        close = price.priceClose,
+                        volume = price.volume.toDouble()
+                    )
+                }
+
+                val currentPrice = candles.last().close
+                val technicalResult = TechnicalAnalysisEngine.analyze(
+                    symbol = stockName,
+                    currentPrice = currentPrice,
+                    candles = candles,
+                    provenance = MarketDataProvenance.LIVE_EXCHANGE,
+                    sourceExchange = "TSETMC"
                 )
+
+                val fundamental = fundamentalService.fetchFundamentalData(stockData.insCode)
+                val smartMoneyList = smartMoneyService.fetchSmartMoneyData(stockData.insCode)
+                val smartMoneyText = smartMoneyService.analyzeSmartMoney(smartMoneyList)
+
+                return@withTimeout FullAnalysisResult(technicalResult, fundamental, smartMoneyText)
             }
-
-            val currentPrice = candles.last().close
-            val technicalResult = TechnicalAnalysisEngine.analyze(
-                symbol = stockName,
-                currentPrice = currentPrice,
-                candles = candles,
-                provenance = MarketDataProvenance.LIVE_EXCHANGE,
-                sourceExchange = "TSETMC"
-            )
-
-            val fundamental = fundamentalService.fetchFundamentalData(stockData.insCode)
-            val smartMoneyList = smartMoneyService.fetchSmartMoneyData(stockData.insCode)
-            val smartMoneyText = smartMoneyService.analyzeSmartMoney(smartMoneyList)
-
-            return@withContext FullAnalysisResult(technicalResult, fundamental, smartMoneyText)
         } catch (e: Exception) {
             Log.e("AnalysisService", "Error analyzing $stockName: ${e.message}", e)
             return@withContext null
