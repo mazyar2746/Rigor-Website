@@ -204,6 +204,8 @@ fun RigourApp(
         BackHandler(enabled = currentScreen !is Screen.Markets) {
             when (currentScreen) {
                 is Screen.CoinDetail -> viewModel.navigateTo(Screen.Markets)
+                is Screen.IranStockDetail -> viewModel.navigateTo(Screen.IranStockSearch)
+                is Screen.IranStockSearch -> viewModel.navigateTo(Screen.Markets)
                 is Screen.Welcome -> viewModel.navigateTo(Screen.Markets)
                 is Screen.Signals -> viewModel.navigateTo(Screen.Markets)
                 is Screen.Subscription -> viewModel.navigateTo(Screen.Markets)
