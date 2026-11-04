@@ -403,6 +403,21 @@ fun RigourApp(
                         )
                     }
 
+                    is Screen.IranStockDetail -> {
+                        IranStockDetailScreen(
+                            stockName = screen.stockName,
+                            onBack = { viewModel.navigateTo(Screen.IranStockSearch) },
+                            lang = currentLanguage
+                        )
+                    }
+
+                    is Screen.IranStockSearch -> {
+                        IranStockSearchScreen(
+                            onBack = { viewModel.navigateTo(Screen.Markets) },
+                            onStockSelected = { viewModel.navigateTo(Screen.IranStockDetail(it)) }
+                        )
+                    }
+
                     is Screen.Markets -> {
                         MarketDashboardScreen(
                             onNavigateToIranStock = { viewModel.navigateTo(Screen.IranStockSearch) },
