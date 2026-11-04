@@ -56,7 +56,7 @@ fun IranStockDetailScreen(
             try {
                 val analysis = service.analyzeStock(stockName)
                 if (analysis == null) {
-                    errorMsg = "دیتای قیمتی این نماد در دسترس نیست. احتمالاً نماد متوقف بوده یا در صف مجمع/افزایش سرمایه قرار دارد."
+                    errorMsg = "دیتای این نماد در دسترس نیست (احتمالاً معاملات آن ثبت نشده یا نماد متوقف است)."
                 } else {
                     result = analysis
                 }
