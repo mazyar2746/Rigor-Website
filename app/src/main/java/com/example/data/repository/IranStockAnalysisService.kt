@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 
 data class FullAnalysisResult(
     val technical: TechnicalAnalysisResult,
@@ -25,60 +26,48 @@ class IranStockAnalysisService(private val context: Context) {
 
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
-            // ۱. خواندن دیتای قیمتی از assets
-            val jsonString = context.assets.open("market_data.json").bufferedReader().use { it.readText() }
-            val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
-            val dataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
+            withTimeoutOrNull(10000L) { // تایم‌اوت ۱۰ ثانیه
+                val jsonString = context.assets.open("market_data.json").bufferedReader().use { it.readText() }
+                val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
+                val dataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
 
-            // ۲. چک کردن وجود دیتای قیمتی برای این نماد
-            val stockData = dataMap?.get(stockName)
-            if (stockData == null || stockData.prices.isEmpty()) {
-                Log.w("AnalysisService", "No price data for $stockName")
-                return@withContext null
-            }
+                val stockData = dataMap?.get(stockName) ?: return@withTimeoutOrNull null
+                if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
-            // ۳. تبدیل به Candle
-            val candles = stockData.prices.map { price ->
-                Candle(
-                    timestamp = price.dateRaw,
-                    open = price.priceYesterday,
-                    high = price.priceMax,
-                    low = price.priceMin,
-                    close = price.priceClose,
-                    volume = price.volume.toDouble()
+                val candles = stockData.prices.map { price ->
+                    Candle(
+                        timestamp = price.dateRaw,
+                        open = price.priceYesterday,
+                        high = price.priceMax,
+                        low = price.priceMin,
+                        close = price.priceClose,
+                        volume = price.volume.toDouble()
+                    )
+                }
+
+                val currentPrice = candles.last().close
+                val technicalResult = TechnicalAnalysisEngine.analyze(
+                    symbol = stockName,
+                    currentPrice = currentPrice,
+                    candles = candles,
+                    provenance = MarketDataProvenance.LIVE_EXCHANGE,
+                    sourceExchange = "TSETMC"
                 )
+
+                val fundamental = try {
+                    fundamentalService.fetchFundamentalData(stockData.insCode)
+                } catch (e: Exception) { null }
+
+                val smartMoneyText = try {
+                    val smartMoneyList = smartMoneyService.fetchSmartMoneyData(stockData.insCode)
+                    smartMoneyService.analyzeSmartMoney(smartMoneyList)
+                } catch (e: Exception) { null }
+
+                FullAnalysisResult(technicalResult, fundamental, smartMoneyText)
             }
-
-            // ۴. تحلیل تکنیکال
-            val currentPrice = candles.last().close
-            val technicalResult = TechnicalAnalysisEngine.analyze(
-                symbol = stockName,
-                currentPrice = currentPrice,
-                candles = candles,
-                provenance = MarketDataProvenance.LIVE_EXCHANGE,
-                sourceExchange = "TSETMC"
-            )
-
-            // ۵. دریافت اطلاعات بنیادی و پول هوشمند (با try-catch جداگانه)
-            val fundamental = try {
-                fundamentalService.fetchFundamentalData(stockData.insCode)
-            } catch (e: Exception) {
-                Log.e("AnalysisService", "Fundamental error: ${e.message}")
-                null
-            }
-
-            val smartMoneyText = try {
-                val smartMoneyList = smartMoneyService.fetchSmartMoneyData(stockData.insCode)
-                smartMoneyService.analyzeSmartMoney(smartMoneyList)
-            } catch (e: Exception) {
-                Log.e("AnalysisService", "SmartMoney error: ${e.message}")
-                null
-            }
-
-            return@withContext FullAnalysisResult(technicalResult, fundamental, smartMoneyText)
         } catch (e: Exception) {
-            Log.e("AnalysisService", "Error analyzing $stockName: ${e.message}", e)
-            return@withContext null
+            Log.e("AnalysisService", "Error: ${e.message}", e)
+            null
         }
     }
 }
