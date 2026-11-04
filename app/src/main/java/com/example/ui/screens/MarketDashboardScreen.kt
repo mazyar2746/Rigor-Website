@@ -67,7 +67,7 @@ import java.util.Locale
 
 @Composable
 fun MarketDashboardScreen(
-    onNavigateToIranStock: () -> Unit,
+    onNavigateToHub: () -> Unit,
     coins: List<CryptoCoin>,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
@@ -108,15 +108,16 @@ fun MarketDashboardScreen(
     ) {
         Spacer(modifier = Modifier.height(12.dp))
 
-        Button(
-            onClick = onNavigateToIranStock,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981)),
-            shape = RoundedCornerShape(12.dp)
+        // دکمه برگشت به Hub
+        TextButton(
+            onClick = onNavigateToHub,
+            modifier = Modifier.align(Alignment.End)
         ) {
-            Text("📈 ورود به بازار سهام ایران", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text("← بازگشت به انتخاب بازار", color = Color(0xFF00BCD4), fontSize = 12.sp)
         }
+        Spacer(modifier = Modifier.height(4.dp))
 
+        
         // Search Bar
         OutlinedTextField(
             value = searchQuery,

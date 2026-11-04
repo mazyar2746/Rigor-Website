@@ -402,7 +402,7 @@ fun RigourApp(
 
                     is Screen.IranStockSearch -> {
                         IranStockSearchScreen(
-                            onBack = { viewModel.navigateTo(Screen.Markets) },
+                            onBack = { viewModel.navigateTo(Screen.Hub) },
                             onStockSelected = { viewModel.navigateTo(Screen.IranStockDetail(it)) }
                         )
                     }
@@ -420,7 +420,7 @@ fun RigourApp(
 
                     is Screen.Markets -> {
                         MarketDashboardScreen(
-                            onNavigateToIranStock = { viewModel.navigateTo(Screen.IranStockSearch) },
+                            onNavigateToHub = { viewModel.navigateTo(Screen.Hub) },
                             coins = filteredCoins,
                             searchQuery = searchQuery,
                             onSearchQueryChange = { viewModel.setSearchQuery(it) },
