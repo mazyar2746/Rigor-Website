@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 
 sealed class Screen {
     object Welcome : Screen()
+    object Hub : Screen()
     object Markets : Screen()
     object IranStockSearch : Screen()
     data class IranStockDetail(val stockName: String) : Screen()
@@ -43,7 +44,7 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
     private val subscriptionRepository = SubscriptionRepository(database.subscriptionDao())
 
     // App Navigation
-    private val _currentScreen = MutableStateFlow<Screen>(Screen.Markets)
+    private val _currentScreen = MutableStateFlow<Screen>(Screen.Hub)
     val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
 
     // i18n & RTL State

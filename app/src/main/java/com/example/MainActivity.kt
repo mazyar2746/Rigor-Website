@@ -76,6 +76,7 @@ import com.example.ui.Screen
 import com.example.ui.components.LanguageSelectorDialog
 import com.example.ui.screens.CoinDetailScreen
 import com.example.ui.screens.ContactUsScreen
+import com.example.ui.screens.MarketSelectorScreen
 import com.example.ui.screens.MarketDashboardScreen
 import com.example.ui.screens.IranStockSearchScreen
 import com.example.ui.screens.IranStockDetailScreen
@@ -406,6 +407,15 @@ fun RigourApp(
                     }
 
 
+
+                    is Screen.Hub -> {
+                        MarketSelectorScreen(
+                            onNavigateToCrypto = { viewModel.navigateTo(Screen.Markets) },
+                            onNavigateToIranStock = { viewModel.navigateTo(Screen.IranStockSearch) },
+                            onNavigateToForex = { /* به‌زودی */ },
+                            onNavigateToDex = { /* به‌زودی */ }
+                        )
+                    }
 
                     is Screen.Markets -> {
                         MarketDashboardScreen(
