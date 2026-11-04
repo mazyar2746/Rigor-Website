@@ -23,7 +23,6 @@ import com.example.engine.SignalInterpreter
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,25 +35,23 @@ fun IranStockDetailScreen(
     var result by remember { mutableStateOf<FullAnalysisResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMsg by remember { mutableStateOf<String?>(null) }
-    val scope = rememberCoroutineScope()
     val service = remember { IranStockAnalysisService(context) }
 
+    // استفاده از LaunchedEffect ساده (بدون scope.launch اضافه)
     LaunchedEffect(stockName) {
         isLoading = true
         errorMsg = null
-        scope.launch {
-            try {
-                val analysis = service.analyzeStock(stockName)
-                if (analysis == null) {
-                    errorMsg = StringsDictionary.get("iran_stock_error", lang)
-                } else {
-                    result = analysis
-                }
-            } catch (e: Exception) {
-                errorMsg = "خطای غیرمنتظره: ${e.message}"
-            } finally {
-                isLoading = false
+        try {
+            val analysis = service.analyzeStock(stockName)
+            if (analysis == null) {
+                errorMsg = StringsDictionary.get("iran_stock_error", lang)
+            } else {
+                result = analysis
             }
+        } catch (e: Exception) {
+            errorMsg = "خطا: ${e.message}"
+        } finally {
+            isLoading = false
         }
     }
 
