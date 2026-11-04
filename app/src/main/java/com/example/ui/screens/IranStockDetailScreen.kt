@@ -23,7 +23,6 @@ import com.example.engine.SignalInterpreter
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,15 +42,6 @@ fun IranStockDetailScreen(
     LaunchedEffect(stockName) {
         isLoading = true
         errorMsg = null
-        
-        val timeoutJob = scope.launch {
-            delay(10000) // ۱۰ ثانیه
-            if (isLoading) {
-                isLoading = false
-                errorMsg = "زمان دریافت اطلاعات به پایان رسید. لطفاً دوباره تلاش کنید."
-            }
-        }
-        
         scope.launch {
             try {
                 val analysis = service.analyzeStock(stockName)
@@ -64,7 +54,6 @@ fun IranStockDetailScreen(
                 errorMsg = "خطای غیرمنتظره: ${e.message}"
             } finally {
                 isLoading = false
-                timeoutJob.cancel()
             }
         }
     }
