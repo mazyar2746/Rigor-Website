@@ -23,6 +23,7 @@ import com.example.engine.SignalInterpreter
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,13 +43,15 @@ fun IranStockDetailScreen(
     LaunchedEffect(stockName) {
         isLoading = true
         errorMsg = null
-        val timeoutJob = kotlinx.coroutines.launch {
-            kotlinx.coroutines.delay(10000) // ۱۰ ثانیه
+        
+        val timeoutJob = scope.launch {
+            delay(10000) // ۱۰ ثانیه
             if (isLoading) {
                 isLoading = false
                 errorMsg = "زمان دریافت اطلاعات به پایان رسید. لطفاً دوباره تلاش کنید."
             }
         }
+        
         scope.launch {
             try {
                 val analysis = service.analyzeStock(stockName)
@@ -91,7 +94,7 @@ fun IranStockDetailScreen(
         ) {
             if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = Color(0xFF00BCD4))
                 }
             } else if (errorMsg != null) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -111,7 +114,7 @@ fun IranStockDetailScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // کارت قیمت و سیگنال
+                    // قیمت و سیگنال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -132,7 +135,7 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // کارت اطلاعات بنیادی
+                    // اطلاعات بنیادی
                     if (fund != null) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
@@ -151,22 +154,24 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // کارت پول هوشمند
-                    if (result!!.smartMoneyText != null) {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(text = "💰 تحلیل پول هوشمند (حقیقی/حقوقی)", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                                Spacer(modifier = Modifier.height(8.dp))
+                    // پول هوشمند
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(text = "💰 تحلیل پول هوشمند (حقیقی/حقوقی)", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            if (result!!.smartMoneyText != null) {
                                 Text(text = result!!.smartMoneyText!!, color = Color(0xFFE2E8F0), fontSize = 14.sp, lineHeight = 22.sp)
+                            } else {
+                                Text(text = "دیتای پول هوشمند برای این نماد در دسترس نیست.", color = Color(0xFF94A3B8), fontSize = 14.sp)
                             }
                         }
                     }
 
-                    // کارت منطق تحلیل
+                    // منطق تحلیل
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
