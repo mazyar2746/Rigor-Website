@@ -25,6 +25,8 @@ class IranStockAnalysisService(private val context: Context) {
 
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
+            // timeout ۱۰ ثانیه‌ای برای جلوگیری از لودینگ بی‌نهایت
+            return@withContext kotlinx.coroutines.withTimeout(10000L) {
             val jsonString = context.assets.open("market_data.json").bufferedReader().use { it.readText() }
             val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
             val dataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
