@@ -23,6 +23,9 @@ import com.example.engine.SignalInterpreter
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,23 +38,35 @@ fun IranStockDetailScreen(
     var result by remember { mutableStateOf<FullAnalysisResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMsg by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
     val service = remember { IranStockAnalysisService(context) }
 
-    // استفاده از LaunchedEffect ساده (بدون scope.launch اضافه)
     LaunchedEffect(stockName) {
         isLoading = true
         errorMsg = null
-        try {
-            val analysis = service.analyzeStock(stockName)
-            if (analysis == null) {
-                errorMsg = StringsDictionary.get("iran_stock_error", lang)
-            } else {
-                result = analysis
+        
+        val timeoutJob = scope.launch {
+            delay(10000) // ۱۰ ثانیه
+            if (isLoading) {
+                isLoading = false
+                errorMsg = "زمان دریافت اطلاعات به پایان رسید. لطفاً دوباره تلاش کنید."
             }
-        } catch (e: Exception) {
-            errorMsg = "خطا: ${e.message}"
-        } finally {
-            isLoading = false
+        }
+        
+        scope.launch {
+            try {
+                val analysis = service.analyzeStock(stockName)
+                if (analysis == null) {
+                    errorMsg = "دیتای این نماد در دسترس نیست."
+                } else {
+                    result = analysis
+                }
+            } catch (e: Exception) {
+                errorMsg = "خطا: ${e.message}"
+            } finally {
+                isLoading = false
+                timeoutJob.cancel()
+            }
         }
     }
 
@@ -105,7 +120,6 @@ fun IranStockDetailScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // قیمت و سیگنال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -126,7 +140,6 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // اطلاعات بنیادی
                     if (fund != null) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
@@ -139,13 +152,10 @@ fun IranStockDetailScreen(
                                 fund.sectorName?.let { InfoRow(StringsDictionary.get("iran_stock_sector", lang), it) }
                                 fund.estimatedEPS?.let { InfoRow(StringsDictionary.get("iran_stock_eps", lang), "${String.format("%,.0f", it)} ریال") }
                                 fund.sectorPE?.let { InfoRow(StringsDictionary.get("iran_stock_pe", lang), String.format("%.2f", it)) }
-                                fund.weekLow?.let { low -> fund.weekHigh?.let { high -> InfoRow(StringsDictionary.get("iran_stock_week_range", lang), "${String.format("%,.0f", low)} - ${String.format("%,.0f", high)}") } }
-                                fund.yearLow?.let { low -> fund.yearHigh?.let { high -> InfoRow(StringsDictionary.get("iran_stock_year_range", lang), "${String.format("%,.0f", low)} - ${String.format("%,.0f", high)}") } }
                             }
                         }
                     }
 
-                    // پول هوشمند
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -154,15 +164,10 @@ fun IranStockDetailScreen(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = "💰 " + StringsDictionary.get("iran_stock_smart_money", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
-                            if (result!!.smartMoneyText != null) {
-                                Text(text = result!!.smartMoneyText!!, color = Color(0xFFE2E8F0), fontSize = 14.sp, lineHeight = 22.sp)
-                            } else {
-                                Text(text = StringsDictionary.get("iran_stock_smart_money_unavailable", lang), color = Color(0xFF94A3B8), fontSize = 14.sp)
-                            }
+                            Text(text = result!!.smartMoneyText ?: StringsDictionary.get("iran_stock_smart_money_unavailable", lang), color = Color(0xFFE2E8F0), fontSize = 14.sp)
                         }
                     }
 
-                    // منطق تحلیل
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
