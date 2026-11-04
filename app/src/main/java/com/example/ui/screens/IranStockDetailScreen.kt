@@ -39,28 +39,34 @@ fun IranStockDetailScreen(
     val scope = rememberCoroutineScope()
     val service = remember { IranStockAnalysisService(context) }
 
-    // این بار به جای LaunchedEffect، از DisposableEffect استفاده می‌کنیم
     LaunchedEffect(stockName) {
         isLoading = true
         errorMsg = null
-        try {
-            val analysis = service.analyzeStock(stockName)
-            if (analysis == null) {
-                errorMsg = "دیتای این نماد در دسترس نیست."
-            } else {
-                result = analysis
+        scope.launch {
+            try {
+                val analysis = service.analyzeStock(stockName)
+                if (analysis == null) {
+                    errorMsg = StringsDictionary.get("iran_stock_error", lang)
+                } else {
+                    result = analysis
+                }
+            } catch (e: Exception) {
+                errorMsg = "خطای غیرمنتظره: ${e.message}"
+            } finally {
+                isLoading = false
             }
-        } catch (e: Exception) {
-            errorMsg = "خطا: ${e.message}"
-        } finally {
-            isLoading = false
         }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("${StringsDictionary.get("iran_stock_analysis", lang)} $stockName", fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        text = "${StringsDictionary.get("iran_stock_analysis", lang)} $stockName",
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
@@ -102,6 +108,7 @@ fun IranStockDetailScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    // قیمت و سیگنال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -122,6 +129,7 @@ fun IranStockDetailScreen(
                         }
                     }
 
+                    // اطلاعات بنیادی
                     if (fund != null) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
@@ -129,34 +137,42 @@ fun IranStockDetailScreen(
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
-                                Text(text = "📊 اطلاعات بنیادی", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Text(text = "📊 " + StringsDictionary.get("iran_stock_basic_info", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                 Spacer(modifier = Modifier.height(8.dp))
-                                fund.sectorName?.let { InfoRow("صنعت", it) }
-                                fund.estimatedEPS?.let { InfoRow("EPS تخمینی", "${String.format("%,.0f", it)} ریال") }
-                                fund.sectorPE?.let { InfoRow("P/E صنعت", String.format("%.2f", it)) }
+                                fund.sectorName?.let { InfoRow(StringsDictionary.get("iran_stock_sector", lang), it) }
+                                fund.estimatedEPS?.let { InfoRow(StringsDictionary.get("iran_stock_eps", lang), "${String.format("%,.0f", it)} ریال") }
+                                fund.sectorPE?.let { InfoRow(StringsDictionary.get("iran_stock_pe", lang), String.format("%.2f", it)) }
+                                fund.weekLow?.let { low -> fund.weekHigh?.let { high -> InfoRow(StringsDictionary.get("iran_stock_week_range", lang), "${String.format("%,.0f", low)} - ${String.format("%,.0f", high)}") } }
+                                fund.yearLow?.let { low -> fund.yearHigh?.let { high -> InfoRow(StringsDictionary.get("iran_stock_year_range", lang), "${String.format("%,.0f", low)} - ${String.format("%,.0f", high)}") } }
                             }
                         }
                     }
 
+                    // پول هوشمند
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = "💰 تحلیل پول هوشمند", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text(text = "💰 " + StringsDictionary.get("iran_stock_smart_money", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text(text = result!!.smartMoneyText ?: "دیتا در دسترس نیست.", color = Color(0xFFE2E8F0), fontSize = 14.sp)
+                            if (result!!.smartMoneyText != null) {
+                                Text(text = result!!.smartMoneyText!!, color = Color(0xFFE2E8F0), fontSize = 14.sp, lineHeight = 22.sp)
+                            } else {
+                                Text(text = StringsDictionary.get("iran_stock_smart_money_unavailable", lang), color = Color(0xFF94A3B8), fontSize = 14.sp)
+                            }
                         }
                     }
 
+                    // منطق تحلیل
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = "🧠 منطق تحلیل", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text(text = "🧠 " + StringsDictionary.get("iran_stock_reasoning_title", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(text = reasoning, color = Color(0xFFE2E8F0), fontSize = 14.sp, lineHeight = 22.sp)
                         }
