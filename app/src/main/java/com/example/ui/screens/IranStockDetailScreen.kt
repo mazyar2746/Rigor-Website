@@ -39,22 +39,21 @@ fun IranStockDetailScreen(
     val scope = rememberCoroutineScope()
     val service = remember { IranStockAnalysisService(context) }
 
+    // این بار به جای LaunchedEffect، از DisposableEffect استفاده می‌کنیم
     LaunchedEffect(stockName) {
         isLoading = true
         errorMsg = null
-        scope.launch {
-            try {
-                val analysis = service.analyzeStock(stockName)
-                if (analysis == null) {
-                    errorMsg = "دیتای این نماد در دسترس نیست (احتمالاً معاملات آن ثبت نشده یا نماد متوقف است)."
-                } else {
-                    result = analysis
-                }
-            } catch (e: Exception) {
-                errorMsg = "خطای غیرمنتظره: ${e.message}"
-            } finally {
-                isLoading = false
+        try {
+            val analysis = service.analyzeStock(stockName)
+            if (analysis == null) {
+                errorMsg = "دیتای این نماد در دسترس نیست."
+            } else {
+                result = analysis
             }
+        } catch (e: Exception) {
+            errorMsg = "خطا: ${e.message}"
+        } finally {
+            isLoading = false
         }
     }
 
@@ -135,8 +134,6 @@ fun IranStockDetailScreen(
                                 fund.sectorName?.let { InfoRow("صنعت", it) }
                                 fund.estimatedEPS?.let { InfoRow("EPS تخمینی", "${String.format("%,.0f", it)} ریال") }
                                 fund.sectorPE?.let { InfoRow("P/E صنعت", String.format("%.2f", it)) }
-                                fund.weekLow?.let { low -> fund.weekHigh?.let { high -> InfoRow("محدوده هفته", "${String.format("%,.0f", low)} - ${String.format("%,.0f", high)}") } }
-                                fund.yearLow?.let { low -> fund.yearHigh?.let { high -> InfoRow("محدوده سال", "${String.format("%,.0f", low)} - ${String.format("%,.0f", high)}") } }
                             }
                         }
                     }
@@ -147,13 +144,9 @@ fun IranStockDetailScreen(
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = "💰 تحلیل پول هوشمند (حقیقی/حقوقی)", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text(text = "💰 تحلیل پول هوشمند", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
-                            if (result!!.smartMoneyText != null) {
-                                Text(text = result!!.smartMoneyText!!, color = Color(0xFFE2E8F0), fontSize = 14.sp, lineHeight = 22.sp)
-                            } else {
-                                Text(text = "دیتای پول هوشمند برای این نماد در دسترس نیست.", color = Color(0xFF94A3B8), fontSize = 14.sp)
-                            }
+                            Text(text = result!!.smartMoneyText ?: "دیتا در دسترس نیست.", color = Color(0xFFE2E8F0), fontSize = 14.sp)
                         }
                     }
 
@@ -163,7 +156,7 @@ fun IranStockDetailScreen(
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = "🧠 " + StringsDictionary.get("iran_stock_reasoning_title", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text(text = "🧠 منطق تحلیل", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(text = reasoning, color = Color(0xFFE2E8F0), fontSize = 14.sp, lineHeight = 22.sp)
                         }
