@@ -1,4 +1,6 @@
 package com.example.ui.screens
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Button
  
 import com.example.ui.components.CoinIcon
 
@@ -65,6 +67,7 @@ import java.util.Locale
 
 @Composable
 fun MarketDashboardScreen(
+    onNavigateToIranStock: () -> Unit,
     coins: List<CryptoCoin>,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
@@ -104,6 +107,15 @@ fun MarketDashboardScreen(
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(12.dp))
+
+        Button(
+            onClick = onNavigateToIranStock,
+            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981)),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text("📈 ورود به بازار سهام ایران", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+        }
 
         // Search Bar
         OutlinedTextField(

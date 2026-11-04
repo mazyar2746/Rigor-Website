@@ -77,6 +77,8 @@ import com.example.ui.components.LanguageSelectorDialog
 import com.example.ui.screens.CoinDetailScreen
 import com.example.ui.screens.ContactUsScreen
 import com.example.ui.screens.MarketDashboardScreen
+import com.example.ui.screens.IranStockSearchScreen
+import com.example.ui.screens.IranStockDetailScreen
 import com.example.ui.screens.SettingsScreen
 import com.example.ui.screens.WelcomeScreen
 import com.example.ui.screens.SignalsScreen
@@ -386,8 +388,24 @@ fun RigourApp(
                         )
                     }
 
+                    is Screen.IranStockDetail -> {
+                        IranStockDetailScreen(
+                            stockName = screen.stockName,
+                            onBack = { viewModel.navigateTo(Screen.IranStockSearch) },
+                            lang = currentLanguage
+                        )
+                    }
+
+                    is Screen.IranStockSearch -> {
+                        IranStockSearchScreen(
+                            onBack = { viewModel.navigateTo(Screen.Markets) },
+                            onStockSelected = { viewModel.navigateTo(Screen.IranStockDetail(it)) }
+                        )
+                    }
+
                     is Screen.Markets -> {
                         MarketDashboardScreen(
+                            onNavigateToIranStock = { viewModel.navigateTo(Screen.IranStockSearch) },
                             coins = filteredCoins,
                             searchQuery = searchQuery,
                             onSearchQueryChange = { viewModel.setSearchQuery(it) },
