@@ -108,7 +108,8 @@ fun IranStockDetailScreen(
                 Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)), shape = RoundedCornerShape(16.dp)) {
                         Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("${StringsDictionary.get("iran_stock_price", lang)}: ${formatPrice(tech.currentPrice)}", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                            // استفاده مستقیم از toLong برای دور زدن هرگونه فرمت دلار
+                            Text("${StringsDictionary.get("iran_stock_price", lang)}: ${tech.currentPrice.toLong()}", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
                                 Text(tech.dataSourceNotice ?: "", color = if (tech.provenance.name == "LIVE_EXCHANGE") Color(0xFF22C55E) else Color(0xFFEAB308), fontSize = 10.sp)
                                 if (result!!.lastUpdated > 0) {
@@ -142,9 +143,10 @@ fun IranStockDetailScreen(
                                 Text("📊 " + StringsDictionary.get("iran_stock_basic_info", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 fund.sectorName?.let { InfoRow(StringsDictionary.get("iran_stock_sector", lang), it, Color.White) }
-                                fund.estimatedEPS?.let { InfoRow(StringsDictionary.get("iran_stock_eps", lang), "${formatPrice(it)} ریال", Color.White) }
+                                // استفاده مستقیم از toLong
+                                fund.estimatedEPS?.let { InfoRow(StringsDictionary.get("iran_stock_eps", lang), "${it.toLong()} ریال", Color.White) }
                                 fund.sectorPE?.let { InfoRow(StringsDictionary.get("iran_stock_pe", lang), String.format(Locale.US, "%.2f", it), Color.White) }
-                                fund.totalShares?.let { InfoRow("تعداد کل سهام", "${formatPrice(it / 1_000_000_000)} میلیارد", Color.White) }
+                                fund.totalShares?.let { InfoRow("تعداد کل سهام", "${(it / 1_000_000_000).toLong()} میلیارد", Color.White) }
                             }
                         }
                     }
@@ -172,29 +174,14 @@ fun DynamicLevelsCard(currentPrice: Double, r2: Double, r1: Double, pivot: Doubl
         Column(modifier = Modifier.padding(16.dp)) {
             Text("📈 سطوح کلیدی", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Spacer(modifier = Modifier.height(12.dp))
+            // استفاده مستقیم از toLong برای همه سطوح
             if (resistances.isEmpty()) InfoRow("مقاومت نزدیک", "بدون مقاومت (شکست کامل)", Color(0xFFFCA5A5))
-            else { InfoRow("مقاومت نزدیک", formatPrice(resistances.first()), Color(0xFFFCA5A5)); if (resistances.size > 1) InfoRow("مقاومت دوم", formatPrice(resistances[1]), Color(0xFFFCA5A5)) }
-            if (!pivot.isNaN() && pivot > 0) InfoRow("پیوت (Pivot)", formatPrice(pivot), Color(0xFFE2E8F0))
+            else { InfoRow("مقاومت نزدیک", "${resistances.first().toLong()}", Color(0xFFFCA5A5)); if (resistances.size > 1) InfoRow("مقاومت دوم", "${resistances[1].toLong()}", Color(0xFFFCA5A5)) }
+            if (!pivot.isNaN() && pivot > 0) InfoRow("پیوت (Pivot)", "${pivot.toLong()}", Color(0xFFE2E8F0))
             if (supports.isEmpty()) InfoRow("حمایت نزدیک", "بدون حمایت (ریزش کامل)", Color(0xFF86EFAC))
-            else { InfoRow("حمایت نزدیک", formatPrice(supports.first()), Color(0xFF86EFAC)); if (supports.size > 1) InfoRow("حمایت دوم", formatPrice(supports[1]), Color(0xFF86EFAC)) }
+            else { InfoRow("حمایت نزدیک", "${supports.first().toLong()}", Color(0xFF86EFAC)); if (supports.size > 1) InfoRow("حمایت دوم", "${supports[1].toLong()}", Color(0xFF86EFAC)) }
         }
     }
-}
-
-private fun formatPrice(value: Double?): String {
-    if (value == null || value.isNaN() || value.isInfinite()) return "---"
-    val longValue = Math.round(value)
-    val str = Math.abs(longValue).toString()
-    val sb = StringBuilder()
-    var count = 0
-    for (i in str.length - 1 downTo 0) {
-        sb.append(str[i])
-        count++
-        if (count % 3 == 0 && i != 0) {
-            sb.append(",")
-        }
-    }
-    return if (longValue < 0) "-${sb.reverse()}" else sb.reverse().toString()
 }
 
 @Composable
