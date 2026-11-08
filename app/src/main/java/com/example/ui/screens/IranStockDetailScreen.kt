@@ -119,6 +119,7 @@ fun IranStockDetailScreen(
                     modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    // 1. قیمت و سیگنال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -130,7 +131,6 @@ fun IranStockDetailScreen(
                                 color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold
                             )
                             
-                            // نمایش وضعیت و ساعت آپدیت
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
                                 Text(
                                     text = tech.dataSourceNotice ?: "",
@@ -151,23 +151,17 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = "📈 سطوح کلیدی", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            
-                            SmartLevelRow("مقاومت ۲", tech.resistance2, tech.currentPrice, isResistance = true)
-                            SmartLevelRow("مقاومت ۱", tech.resistance1, tech.currentPrice, isResistance = true)
-                            InfoRow("پیوت", formatPrice(tech.pivotPoint), Color.White)
-                            SmartLevelRow("حمایت ۱", tech.support1, tech.currentPrice, isResistance = false)
-                            SmartLevelRow("حمایت ۲", tech.support2, tech.currentPrice, isResistance = false)
-                        }
-                    }
+                    // 2. سطوح کلیدی داینامیک (هوشمند)
+                    DynamicLevelsCard(
+                        currentPrice = tech.currentPrice,
+                        r2 = tech.resistance2,
+                        r1 = tech.resistance1,
+                        pivot = tech.pivotPoint,
+                        s1 = tech.support1,
+                        s2 = tech.support2
+                    )
 
+                    // 3. اندیکاتورهای تکنیکال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -185,6 +179,7 @@ fun IranStockDetailScreen(
                         }
                     }
 
+                    // 4. اطلاعات پایه
                     if (fund != null) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
@@ -202,6 +197,7 @@ fun IranStockDetailScreen(
                         }
                     }
 
+                    // 5. منطق تحلیل
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -219,21 +215,58 @@ fun IranStockDetailScreen(
     }
 }
 
-private fun formatPrice(value: Double?): String {
-    if (value == null || value.isNaN() || value.isInfinite()) return "---"
-    return DecimalFormat("#,###").format(value)
+// کامپوزبل هوشمند برای نمایش داینامیک سطوح حمایت و مقاومت
+@Composable
+fun DynamicLevelsCard(currentPrice: Double, r2: Double, r1: Double, pivot: Double, s1: Double, s2: Double) {
+    // 1. همه سطوح رو یه لیست می‌کنیم و فیلترهای لازم رو اعمال می‌کنیم
+    val allLevels = listOf(r2, r1, s1, s2).filter { !it.isNaN() && it > 0.0 }.distinct()
+
+    // 2. جدا کردن مقاومت‌ها (بالاتر از قیمت) و حمایت‌ها (پایین‌تر از قیمت)
+    val resistances = allLevels.filter { it > currentPrice }.sorted() // نزدیک‌ترین به بالا
+    val supports = allLevels.filter { it < currentPrice }.sortedDescending() // نزدیک‌ترین به پایین
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "📈 سطوح کلیدی", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // نمایش مقاومت‌ها
+            if (resistances.isEmpty()) {
+                InfoRow("مقاومت نزدیک", "بدون مقاومت (شکست کامل)", Color(0xFFFCA5A5))
+            } else {
+                InfoRow("مقاومت نزدیک", formatPrice(resistances.first()), Color(0xFFFCA5A5))
+                if (resistances.size > 1) {
+                    InfoRow("مقاومت دوم", formatPrice(resistances[1]), Color(0xFFFCA5A5))
+                }
+            }
+
+            // پیوت (خط وسط)
+            if (!pivot.isNaN() && pivot > 0) {
+                InfoRow("پیوت (Pivot)", formatPrice(pivot), Color(0xFFE2E8F0))
+            }
+
+            // نمایش حمایت‌ها
+            if (supports.isEmpty()) {
+                InfoRow("حمایت نزدیک", "بدون حمایت (ریزش کامل)", Color(0xFF86EFAC))
+            } else {
+                InfoRow("حمایت نزدیک", formatPrice(supports.first()), Color(0xFF86EFAC))
+                if (supports.size > 1) {
+                    InfoRow("حمایت دوم", formatPrice(supports[1]), Color(0xFF86EFAC))
+                }
+            }
+        }
+    }
 }
 
-@Composable
-fun SmartLevelRow(label: String, level: Double, currentPrice: Double, isResistance: Boolean) {
-    val isBroken = if (isResistance) currentPrice > level else currentPrice < level
-    val displayLabel = if (isBroken) "$label (شکسته شده)" else label
-    val valueColor = if (isBroken) Color(0xFFFCA5A5) else Color.White
-    
-    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = displayLabel, color = if (isBroken) Color(0xFFFCA5A5) else Color(0xFF94A3B8), fontSize = 14.sp)
-        Text(text = formatPrice(level), color = valueColor, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-    }
+// تابع ضدگلوله برای فرمت قیمت (بدون دلار و بدون اعشار)
+private fun formatPrice(value: Double?): String {
+    if (value == null || value.isNaN() || value.isInfinite()) return "---"
+    // استفاده از DecimalFormat برای اطمینان از عدم وجود علامت دلار
+    return DecimalFormat("#,###").format(value).replace("$", "")
 }
 
 @Composable
