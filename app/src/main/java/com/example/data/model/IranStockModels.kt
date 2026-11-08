@@ -8,12 +8,14 @@ data class StockInfo(
 )
 
 data class DailyPrice(
-    @SerializedName("pClosing") val priceClose: Double,
+    @SerializedName(value = "pClosing", alternate = ["priceClose"]) val priceClose: Double,
     @SerializedName("priceMin") val priceMin: Double,
     @SerializedName("priceMax") val priceMax: Double,
     @SerializedName("priceYesterday") val priceYesterday: Double,
-    @SerializedName("qTotTran5J") val volume: Long,
-    @SerializedName("dEven") val dateRaw: Long
+    @SerializedName(value = "qTotTran5J", alternate = ["volume"]) val volume: Double,
+    @SerializedName(value = "dEven", alternate = ["dateRaw"]) val dateRaw: Long,
+    @SerializedName("pe") val pe: Double? = null,
+    @SerializedName("eps") val eps: Double? = null
 ) {
     val dateString: String
         get() {

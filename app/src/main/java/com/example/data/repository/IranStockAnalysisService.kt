@@ -13,10 +13,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 
+data class FundamentalData(
+    val sectorName: String? = null,
+    val estimatedEPS: Double? = null,
+    val sectorPE: Double? = null
+)
+
 data class FullAnalysisResult(
     val technical: TechnicalAnalysisResult,
     val fundamental: FundamentalData?,
-    val smartMoneyText: String?
+    val smartMoneyText: String? = null
 )
 
 class IranStockAnalysisService(private val context: Context) {
@@ -42,7 +48,6 @@ class IranStockAnalysisService(private val context: Context) {
                 val stockData = dataMap?.get(normalizeSymbol(stockName)) ?: return@withTimeoutOrNull null
                 if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
-                // FIX 1: Sort candles oldest to newest, and filter out zero prices
                 val candles = stockData.prices.map { price ->
                     Candle(
                         timestamp = price.dateRaw,
@@ -50,21 +55,21 @@ class IranStockAnalysisService(private val context: Context) {
                         high = price.priceMax,
                         low = price.priceMin,
                         close = price.priceClose,
-                        volume = price.volume.toDouble()
+                        volume = price.volume
                     )
                 }.sortedBy { it.timestamp }.filter { it.close > 0.0 }
 
                 if (candles.isEmpty()) return@withTimeoutOrNull null
 
-                // FIX 2: Current price is now the newest valid close
                 val currentPrice = candles.last().close
 
-                val recent = candles.takeLast(30).map { it.close }.sorted()
-                val minPrice = recent.firstOrNull() ?: currentPrice
-                val maxPrice = recent.lastOrNull() ?: currentPrice
-                val range = maxPrice - minPrice
-                val support1 = minPrice + range * 0.25
-                val resistance1 = minPrice + range * 0.75
+                // استخراج P/E و EPS از آخرین کندل معتبر
+                val latestValidPrice = stockData.prices.sortedBy { it.dateRaw }.lastOrNull { it.priceClose > 0.0 }
+                val fundamental = FundamentalData(
+                    sectorName = null,
+                    estimatedEPS = latestValidPrice?.eps,
+                    sectorPE = latestValidPrice?.pe
+                )
 
                 val technicalResult = TechnicalAnalysisEngine.analyze(
                     symbol = stockName,
@@ -76,8 +81,8 @@ class IranStockAnalysisService(private val context: Context) {
 
                 FullAnalysisResult(
                     technical = technicalResult,
-                    fundamental = null,
-                    smartMoneyText = "حمایت نزدیک: ${support1.toInt()} | مقاومت نزدیک: ${resistance1.toInt()}"
+                    fundamental = fundamental,
+                    smartMoneyText = null
                 )
             }
         } catch (e: Exception) {

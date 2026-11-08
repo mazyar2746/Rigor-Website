@@ -38,24 +38,26 @@ fun IranStockDetailScreen(
     var result by remember { mutableStateOf<FullAnalysisResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMsg by remember { mutableStateOf<String?>(null) }
+
     val scope = rememberCoroutineScope()
     val service = remember { IranStockAnalysisService(context) }
 
     LaunchedEffect(stockName) {
         isLoading = true
         errorMsg = null
-        
+
         val timeoutJob = scope.launch {
-            delay(10000) // ۱۰ ثانیه
+            delay(10000)
             if (isLoading) {
                 isLoading = false
                 errorMsg = "زمان دریافت اطلاعات به پایان رسید. لطفاً دوباره تلاش کنید."
             }
         }
-        
+
         scope.launch {
             try {
                 val analysis = service.analyzeStock(stockName)
+
                 if (analysis == null) {
                     errorMsg = "دیتای این نماد در دسترس نیست."
                 } else {
@@ -120,6 +122,7 @@ fun IranStockDetailScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    // 1. قیمت و سیگنال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -140,6 +143,28 @@ fun IranStockDetailScreen(
                         }
                     }
 
+                    // 2. سطوح حمایت و مقاومت (جایگزین کارت پول هوشمند)
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(text = "📈 سطوح کلیدی", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            if (!tech.resistance1.isNaN()) {
+                                InfoRow("مقاومت ۲", String.format("%,.0f", tech.resistance2))
+                                InfoRow("مقاومت ۱", String.format("%,.0f", tech.resistance1))
+                                InfoRow("پیوت", String.format("%,.0f", tech.pivotPoint))
+                                InfoRow("حمایت ۱", String.format("%,.0f", tech.support1))
+                                InfoRow("حمایت ۲", String.format("%,.0f", tech.support2))
+                            } else {
+                                Text("سطوح در دسترس نیست.", color = Color(0xFFE2E8F0), fontSize = 14.sp)
+                            }
+                        }
+                    }
+
+                    // 3. اطلاعات پایه (P/E و EPS)
                     if (fund != null) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
@@ -156,18 +181,7 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = "💰 " + StringsDictionary.get("iran_stock_smart_money", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(text = result!!.smartMoneyText ?: StringsDictionary.get("iran_stock_smart_money_unavailable", lang), color = Color(0xFFE2E8F0), fontSize = 14.sp)
-                        }
-                    }
-
+                    // 4. منطق تحلیل
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
