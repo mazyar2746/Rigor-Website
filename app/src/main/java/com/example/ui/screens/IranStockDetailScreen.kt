@@ -57,7 +57,6 @@ fun IranStockDetailScreen(
         scope.launch {
             try {
                 val analysis = service.analyzeStock(stockName)
-
                 if (analysis == null) {
                     errorMsg = "دیتای این نماد در دسترس نیست."
                 } else {
@@ -143,7 +142,7 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // 2. سطوح حمایت و مقاومت (جایگزین کارت پول هوشمند)
+                    // 2. سطوح کلیدی
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -164,7 +163,28 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // 3. اطلاعات پایه (P/E و EPS)
+                    // 3. اندیکاتورهای تکنیکال (جدید!)
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(text = "📊 اندیکاتورهای تکنیکال", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            
+                            InfoRow("RSI (14)", String.format("%.1f", tech.rsi))
+                            Text(tech.rsiDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, modifier = Modifier.padding(bottom = 8.dp))
+                            
+                            InfoRow("MACD Histogram", String.format("%.3f", tech.macdHistogram))
+                            Text(tech.macdDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, modifier = Modifier.padding(bottom = 8.dp))
+                            
+                            InfoRow("Bollinger Signal", tech.bbSignal.name)
+                            Text(tech.bbDescription, color = Color(0xFF94A3B8), fontSize = 12.sp)
+                        }
+                    }
+
+                    // 4. اطلاعات پایه
                     if (fund != null) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
@@ -181,7 +201,7 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // 4. منطق تحلیل
+                    // 5. منطق تحلیل
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
