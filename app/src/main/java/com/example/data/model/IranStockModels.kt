@@ -30,5 +30,6 @@ data class DailyPrice(
 
 data class StockMarketData(
     @SerializedName("insCode") val insCode: String,
-    @SerializedName("prices") val prices: List<DailyPrice>
+    @SerializedName("prices") val prices: List<DailyPrice>,
+    @SerializedName("lastUpdated") var lastUpdated: Long = 0L // زمان آخرین آپدیت (میلی‌ثانیه)
 )

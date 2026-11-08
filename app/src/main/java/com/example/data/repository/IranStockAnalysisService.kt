@@ -7,9 +7,7 @@ import com.example.data.model.MarketDataProvenance
 import com.example.data.model.StockMarketData
 import com.example.data.model.TechnicalAnalysisResult
 import com.example.engine.TechnicalAnalysisEngine
-import com.google.gson.Gson
 import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
@@ -23,18 +21,11 @@ data class FullAnalysisResult(
 )
 
 class IranStockAnalysisService(private val context: Context) {
-    private val gson = Gson()
-
+    
     private fun normalizeSymbol(input: String): String {
-        return input
-            .replace('ي', 'ی')
-            .replace('ك', 'ک')
-            .replace('\u200c', ' ')
-            .replace(Regex("\\s+"), "")
-            .trim()
+        return input.replace('ي', 'ی').replace('ك', 'ک').replace('\u200c', ' ').replace(Regex("\\s+"), "").trim()
     }
 
-    // تابع جدید برای گرفتن قیمت لحظه‌ای از TSETMC
     private suspend fun fetchLivePrice(insCode: String): Double? = withContext(Dispatchers.IO) {
         try {
             val url = URL("https://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceInfo/$insCode")
@@ -48,7 +39,6 @@ class IranStockAnalysisService(private val context: Context) {
                 val root = JsonParser.parseString(text).asJsonObject
                 val info = root.getAsJsonObject("closingPriceInfo")
                 
-                // اول قیمت آخرین معامله (pDrCotVal) رو چک می‌کنیم، اگه نبود قیمت پایانی (pClosing)
                 val livePrice = info?.get("pDrCotVal")?.asDouble
                 if (livePrice != null && livePrice > 0) return@withContext livePrice
                 val pClosing = info?.get("pClosing")?.asDouble
@@ -62,15 +52,12 @@ class IranStockAnalysisService(private val context: Context) {
 
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
-            withTimeoutOrNull(25000L) {
-                val jsonString = context.assets.open("market_data.json").bufferedReader().use { it.readText() }
-                val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
-                val rawDataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
-
-                val dataMap = rawDataMap?.entries?.associate { normalizeSymbol(it.key) to it.value }
-                val stockData = dataMap?.get(normalizeSymbol(stockName)) ?: return@withTimeoutOrNull null
+            withTimeoutOrNull(30000L) { // افزایش تایم‌اوت چون ممکنه آپدیت انجام بشه
+                // 1. گرفتن دیتا از مدیر کش (با پشتیبانی از همزمانی)
+                val stockData = MarketDataCacheManager.getStockData(stockName) ?: return@withTimeoutOrNull null
                 if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
+                // 2. ساخت کندل‌ها
                 val candles = stockData.prices.map { price ->
                     Candle(
                         timestamp = price.dateRaw,
@@ -84,10 +71,11 @@ class IranStockAnalysisService(private val context: Context) {
 
                 if (candles.isEmpty()) return@withTimeoutOrNull null
 
-                // قیمت از API گرفته می‌شه، اگه اینترنت قطع بود از فایل می‌خونه
+                // 3. گرفتن قیمت لحظه‌ای
                 val livePrice = fetchLivePrice(stockData.insCode)
                 val currentPrice = livePrice ?: candles.last().close
 
+                // 4. استخراج P/E و EPS
                 val latestValidPrice = stockData.prices.sortedBy { it.dateRaw }.lastOrNull { it.priceClose > 0.0 }
                 
                 val fundamental = FundamentalData(
@@ -101,9 +89,10 @@ class IranStockAnalysisService(private val context: Context) {
                     yearLow = null
                 )
 
+                // 5. تحلیل
                 val technicalResult = TechnicalAnalysisEngine.analyze(
                     symbol = stockName,
-                    currentPrice = currentPrice, // حالا از قیمت زنده استفاده می‌شه
+                    currentPrice = currentPrice,
                     candles = candles,
                     provenance = MarketDataProvenance.CACHED_EXCHANGE,
                     sourceExchange = "TSETMC"

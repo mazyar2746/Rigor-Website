@@ -69,6 +69,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.billing.BillingManager
+import com.example.data.repository.MarketDataCacheManager
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
 import com.example.ui.RigourViewModel
@@ -93,13 +94,15 @@ import com.example.ui.theme.RigourSurface
 import com.example.ui.theme.RigourTheme
 
 class MainActivity : ComponentActivity() {
-
     private val viewModel: RigourViewModel by viewModels()
     private var billingManager: BillingManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // --- راه‌اندازی کش دیتای بازار (سیستم همزمانی) ---
+        MarketDataCacheManager.init(this)
 
         try {
             val manager = BillingManager(this)
@@ -193,15 +196,11 @@ fun RigourApp(
     val bscApiKey by viewModel.bscApiKey.collectAsStateWithLifecycle()
     val isSandboxMode by viewModel.isSandboxMode.collectAsStateWithLifecycle()
 
-        // Forex state    }
-
     var showLanguageDialog by remember { mutableStateOf(false) }
 
-    // RTL support for Persian and Arabic
     val layoutDirection = if (currentLanguage.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
 
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
-        // Back handler
         BackHandler(enabled = currentScreen !is Screen.Markets) {
             when (currentScreen) {
                 is Screen.CoinDetail -> viewModel.navigateTo(Screen.Markets)
@@ -256,7 +255,6 @@ fun RigourApp(
                         }
                     },
                     actions = {
-                        // Language switcher button with flag
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
@@ -277,7 +275,6 @@ fun RigourApp(
                             }
                         }
 
-                        // Refresh button
                         IconButton(
                             onClick = { viewModel.loadCoins() },
                             modifier = Modifier.testTag("topbar_refresh_btn")
@@ -407,8 +404,6 @@ fun RigourApp(
                         )
                     }
 
-
-
                     is Screen.Hub -> {
                         MarketSelectorScreen(
                             onNavigateToCrypto = { viewModel.navigateTo(Screen.Markets) },
@@ -503,7 +498,6 @@ fun RigourApp(
                     }
                 }
 
-                // Modal Language Dialog
                 if (showLanguageDialog) {
                     LanguageSelectorDialog(
                         currentLanguage = currentLanguage,
