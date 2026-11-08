@@ -21,7 +21,7 @@ data class FullAnalysisResult(
     val technical: TechnicalAnalysisResult,
     val fundamental: FundamentalData?,
     val smartMoneyText: String? = null,
-    val lastUpdated: Long = 0L // زمان آخرین آپدیت کش
+    val lastUpdated: Long = 0L
 )
 
 class IranStockAnalysisService(private val context: Context) {
@@ -78,9 +78,13 @@ class IranStockAnalysisService(private val context: Context) {
                     val isLive = livePrice != null
 
                     val technicalResult = TechnicalAnalysisEngine.analyze(
-                        symbol = stockName, currentPrice = currentPrice, candles = candles,
+                        symbol = stockName, 
+                        currentPrice = currentPrice, 
+                        candles = candles,
                         provenance = if (isLive) MarketDataProvenance.LIVE_EXCHANGE else MarketDataProvenance.CACHED_EXCHANGE,
-                        sourceExchange = "TSETMC"
+                        sourceExchange = "TSETMC",
+                        pe = fundamentalData?.sectorPE,
+                        eps = fundamentalData?.estimatedEPS
                     )
 
                     FullAnalysisResult(technicalResult, fundamentalData, null, stockData.lastUpdated)
