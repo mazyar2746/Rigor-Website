@@ -22,14 +22,24 @@ data class FullAnalysisResult(
 class IranStockAnalysisService(private val context: Context) {
     private val gson = Gson()
 
+    private fun normalizeSymbol(input: String): String {
+        return input
+            .replace('ي', 'ی')
+            .replace('ك', 'ک')
+            .replace('\u200c', ' ')
+            .replace(Regex("\\s+"), "")
+            .trim()
+    }
+
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
             withTimeoutOrNull(25000L) {
                 val jsonString = context.assets.open("market_data.json").bufferedReader().use { it.readText() }
                 val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
-                val dataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
-                
-                val stockData = dataMap?.get(stockName) ?: return@withTimeoutOrNull null
+                val rawDataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
+
+                val dataMap = rawDataMap?.entries?.associate { normalizeSymbol(it.key) to it.value }
+                val stockData = dataMap?.get(normalizeSymbol(stockName)) ?: return@withTimeoutOrNull null
                 if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
                 val candles = stockData.prices.map { price ->
@@ -44,8 +54,7 @@ class IranStockAnalysisService(private val context: Context) {
                 }
 
                 val currentPrice = candles.last().close
-                
-                // محاسبه حمایت و مقاومت
+
                 val recent = candles.takeLast(30).map { it.close }.sorted()
                 val minPrice = recent.firstOrNull() ?: currentPrice
                 val maxPrice = recent.lastOrNull() ?: currentPrice
@@ -61,7 +70,6 @@ class IranStockAnalysisService(private val context: Context) {
                     sourceExchange = "TSETMC"
                 )
 
-                // برگرداندن نتیجه با حمایت/مقاومت
                 FullAnalysisResult(
                     technical = technicalResult,
                     fundamental = null,
