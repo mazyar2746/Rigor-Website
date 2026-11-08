@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.ConcurrentHashMap
 
 data class FullAnalysisResult(
     val technical: TechnicalAnalysisResult,
@@ -24,8 +25,19 @@ data class FullAnalysisResult(
 class IranStockAnalysisService(private val context: Context) {
     
     private val fundamentalService = IranStockFundamentalService()
+    
+    // کش ۶۰ ثانیه‌ای برای قیمت لحظه‌ای (جلوگیری از درخواست تکراری)
+    private val livePriceCache = ConcurrentHashMap<String, Pair<Double, Long>>()
+    private val LIVE_PRICE_CACHE_MS = 60 * 1000L // ۱ دقیقه
 
     private suspend fun fetchLivePrice(insCode: String): Double? = withContext(Dispatchers.IO) {
+        // 1. چک کردن کش
+        val cached = livePriceCache[insCode]
+        if (cached != null && (System.currentTimeMillis() - cached.second) < LIVE_PRICE_CACHE_MS) {
+            return@withContext cached.first
+        }
+
+        // 2. درخواست از API
         try {
             val url = URL("https://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceInfo/$insCode")
             val conn = url.openConnection() as HttpURLConnection
@@ -36,9 +48,14 @@ class IranStockAnalysisService(private val context: Context) {
             if (conn.responseCode == 200) {
                 val text = conn.inputStream.bufferedReader().use { it.readText() }
                 val info = JsonParser.parseString(text).asJsonObject.getAsJsonObject("closingPriceInfo")
-                val livePrice = info?.get("pDrCotVal")?.asDouble
-                if (livePrice != null && livePrice > 0) return@withContext livePrice
-                return@withContext info?.get("pClosing")?.asDouble
+                var livePrice = info?.get("pDrCotVal")?.asDouble
+                if (livePrice == null || livePrice <= 0) {
+                    livePrice = info?.get("pClosing")?.asDouble
+                }
+                if (livePrice != null && livePrice > 0) {
+                    livePriceCache[insCode] = Pair(livePrice, System.currentTimeMillis())
+                    return@withContext livePrice
+                }
             }
         } catch (e: Exception) {
             Log.e("RIGOR_DEBUG", "Live price fetch failed: ${e.message}")
@@ -49,7 +66,6 @@ class IranStockAnalysisService(private val context: Context) {
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
             withTimeoutOrNull(30000L) {
-                // 1. گرفتن دیتای کندل از کش (سیستم همزمانی)
                 val stockData = MarketDataCacheManager.getStockData(stockName) ?: return@withTimeoutOrNull null
                 if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
@@ -66,29 +82,30 @@ class IranStockAnalysisService(private val context: Context) {
 
                 if (candles.isEmpty()) return@withTimeoutOrNull null
 
-                // 2. گرفتن همزمان قیمت لحظه‌ای و دیتای بنیادی
-                val livePriceDeferred = async { fetchLivePrice(stockData.insCode) }
-                val fundamentalDeferred = async { fundamentalService.fetchFundamentalData(stockData.insCode) }
-                
-                val livePrice = livePriceDeferred.await()
-                val fundamentalData = fundamentalDeferred.await()
+                return@withTimeoutOrNull coroutineScope {
+                    val livePriceDeferred = async { fetchLivePrice(stockData.insCode) }
+                    val fundamentalDeferred = async { fundamentalService.fetchFundamentalData(stockData.insCode) }
+                    
+                    val livePrice = livePriceDeferred.await()
+                    val fundamentalData = fundamentalDeferred.await()
 
-                val currentPrice = livePrice ?: candles.last().close
+                    val currentPrice = livePrice ?: candles.last().close
+                    val isLive = livePrice != null
 
-                // 3. تحلیل تکنیکال
-                val technicalResult = TechnicalAnalysisEngine.analyze(
-                    symbol = stockName,
-                    currentPrice = currentPrice,
-                    candles = candles,
-                    provenance = MarketDataProvenance.CACHED_EXCHANGE,
-                    sourceExchange = "TSETMC"
-                )
+                    val technicalResult = TechnicalAnalysisEngine.analyze(
+                        symbol = stockName,
+                        currentPrice = currentPrice,
+                        candles = candles,
+                        provenance = if (isLive) MarketDataProvenance.LIVE_EXCHANGE else MarketDataProvenance.CACHED_EXCHANGE,
+                        sourceExchange = "TSETMC"
+                    )
 
-                FullAnalysisResult(
-                    technical = technicalResult,
-                    fundamental = fundamentalData,
-                    smartMoneyText = null
-                )
+                    FullAnalysisResult(
+                        technical = technicalResult,
+                        fundamental = fundamentalData,
+                        smartMoneyText = null
+                    )
+                }
             }
         } catch (e: Exception) {
             Log.e("RIGOR_DEBUG", "Error: ${e.message}", e)

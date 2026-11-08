@@ -25,7 +25,6 @@ import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +46,7 @@ fun IranStockDetailScreen(
         errorMsg = null
 
         val timeoutJob = scope.launch {
-            delay(10000)
+            delay(15000)
             if (isLoading) {
                 isLoading = false
                 errorMsg = "زمان دریافت اطلاعات به پایان رسید. لطفاً دوباره تلاش کنید."
@@ -74,35 +73,15 @@ fun IranStockDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = "${StringsDictionary.get("iran_stock_analysis", lang)} $stockName",
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF00BCD4),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
-                )
+                title = { Text(text = "${StringsDictionary.get("iran_stock_analysis", lang)} $stockName", fontWeight = FontWeight.Bold) },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = "Back") } },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF00BCD4), titleContentColor = Color.White, navigationIconContentColor = Color.White)
             )
         }
     ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .background(RigourBackground)
-        ) {
+        Box(modifier = Modifier.fillMaxSize().padding(padding).background(RigourBackground)) {
             if (isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Color(0xFF00BCD4))
-                }
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator(color = Color(0xFF00BCD4)) }
             } else if (errorMsg != null) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = errorMsg!!, color = Color.Red, fontSize = 16.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.padding(24.dp))
@@ -115,10 +94,7 @@ fun IranStockDetailScreen(
                 val signalLabel = SignalInterpreter.getSignalLabel(finalSignal, lang)
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(16.dp),
+                    modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     // 1. قیمت و سیگنال
@@ -127,22 +103,27 @@ fun IranStockDetailScreen(
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
                         shape = RoundedCornerShape(16.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(20.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
+                        Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "${StringsDictionary.get("iran_stock_price", lang)}: ${String.format("%,.0f", tech.currentPrice)}",
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold
+                                color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold
                             )
+                            
+                            // برچسب وضعیت دیتا
+                            Text(
+                                text = tech.dataSourceNotice ?: "",
+                                color = if (tech.provenance.name == "LIVE_EXCHANGE") Color(0xFF22C55E) else Color(0xFFEAB308),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+
                             Spacer(modifier = Modifier.height(12.dp))
                             SignalBadge(signal = finalSignal, label = signalLabel)
                         }
                     }
 
-                    // 2. سطوح کلیدی
+                    // 2. سطوح کلیدی (با حل NaN)
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -151,19 +132,15 @@ fun IranStockDetailScreen(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = "📈 سطوح کلیدی", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
-                            if (!tech.resistance1.isNaN()) {
-                                InfoRow("مقاومت ۲", String.format("%,.0f", tech.resistance2))
-                                InfoRow("مقاومت ۱", String.format("%,.0f", tech.resistance1))
-                                InfoRow("پیوت", String.format("%,.0f", tech.pivotPoint))
-                                InfoRow("حمایت ۱", String.format("%,.0f", tech.support1))
-                                InfoRow("حمایت ۲", String.format("%,.0f", tech.support2))
-                            } else {
-                                Text("سطوح در دسترس نیست.", color = Color(0xFFE2E8F0), fontSize = 14.sp)
-                            }
+                            InfoRow("مقاومت ۲", formatPrice(tech.resistance2))
+                            InfoRow("مقاومت ۱", formatPrice(tech.resistance1))
+                            InfoRow("پیوت", formatPrice(tech.pivotPoint))
+                            InfoRow("حمایت ۱", formatPrice(tech.support1))
+                            InfoRow("حمایت ۲", formatPrice(tech.support2))
                         }
                     }
 
-                    // 3. اندیکاتورهای تکنیکال (با عناوین فارسی)
+                    // 3. اندیکاتورهای تکنیکال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -195,8 +172,9 @@ fun IranStockDetailScreen(
                                 Text(text = "📊 " + StringsDictionary.get("iran_stock_basic_info", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 fund.sectorName?.let { InfoRow(StringsDictionary.get("iran_stock_sector", lang), it) }
-                                fund.estimatedEPS?.let { InfoRow(StringsDictionary.get("iran_stock_eps", lang), "${String.format("%,.0f", it)} ریال") }
+                                fund.estimatedEPS?.let { InfoRow(StringsDictionary.get("iran_stock_eps", lang), "${formatPrice(it)} ریال") }
                                 fund.sectorPE?.let { InfoRow(StringsDictionary.get("iran_stock_pe", lang), String.format("%.2f", it)) }
+                                fund.totalShares?.let { InfoRow("تعداد کل سهام", "${formatPrice(it / 1_000_000_000)} میلیارد") }
                             }
                         }
                     }
@@ -217,6 +195,11 @@ fun IranStockDetailScreen(
             }
         }
     }
+}
+
+// تابع کمکی برای حل مشکل NaN و نمایش خط تیره
+private fun formatPrice(value: Double?): String {
+    return if (value == null || value.isNaN() || value.isInfinite()) "---" else String.format("%,.0f", value)
 }
 
 @Composable
