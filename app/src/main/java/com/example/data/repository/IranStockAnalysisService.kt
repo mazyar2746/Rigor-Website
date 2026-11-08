@@ -13,12 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 
-data class FundamentalData(
-    val sectorName: String? = null,
-    val estimatedEPS: Double? = null,
-    val sectorPE: Double? = null
-)
-
 data class FullAnalysisResult(
     val technical: TechnicalAnalysisResult,
     val fundamental: FundamentalData?,
@@ -65,10 +59,17 @@ class IranStockAnalysisService(private val context: Context) {
 
                 // استخراج P/E و EPS از آخرین کندل معتبر
                 val latestValidPrice = stockData.prices.sortedBy { it.dateRaw }.lastOrNull { it.priceClose > 0.0 }
+                
+                // پر کردن هر ۸ فیلد کلاس FundamentalData
                 val fundamental = FundamentalData(
-                    sectorName = null,
                     estimatedEPS = latestValidPrice?.eps,
-                    sectorPE = latestValidPrice?.pe
+                    sectorPE = latestValidPrice?.pe,
+                    sectorName = null,
+                    totalShares = null,
+                    weekHigh = null,
+                    weekLow = null,
+                    yearHigh = null,
+                    yearLow = null
                 )
 
                 val technicalResult = TechnicalAnalysisEngine.analyze(
