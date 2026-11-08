@@ -27,7 +27,6 @@ import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -85,7 +84,9 @@ fun IranStockDetailScreen(
             } else if (result != null) {
                 val tech = result!!.technical
                 val fund = result!!.fundamental
-                val finalSignal = SignalInterpreter.getFinalSignal(tech.rsiSignal, result!!.smartMoneyText)
+                
+                // اصلاح بزرگ: استفاده از overallSignal به جای rsiSignal
+                val finalSignal = tech.overallSignal 
                 val reasoning = SignalInterpreter.getReasoningText(tech, result!!.smartMoneyText, lang)
                 val signalLabel = SignalInterpreter.getSignalLabel(finalSignal, lang)
 
@@ -171,12 +172,10 @@ fun DynamicLevelsCard(currentPrice: Double, r2: Double, r1: Double, pivot: Doubl
     }
 }
 
-// تابع قطعی برای فرمت قیمت (بدون دلار و اعشار)
+// 🔥 تابع ضدگلوله: تبدیل به Long و فرمت با کاما (غیرممکنه دلار یا اعشار بده)
 private fun formatPrice(value: Double?): String {
     if (value == null || value.isNaN() || value.isInfinite()) return "---"
-    val formatter = NumberFormat.getNumberInstance(Locale.US)
-    formatter.maximumFractionDigits = 0
-    return formatter.format(value).replace(Regex("[^0-9,٫]"), "")
+    return String.format(Locale.US, "%,d", value.toLong())
 }
 
 @Composable
