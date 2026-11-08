@@ -60,11 +60,11 @@ object MarketDataCacheManager {
             }
         }
 
-        var stockData = inMemoryData?.entries?.find { normalizeSymbol(it.key) == normalizedSymbol }?.value
+        val currentStockData = inMemoryData?.entries?.find { normalizeSymbol(it.key) == normalizedSymbol }?.value
             ?: return@withContext null
 
         // 2. چک کردن اینکه آیا دیتا منقضی شده یا نه
-        val isExpired = System.currentTimeMillis() - stockData.lastUpdated > CACHE_EXPIRY_MS
+        val isExpired = System.currentTimeMillis() - currentStockData.lastUpdated > CACHE_EXPIRY_MS
 
         if (isExpired) {
             // اگر همین الان داره برای این نماد درخواست می‌ره، صبر می‌کنیم همون نتیجه رو بگیریم
@@ -72,18 +72,17 @@ object MarketDataCacheManager {
                 while (ongoingFetches.containsKey(normalizedSymbol)) {
                     Thread.sleep(200)
                 }
-                stockData = inMemoryData?.entries?.find { normalizeSymbol(it.key) == normalizedSymbol }?.value
-                if (stockData != null) return@withContext stockData
+                return@withContext inMemoryData?.entries?.find { normalizeSymbol(it.key) == normalizedSymbol }?.value
             }
 
             ongoingFetches[normalizedSymbol] = Any()
             try {
-                val updatedData = fetchHistoryFromApi(stockData.insCode)
-                if (updatedData != null && updatedData.isNotEmpty()) {
+                val updatedPrices = fetchHistoryFromApi(currentStockData.insCode)
+                if (updatedPrices != null && updatedPrices.isNotEmpty()) {
                     // محدود کردن به ۳۰ روز آخر
-                    val trimmedPrices = updatedData.takeLast(30)
+                    val trimmedPrices = updatedPrices.takeLast(30)
                     val newData = StockMarketData(
-                        insCode = stockData.insCode,
+                        insCode = currentStockData.insCode,
                         prices = trimmedPrices,
                         lastUpdated = System.currentTimeMillis()
                     )
@@ -96,7 +95,7 @@ object MarketDataCacheManager {
                             cacheFile.writeText(gson.toJson(map))
                         }
                     }
-                    stockData = newData
+                    return@withContext newData
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error updating data for $symbol", e)
@@ -104,11 +103,11 @@ object MarketDataCacheManager {
                 ongoingFetches.remove(normalizedSymbol)
             }
         }
-        return@withContext stockData
+        return@withContext currentStockData
     }
 
     private fun fetchHistoryFromApi(insCode: String): List<DailyPrice>? {
-        return try {
+        try {
             val url = URL("https://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceDailyList/$insCode/35")
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "GET"
@@ -119,29 +118,31 @@ object MarketDataCacheManager {
             if (conn.responseCode == 200) {
                 val text = conn.inputStream.bufferedReader().use { it.readText() }
                 val root = JsonParser.parseString(text).asJsonObject
-                val array = root.getAsJsonArray("closingPriceDaily") ?: return null
-
-                val list = mutableListOf<DailyPrice>()
-                for (element in array) {
-                    val obj = element.asJsonObject
-                    val pClose = obj.get("pClosing")?.asDouble ?: 0.0
-                    // فیلتر کردن کندل‌های صفر
-                    if (pClose > 0) {
-                        list.add(
-                            DailyPrice(
-                                priceClose = pClose,
-                                priceMin = obj.get("priceMin")?.asDouble ?: 0.0,
-                                priceMax = obj.get("priceMax")?.asDouble ?: 0.0,
-                                priceYesterday = obj.get("priceYesterday")?.asDouble ?: 0.0,
-                                volume = obj.get("qTotTran5J")?.asDouble ?: 0.0,
-                                dateRaw = obj.get("dEven")?.asLong ?: 0L,
-                                pe = obj.get("pe")?.asDouble,
-                                eps = obj.get("eps")?.asDouble
+                val array = root.getAsJsonArray("closingPriceDaily")
+                
+                if (array != null) {
+                    val list = mutableListOf<DailyPrice>()
+                    for (element in array) {
+                        val obj = element.asJsonObject
+                        val pClose = obj.get("pClosing")?.asDouble ?: 0.0
+                        // فیلتر کردن کندل‌های صفر
+                        if (pClose > 0) {
+                            list.add(
+                                DailyPrice(
+                                    priceClose = pClose,
+                                    priceMin = obj.get("priceMin")?.asDouble ?: 0.0,
+                                    priceMax = obj.get("priceMax")?.asDouble ?: 0.0,
+                                    priceYesterday = obj.get("priceYesterday")?.asDouble ?: 0.0,
+                                    volume = obj.get("qTotTran5J")?.asDouble ?: 0.0,
+                                    dateRaw = obj.get("dEven")?.asLong ?: 0L,
+                                    pe = obj.get("pe")?.asDouble,
+                                    eps = obj.get("eps")?.asDouble
+                                )
                             )
-                        )
+                        }
                     }
+                    return list.sortedBy { it.dateRaw } // مرتب‌سازی از قدیم به جدید
                 }
-                return list.sortedBy { it.dateRaw } // مرتب‌سازی از قدیم به جدید
             }
         } catch (e: Exception) {
             Log.e(TAG, "API fetch error: ${e.message}")
