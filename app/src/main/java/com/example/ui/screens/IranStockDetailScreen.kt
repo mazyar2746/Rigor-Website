@@ -163,7 +163,7 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // 3. اندیکاتورهای تکنیکال (جدید!)
+                    // 3. اندیکاتورهای تکنیکال (با اصلاح بریده شدن متن)
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -174,13 +174,13 @@ fun IranStockDetailScreen(
                             Spacer(modifier = Modifier.height(8.dp))
                             
                             InfoRow("RSI (14)", String.format("%.1f", tech.rsi))
-                            Text(tech.rsiDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, modifier = Modifier.padding(bottom = 8.dp))
+                            Text(tech.rsiDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(bottom = 12.dp, top = 2.dp))
                             
                             InfoRow("MACD Histogram", String.format("%.3f", tech.macdHistogram))
-                            Text(tech.macdDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, modifier = Modifier.padding(bottom = 8.dp))
+                            Text(tech.macdDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(bottom = 12.dp, top = 2.dp))
                             
                             InfoRow("Bollinger Signal", tech.bbSignal.name)
-                            Text(tech.bbDescription, color = Color(0xFF94A3B8), fontSize = 12.sp)
+                            Text(tech.bbDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(top = 2.dp))
                         }
                     }
 

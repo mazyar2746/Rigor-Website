@@ -8,10 +8,13 @@ import com.example.data.model.StockMarketData
 import com.example.data.model.TechnicalAnalysisResult
 import com.example.engine.TechnicalAnalysisEngine
 import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import java.net.HttpURLConnection
+import java.net.URL
 
 data class FullAnalysisResult(
     val technical: TechnicalAnalysisResult,
@@ -29,6 +32,32 @@ class IranStockAnalysisService(private val context: Context) {
             .replace('\u200c', ' ')
             .replace(Regex("\\s+"), "")
             .trim()
+    }
+
+    // تابع جدید برای گرفتن قیمت لحظه‌ای از TSETMC
+    private suspend fun fetchLivePrice(insCode: String): Double? = withContext(Dispatchers.IO) {
+        try {
+            val url = URL("https://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceInfo/$insCode")
+            val conn = url.openConnection() as HttpURLConnection
+            conn.requestMethod = "GET"
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0")
+            conn.connectTimeout = 5000
+            conn.readTimeout = 5000
+            if (conn.responseCode == 200) {
+                val text = conn.inputStream.bufferedReader().use { it.readText() }
+                val root = JsonParser.parseString(text).asJsonObject
+                val info = root.getAsJsonObject("closingPriceInfo")
+                
+                // اول قیمت آخرین معامله (pDrCotVal) رو چک می‌کنیم، اگه نبود قیمت پایانی (pClosing)
+                val livePrice = info?.get("pDrCotVal")?.asDouble
+                if (livePrice != null && livePrice > 0) return@withContext livePrice
+                val pClosing = info?.get("pClosing")?.asDouble
+                if (pClosing != null && pClosing > 0) return@withContext pClosing
+            }
+        } catch (e: Exception) {
+            Log.e("RIGOR_DEBUG", "Live price fetch failed for $insCode: ${e.message}")
+        }
+        return@withContext null
     }
 
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
@@ -55,12 +84,12 @@ class IranStockAnalysisService(private val context: Context) {
 
                 if (candles.isEmpty()) return@withTimeoutOrNull null
 
-                val currentPrice = candles.last().close
+                // قیمت از API گرفته می‌شه، اگه اینترنت قطع بود از فایل می‌خونه
+                val livePrice = fetchLivePrice(stockData.insCode)
+                val currentPrice = livePrice ?: candles.last().close
 
-                // استخراج P/E و EPS از آخرین کندل معتبر
                 val latestValidPrice = stockData.prices.sortedBy { it.dateRaw }.lastOrNull { it.priceClose > 0.0 }
                 
-                // پر کردن هر ۸ فیلد کلاس FundamentalData
                 val fundamental = FundamentalData(
                     estimatedEPS = latestValidPrice?.eps,
                     sectorPE = latestValidPrice?.pe,
@@ -74,7 +103,7 @@ class IranStockAnalysisService(private val context: Context) {
 
                 val technicalResult = TechnicalAnalysisEngine.analyze(
                     symbol = stockName,
-                    currentPrice = currentPrice,
+                    currentPrice = currentPrice, // حالا از قیمت زنده استفاده می‌شه
                     candles = candles,
                     provenance = MarketDataProvenance.CACHED_EXCHANGE,
                     sourceExchange = "TSETMC"
