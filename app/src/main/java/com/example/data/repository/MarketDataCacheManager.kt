@@ -7,6 +7,7 @@ import com.example.data.model.StockMarketData
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -14,29 +15,38 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.ConcurrentHashMap
 
 object MarketDataCacheManager {
     private const val TAG = "CacheManager"
-    private const val CACHE_FILE_NAME = "market_data_cache.json"
     private const val CACHE_EXPIRY_MS = 12 * 60 * 60 * 1000L // ۱۲ ساعت
     
     private val gson = Gson()
-    private val fileMutex = Mutex() // قفل برای جلوگیری از نوشتن همزمان
-    private val ongoingFetches = ConcurrentHashMap<String, Any>() // جلوگیری از درخواست تکراری برای یک نماد
+    private val fileMutex = Mutex()
     
-    private var inMemoryData: MutableMap<String, StockMarketData>? = null
-    private lateinit var cacheFile: File
+    // نقشه‌ی درخواست‌های در حال انجام (جلوگیری از درخواست تکراری به API)
+    private val activeRequests = ConcurrentHashMap<String, CompletableDeferred<StockMarketData?>>()
+    
+    private lateinit var contextRef: Context
+    private var globalDataMap: MutableMap<String, StockMarketData>? = null
 
     fun init(context: Context) {
-        cacheFile = File(context.filesDir, CACHE_FILE_NAME)
-        if (!cacheFile.exists()) {
+        contextRef = context.applicationContext
+        // فقط بار اول فایل ۱۲ مگی رو توی حافظه لود می‌کنیم
+        if (globalDataMap == null) {
             try {
-                context.assets.open("market_data.json").use { input ->
-                    cacheFile.outputStream().use { output -> input.copyTo(output) }
-                }
+                val jsonString = contextRef.assets.open("market_data.json").bufferedReader().use { it.readText() }
+                val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
+                val parsed: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
+                globalDataMap = parsed?.toMutableMap() ?: mutableMapOf()
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to copy initial data from assets", e)
+                Log.e(TAG, "Failed to load assets market_data.json", e)
+                globalDataMap = mutableMapOf()
             }
         }
     }
@@ -45,65 +55,91 @@ object MarketDataCacheManager {
         return input.replace('ي', 'ی').replace('ك', 'ک').replace('\u200c', ' ').replace(Regex("\\s+"), "").trim()
     }
 
+    // بررسی اینکه آیا بازار بورس باز است یا خیر
+    private fun isMarketOpen(): Boolean {
+        val tehranTime = TimeZone.getTimeZone("Asia/Tehran")
+        val now = Calendar.getInstance(tehranTime)
+        val dayOfWeek = now.get(Calendar.DAY_OF_WEEK)
+        
+        // ۱ = یکشنبه، ۷ = شنبه. جمعه (۶) بازار تعطیله.
+        if (dayOfWeek == Calendar.FRIDAY) return false 
+        
+        val hour = now.get(Calendar.HOUR_OF_DAY)
+        val minute = now.get(Calendar.MINUTE)
+        val timeInMinutes = hour * 60 + minute
+
+        // بازار از ۹:۰۰ تا ۱۲:۳۰ بازه (با کمی حاشیه اطمینان)
+        val marketOpen = 9 * 60
+        val marketClose = 12 * 60 + 30
+
+        return timeInMinutes in marketOpen..marketClose
+    }
+
     suspend fun getStockData(symbol: String): StockMarketData? = withContext(Dispatchers.IO) {
         val normalizedSymbol = normalizeSymbol(symbol)
+        val cacheFile = File(contextRef.filesDir, "cache_${normalizedSymbol.hashCode()}.json")
         
-        // 1. لود کردن دیتا از فایل به حافظه (فقط یک بار)
-        if (inMemoryData == null) {
-            fileMutex.withLock {
-                if (inMemoryData == null) {
-                    val jsonString = if (cacheFile.exists()) cacheFile.readText() else "{}"
-                    val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
-                    val parsed: Map<String, StockMarketData>? = try { gson.fromJson(jsonString, mapType) } catch (e: Exception) { null }
-                    inMemoryData = parsed?.toMutableMap() ?: mutableMapOf()
-                }
-            }
-        }
-
-        val currentStockData = inMemoryData?.entries?.find { normalizeSymbol(it.key) == normalizedSymbol }?.value
-            ?: return@withContext null
-
-        // 2. چک کردن اینکه آیا دیتا منقضی شده یا نه
-        val isExpired = System.currentTimeMillis() - currentStockData.lastUpdated > CACHE_EXPIRY_MS
-
-        if (isExpired) {
-            // اگر همین الان داره برای این نماد درخواست می‌ره، صبر می‌کنیم همون نتیجه رو بگیریم
-            if (ongoingFetches.containsKey(normalizedSymbol)) {
-                while (ongoingFetches.containsKey(normalizedSymbol)) {
-                    Thread.sleep(200)
-                }
-                return@withContext inMemoryData?.entries?.find { normalizeSymbol(it.key) == normalizedSymbol }?.value
-            }
-
-            ongoingFetches[normalizedSymbol] = Any()
+        // 1. خوندن از کشِ فایل (اگه وجود داشته باشه)
+        var stockData: StockMarketData? = null
+        if (cacheFile.exists()) {
             try {
-                val updatedPrices = fetchHistoryFromApi(currentStockData.insCode)
-                if (updatedPrices != null && updatedPrices.isNotEmpty()) {
-                    // محدود کردن به ۳۰ روز آخر
-                    val trimmedPrices = updatedPrices.takeLast(30)
-                    val newData = StockMarketData(
-                        insCode = currentStockData.insCode,
-                        prices = trimmedPrices,
-                        lastUpdated = System.currentTimeMillis()
-                    )
-                    
-                    // ذخیره توی حافظه و فایل با قفل
-                    fileMutex.withLock {
-                        inMemoryData?.let { map ->
-                            val key = map.keys.find { normalizeSymbol(it) == normalizedSymbol } ?: symbol
-                            map[key] = newData
-                            cacheFile.writeText(gson.toJson(map))
-                        }
-                    }
-                    return@withContext newData
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error updating data for $symbol", e)
-            } finally {
-                ongoingFetches.remove(normalizedSymbol)
-            }
+                stockData = gson.fromJson(cacheFile.readText(), StockMarketData::class.java)
+            } catch (e: Exception) { /* ignore corrupt cache */ }
         }
-        return@withContext currentStockData
+        
+        // اگه کش نبود، از دیتای اولیه (assets) برمی‌داریم
+        if (stockData == null) {
+            stockData = globalDataMap?.entries?.find { normalizeSymbol(it.key) == normalizedSymbol }?.value
+        }
+
+        if (stockData == null) return@withContext null
+
+        // 2. چک کردن انقضا و ساعت بازار
+        val isExpired = System.currentTimeMillis() - stockData.lastUpdated > CACHE_EXPIRY_MS
+        val shouldFetch = isExpired && isMarketOpen() 
+
+        if (!shouldFetch) {
+            return@withContext stockData
+        }
+
+        // 3. سیستم صف هوشمند (همزمانی)
+        val existingRequest = activeRequests[normalizedSymbol]
+        if (existingRequest != null) {
+            return@withContext existingRequest.await()
+        }
+
+        val deferred = CompletableDeferred<StockMarketData?>()
+        activeRequests[normalizedSymbol] = deferred
+
+        try {
+            val updatedPrices = fetchHistoryFromApi(stockData.insCode)
+            if (updatedPrices != null && updatedPrices.isNotEmpty()) {
+                val newData = StockMarketData(
+                    insCode = stockData.insCode,
+                    prices = updatedPrices.takeLast(30), // فقط ۳۰ روز آخر
+                    lastUpdated = System.currentTimeMillis()
+                )
+                
+                // ذخیره در فایل اختصاصی این سهم (بدون نوشتن کل ۱۲ مگ)
+                fileMutex.withLock {
+                    cacheFile.writeText(gson.toJson(newData))
+                    // آپدیت دیتای حافظه اصلی
+                    globalDataMap?.let { map ->
+                        val key = map.keys.find { normalizeSymbol(it) == normalizedSymbol } ?: symbol
+                        map[key] = newData
+                    }
+                }
+                deferred.complete(newData)
+                return@withContext newData
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error updating data for $symbol", e)
+        } finally {
+            activeRequests.remove(normalizedSymbol)
+        }
+
+        deferred.complete(stockData)
+        return@withContext stockData
     }
 
     private fun fetchHistoryFromApi(insCode: String): List<DailyPrice>? {
@@ -119,13 +155,11 @@ object MarketDataCacheManager {
                 val text = conn.inputStream.bufferedReader().use { it.readText() }
                 val root = JsonParser.parseString(text).asJsonObject
                 val array = root.getAsJsonArray("closingPriceDaily")
-                
                 if (array != null) {
                     val list = mutableListOf<DailyPrice>()
                     for (element in array) {
                         val obj = element.asJsonObject
                         val pClose = obj.get("pClosing")?.asDouble ?: 0.0
-                        // فیلتر کردن کندل‌های صفر
                         if (pClose > 0) {
                             list.add(
                                 DailyPrice(
@@ -141,7 +175,7 @@ object MarketDataCacheManager {
                             )
                         }
                     }
-                    return list.sortedBy { it.dateRaw } // مرتب‌سازی از قدیم به جدید
+                    return list.sortedBy { it.dateRaw }
                 }
             }
         } catch (e: Exception) {

@@ -4,11 +4,12 @@ import android.content.Context
 import android.util.Log
 import com.example.data.model.Candle
 import com.example.data.model.MarketDataProvenance
-import com.example.data.model.StockMarketData
 import com.example.data.model.TechnicalAnalysisResult
 import com.example.engine.TechnicalAnalysisEngine
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import java.net.HttpURLConnection
@@ -22,9 +23,7 @@ data class FullAnalysisResult(
 
 class IranStockAnalysisService(private val context: Context) {
     
-    private fun normalizeSymbol(input: String): String {
-        return input.replace('ي', 'ی').replace('ك', 'ک').replace('\u200c', ' ').replace(Regex("\\s+"), "").trim()
-    }
+    private val fundamentalService = IranStockFundamentalService()
 
     private suspend fun fetchLivePrice(insCode: String): Double? = withContext(Dispatchers.IO) {
         try {
@@ -36,28 +35,24 @@ class IranStockAnalysisService(private val context: Context) {
             conn.readTimeout = 5000
             if (conn.responseCode == 200) {
                 val text = conn.inputStream.bufferedReader().use { it.readText() }
-                val root = JsonParser.parseString(text).asJsonObject
-                val info = root.getAsJsonObject("closingPriceInfo")
-                
+                val info = JsonParser.parseString(text).asJsonObject.getAsJsonObject("closingPriceInfo")
                 val livePrice = info?.get("pDrCotVal")?.asDouble
                 if (livePrice != null && livePrice > 0) return@withContext livePrice
-                val pClosing = info?.get("pClosing")?.asDouble
-                if (pClosing != null && pClosing > 0) return@withContext pClosing
+                return@withContext info?.get("pClosing")?.asDouble
             }
         } catch (e: Exception) {
-            Log.e("RIGOR_DEBUG", "Live price fetch failed for $insCode: ${e.message}")
+            Log.e("RIGOR_DEBUG", "Live price fetch failed: ${e.message}")
         }
         return@withContext null
     }
 
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
-            withTimeoutOrNull(30000L) { // افزایش تایم‌اوت چون ممکنه آپدیت انجام بشه
-                // 1. گرفتن دیتا از مدیر کش (با پشتیبانی از همزمانی)
+            withTimeoutOrNull(30000L) {
+                // 1. گرفتن دیتای کندل از کش (سیستم همزمانی)
                 val stockData = MarketDataCacheManager.getStockData(stockName) ?: return@withTimeoutOrNull null
                 if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
-                // 2. ساخت کندل‌ها
                 val candles = stockData.prices.map { price ->
                     Candle(
                         timestamp = price.dateRaw,
@@ -71,25 +66,16 @@ class IranStockAnalysisService(private val context: Context) {
 
                 if (candles.isEmpty()) return@withTimeoutOrNull null
 
-                // 3. گرفتن قیمت لحظه‌ای
-                val livePrice = fetchLivePrice(stockData.insCode)
+                // 2. گرفتن همزمان قیمت لحظه‌ای و دیتای بنیادی
+                val livePriceDeferred = async { fetchLivePrice(stockData.insCode) }
+                val fundamentalDeferred = async { fundamentalService.fetchFundamentalData(stockData.insCode) }
+                
+                val livePrice = livePriceDeferred.await()
+                val fundamentalData = fundamentalDeferred.await()
+
                 val currentPrice = livePrice ?: candles.last().close
 
-                // 4. استخراج P/E و EPS
-                val latestValidPrice = stockData.prices.sortedBy { it.dateRaw }.lastOrNull { it.priceClose > 0.0 }
-                
-                val fundamental = FundamentalData(
-                    estimatedEPS = latestValidPrice?.eps,
-                    sectorPE = latestValidPrice?.pe,
-                    sectorName = null,
-                    totalShares = null,
-                    weekHigh = null,
-                    weekLow = null,
-                    yearHigh = null,
-                    yearLow = null
-                )
-
-                // 5. تحلیل
+                // 3. تحلیل تکنیکال
                 val technicalResult = TechnicalAnalysisEngine.analyze(
                     symbol = stockName,
                     currentPrice = currentPrice,
@@ -100,7 +86,7 @@ class IranStockAnalysisService(private val context: Context) {
 
                 FullAnalysisResult(
                     technical = technicalResult,
-                    fundamental = fundamental,
+                    fundamental = fundamentalData,
                     smartMoneyText = null
                 )
             }
