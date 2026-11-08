@@ -79,7 +79,6 @@ object TechnicalAnalysisEngine {
 
         val confidence = min(98, max(52, (50 + abs(net) * 12).toInt()))
 
-        // محاسبه سطوح پیوت (با هندل کردن NaN)
         val refCandle = if (normalizedCandles.size >= 2) normalizedCandles[normalizedCandles.size - 2] else normalizedCandles.last()
         val h = maxOf(refCandle.high, refCandle.low, refCandle.close)
         val l = minOf(refCandle.high, refCandle.low, refCandle.close).coerceAtLeast(1.0)
@@ -91,14 +90,10 @@ object TechnicalAnalysisEngine {
         val s1 = max(pivot - (h - l), (2.0 * pivot) - h).coerceAtMost(pivot)
         val s2 = min(pivot - (h - l), (2.0 * pivot) - h)
 
-        // --- منطق فوق هوشمند تشخیص صف خرید و فروش ---
-        // اگر قیمت فعلی برابر با بالاترین قیمت امروز باشد و حجم معاملات خیلی بالا باشد، یعنی صف خرید
-        val isLimitUp = currentPrice >= refCandle.high && refCandle.volume > 0 && (currentPrice / refCandle.close > 1.01)
-        val isLimitDown = currentPrice <= refCandle.low && refCandle.volume > 0 && (currentPrice / refCandle.close < 0.99)
-
-        if (isLimitUp && overallSignal != SignalType.STRONG_SELL) {
+        // --- منطق جدید: تشخیص شکست سطوح کلیدی (Breakout / Breakdown) ---
+        if (currentPrice > r2) {
             overallSignal = SignalType.STRONG_BUY
-        } else if (isLimitDown && overallSignal != SignalType.STRONG_BUY) {
+        } else if (currentPrice < s2) {
             overallSignal = SignalType.STRONG_SELL
         }
 
@@ -106,7 +101,6 @@ object TechnicalAnalysisEngine {
             ((bbData.upper - bbData.lower) / bbData.middle).coerceIn(0.005, 0.50)
         } else 0.02
 
-        // محاسبه اهداف با هندل کردن حالت‌های خاص
         val shortTerm = if (overallSignal == SignalType.SELL || overallSignal == SignalType.STRONG_SELL) {
             currentPrice * (1.0 - (volatility * 0.5).coerceIn(0.01, 0.05))
         } else {

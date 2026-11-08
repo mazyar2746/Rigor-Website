@@ -39,7 +39,7 @@ fun IranStockDetailScreen(
     var result by remember { mutableStateOf<FullAnalysisResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMsg by remember { mutableStateOf<String?>(null) }
-    var retryTrigger by remember { mutableStateOf(0) } // تریگر برای دکمه تلاش مجدد
+    var retryTrigger by remember { mutableStateOf(0) }
 
     val scope = rememberCoroutineScope()
     val service = remember { IranStockAnalysisService(context) }
@@ -122,7 +122,7 @@ fun IranStockDetailScreen(
                     ) {
                         Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = "${StringsDictionary.get("iran_stock_price", lang)}: ${String.format("%,.0f", tech.currentPrice)}",
+                                text = "${StringsDictionary.get("iran_stock_price", lang)}: ${formatPrice(tech.currentPrice)}",
                                 color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold
                             )
                             Text(
@@ -143,11 +143,13 @@ fun IranStockDetailScreen(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = "📈 سطوح کلیدی", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
-                            InfoRow("مقاومت ۲", formatPrice(tech.resistance2))
-                            InfoRow("مقاومت ۱", formatPrice(tech.resistance1))
-                            InfoRow("پیوت", formatPrice(tech.pivotPoint))
-                            InfoRow("حمایت ۱", formatPrice(tech.support1))
-                            InfoRow("حمایت ۲", formatPrice(tech.support2))
+                            
+                            // تشخیص وضعیت سطوح (شکسته شده یا نه)
+                            SmartLevelRow("مقاومت ۲", tech.resistance2, tech.currentPrice, isResistance = true)
+                            SmartLevelRow("مقاومت ۱", tech.resistance1, tech.currentPrice, isResistance = true)
+                            InfoRow("پیوت", formatPrice(tech.pivotPoint), Color.White)
+                            SmartLevelRow("حمایت ۱", tech.support1, tech.currentPrice, isResistance = false)
+                            SmartLevelRow("حمایت ۲", tech.support2, tech.currentPrice, isResistance = false)
                         }
                     }
 
@@ -159,11 +161,11 @@ fun IranStockDetailScreen(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = "📊 اندیکاتورهای تکنیکال", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
-                            InfoRow("شاخص قدرت نسبی (RSI)", String.format("%.1f", tech.rsi))
+                            InfoRow("شاخص قدرت نسبی (RSI)", String.format("%.1f", tech.rsi), Color.White)
                             Text(tech.rsiDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(bottom = 12.dp, top = 2.dp))
-                            InfoRow("هیستوگرام MACD", String.format("%.3f", tech.macdHistogram))
+                            InfoRow("هیستوگرام MACD", String.format("%.3f", tech.macdHistogram), Color.White)
                             Text(tech.macdDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(bottom = 12.dp, top = 2.dp))
-                            InfoRow("وضعیت بولینگر", tech.bbSignal.name)
+                            InfoRow("وضعیت بولینگر", tech.bbSignal.name, Color.White)
                             Text(tech.bbDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(top = 2.dp))
                         }
                     }
@@ -177,10 +179,10 @@ fun IranStockDetailScreen(
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(text = "📊 " + StringsDictionary.get("iran_stock_basic_info", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                 Spacer(modifier = Modifier.height(8.dp))
-                                fund.sectorName?.let { InfoRow(StringsDictionary.get("iran_stock_sector", lang), it) }
-                                fund.estimatedEPS?.let { InfoRow(StringsDictionary.get("iran_stock_eps", lang), "${formatPrice(it)} ریال") }
-                                fund.sectorPE?.let { InfoRow(StringsDictionary.get("iran_stock_pe", lang), String.format("%.2f", it)) }
-                                fund.totalShares?.let { InfoRow("تعداد کل سهام", "${formatPrice(it / 1_000_000_000)} میلیارد") }
+                                fund.sectorName?.let { InfoRow(StringsDictionary.get("iran_stock_sector", lang), it, Color.White) }
+                                fund.estimatedEPS?.let { InfoRow(StringsDictionary.get("iran_stock_eps", lang), "${formatPrice(it)} ریال", Color.White) }
+                                fund.sectorPE?.let { InfoRow(StringsDictionary.get("iran_stock_pe", lang), String.format("%.2f", it), Color.White) }
+                                fund.totalShares?.let { InfoRow("تعداد کل سهام", "${formatPrice(it / 1_000_000_000)} میلیارد", Color.White) }
                             }
                         }
                     }
@@ -202,15 +204,29 @@ fun IranStockDetailScreen(
     }
 }
 
+// تابع کمکی برای حل مشکل دلار و اعشار
 private fun formatPrice(value: Double?): String {
     return if (value == null || value.isNaN() || value.isInfinite()) "---" else String.format("%,.0f", value)
 }
 
+// کامپوزبل جدید برای نمایش هوشمند سطوح (شکسته شده یا نه)
 @Composable
-fun InfoRow(label: String, value: String) {
+fun SmartLevelRow(label: String, level: Double, currentPrice: Double, isResistance: Boolean) {
+    val isBroken = if (isResistance) currentPrice > level else currentPrice < level
+    val displayLabel = if (isBroken) "$label (شکسته شده)" else label
+    val valueColor = if (isBroken) Color(0xFFFCA5A5) else Color.White // اگه شکسته شده، قرمز کم‌رنگ بشه
+    
+    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(text = displayLabel, color = if (isBroken) Color(0xFFFCA5A5) else Color(0xFF94A3B8), fontSize = 14.sp)
+        Text(text = formatPrice(level), color = valueColor, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+    }
+}
+
+@Composable
+fun InfoRow(label: String, value: String, valueColor: Color = Color.White) {
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
         Text(text = label, color = Color(0xFF94A3B8), fontSize = 14.sp)
-        Text(text = value, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        Text(text = value, color = valueColor, fontSize = 14.sp, fontWeight = FontWeight.Bold)
     }
 }
 
