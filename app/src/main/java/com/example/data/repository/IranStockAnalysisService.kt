@@ -21,16 +21,14 @@ data class FullAnalysisResult(
 
 class IranStockAnalysisService(private val context: Context) {
     private val gson = Gson()
-    private val fundamentalService = IranStockFundamentalService()
-    private val smartMoneyService = IranStockSmartMoneyService()
 
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
-            withTimeoutOrNull(10000L) { // تایم‌اوت ۱۰ ثانیه
+            withTimeoutOrNull(25000L) {
                 val jsonString = context.assets.open("market_data.json").bufferedReader().use { it.readText() }
                 val mapType = object : TypeToken<Map<String, StockMarketData>>() {}.type
                 val dataMap: Map<String, StockMarketData>? = gson.fromJson(jsonString, mapType)
-
+                
                 val stockData = dataMap?.get(stockName) ?: return@withTimeoutOrNull null
                 if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
@@ -46,27 +44,32 @@ class IranStockAnalysisService(private val context: Context) {
                 }
 
                 val currentPrice = candles.last().close
+                
+                // محاسبه حمایت و مقاومت
+                val recent = candles.takeLast(30).map { it.close }.sorted()
+                val minPrice = recent.firstOrNull() ?: currentPrice
+                val maxPrice = recent.lastOrNull() ?: currentPrice
+                val range = maxPrice - minPrice
+                val support1 = minPrice + range * 0.25
+                val resistance1 = minPrice + range * 0.75
+
                 val technicalResult = TechnicalAnalysisEngine.analyze(
                     symbol = stockName,
                     currentPrice = currentPrice,
                     candles = candles,
-                    provenance = MarketDataProvenance.LIVE_EXCHANGE,
+                    provenance = MarketDataProvenance.CACHED_EXCHANGE,
                     sourceExchange = "TSETMC"
                 )
 
-                val fundamental = try {
-                    fundamentalService.fetchFundamentalData(stockData.insCode)
-                } catch (e: Exception) { null }
-
-                val smartMoneyText = try {
-                    val smartMoneyList = smartMoneyService.fetchSmartMoneyData(stockData.insCode)
-                    smartMoneyService.analyzeSmartMoney(smartMoneyList)
-                } catch (e: Exception) { null }
-
-                FullAnalysisResult(technicalResult, fundamental, smartMoneyText)
+                // برگرداندن نتیجه با حمایت/مقاومت
+                FullAnalysisResult(
+                    technical = technicalResult,
+                    fundamental = null,
+                    smartMoneyText = "حمایت نزدیک: ${support1.toInt()} | مقاومت نزدیک: ${resistance1.toInt()}"
+                )
             }
         } catch (e: Exception) {
-            Log.e("AnalysisService", "Error: ${e.message}", e)
+            Log.e("RIGOR_DEBUG", "Error: ${e.message}", e)
             null
         }
     }
