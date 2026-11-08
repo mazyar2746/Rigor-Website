@@ -90,7 +90,7 @@ object TechnicalAnalysisEngine {
         val s1 = max(pivot - (h - l), (2.0 * pivot) - h).coerceAtMost(pivot)
         val s2 = min(pivot - (h - l), (2.0 * pivot) - h)
 
-        // --- منطق جدید: تشخیص شکست سطوح کلیدی (Breakout / Breakdown) ---
+        // تشخیص شکست سطوح کلیدی
         if (currentPrice > r2) {
             overallSignal = SignalType.STRONG_BUY
         } else if (currentPrice < s2) {

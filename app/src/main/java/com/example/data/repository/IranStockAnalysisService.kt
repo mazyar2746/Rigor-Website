@@ -20,7 +20,8 @@ import java.util.concurrent.ConcurrentHashMap
 data class FullAnalysisResult(
     val technical: TechnicalAnalysisResult,
     val fundamental: FundamentalData?,
-    val smartMoneyText: String? = null
+    val smartMoneyText: String? = null,
+    val lastUpdated: Long = 0L // زمان آخرین آپدیت کش
 )
 
 class IranStockAnalysisService(private val context: Context) {
@@ -57,7 +58,7 @@ class IranStockAnalysisService(private val context: Context) {
 
     suspend fun analyzeStock(stockName: String): FullAnalysisResult? = withContext(Dispatchers.IO) {
         try {
-            withTimeoutOrNull(35000L) { // افزایش تایم‌اوت به خاطر Retryها
+            withTimeoutOrNull(35000L) {
                 val stockData = MarketDataCacheManager.getStockData(stockName) ?: return@withTimeoutOrNull null
                 if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
@@ -82,7 +83,7 @@ class IranStockAnalysisService(private val context: Context) {
                         sourceExchange = "TSETMC"
                     )
 
-                    FullAnalysisResult(technicalResult, fundamentalData, null)
+                    FullAnalysisResult(technicalResult, fundamentalData, null, stockData.lastUpdated)
                 }
             }
         } catch (e: Exception) {

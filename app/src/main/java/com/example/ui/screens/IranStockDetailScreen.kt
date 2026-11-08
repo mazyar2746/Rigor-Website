@@ -27,6 +27,10 @@ import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -125,11 +129,23 @@ fun IranStockDetailScreen(
                                 text = "${StringsDictionary.get("iran_stock_price", lang)}: ${formatPrice(tech.currentPrice)}",
                                 color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold
                             )
-                            Text(
-                                text = tech.dataSourceNotice ?: "",
-                                color = if (tech.provenance.name == "LIVE_EXCHANGE") Color(0xFF22C55E) else Color(0xFFEAB308),
-                                fontSize = 10.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(top = 4.dp)
-                            )
+                            
+                            // نمایش وضعیت و ساعت آپدیت
+                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
+                                Text(
+                                    text = tech.dataSourceNotice ?: "",
+                                    color = if (tech.provenance.name == "LIVE_EXCHANGE") Color(0xFF22C55E) else Color(0xFFEAB308),
+                                    fontSize = 10.sp, fontWeight = FontWeight.Medium
+                                )
+                                if (result!!.lastUpdated > 0) {
+                                    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                                    Text(
+                                        text = " | بروزرسانی: ${timeFormat.format(Date(result!!.lastUpdated))}",
+                                        color = Color(0xFF94A3B8), fontSize = 10.sp
+                                    )
+                                }
+                            }
+
                             Spacer(modifier = Modifier.height(12.dp))
                             SignalBadge(signal = finalSignal, label = signalLabel)
                         }
@@ -144,7 +160,6 @@ fun IranStockDetailScreen(
                             Text(text = "📈 سطوح کلیدی", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
                             
-                            // تشخیص وضعیت سطوح (شکسته شده یا نه)
                             SmartLevelRow("مقاومت ۲", tech.resistance2, tech.currentPrice, isResistance = true)
                             SmartLevelRow("مقاومت ۱", tech.resistance1, tech.currentPrice, isResistance = true)
                             InfoRow("پیوت", formatPrice(tech.pivotPoint), Color.White)
@@ -204,17 +219,16 @@ fun IranStockDetailScreen(
     }
 }
 
-// تابع کمکی برای حل مشکل دلار و اعشار
 private fun formatPrice(value: Double?): String {
-    return if (value == null || value.isNaN() || value.isInfinite()) "---" else String.format("%,.0f", value)
+    if (value == null || value.isNaN() || value.isInfinite()) return "---"
+    return DecimalFormat("#,###").format(value)
 }
 
-// کامپوزبل جدید برای نمایش هوشمند سطوح (شکسته شده یا نه)
 @Composable
 fun SmartLevelRow(label: String, level: Double, currentPrice: Double, isResistance: Boolean) {
     val isBroken = if (isResistance) currentPrice > level else currentPrice < level
     val displayLabel = if (isBroken) "$label (شکسته شده)" else label
-    val valueColor = if (isBroken) Color(0xFFFCA5A5) else Color.White // اگه شکسته شده، قرمز کم‌رنگ بشه
+    val valueColor = if (isBroken) Color(0xFFFCA5A5) else Color.White
     
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
         Text(text = displayLabel, color = if (isBroken) Color(0xFFFCA5A5) else Color(0xFF94A3B8), fontSize = 14.sp)
