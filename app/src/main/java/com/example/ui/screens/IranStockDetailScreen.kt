@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.SignalType
@@ -37,16 +39,17 @@ fun IranStockDetailScreen(
     var result by remember { mutableStateOf<FullAnalysisResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMsg by remember { mutableStateOf<String?>(null) }
+    var retryTrigger by remember { mutableStateOf(0) } // تریگر برای دکمه تلاش مجدد
 
     val scope = rememberCoroutineScope()
     val service = remember { IranStockAnalysisService(context) }
 
-    LaunchedEffect(stockName) {
+    LaunchedEffect(stockName, retryTrigger) {
         isLoading = true
         errorMsg = null
 
         val timeoutJob = scope.launch {
-            delay(15000)
+            delay(20000)
             if (isLoading) {
                 isLoading = false
                 errorMsg = "زمان دریافت اطلاعات به پایان رسید. لطفاً دوباره تلاش کنید."
@@ -62,7 +65,7 @@ fun IranStockDetailScreen(
                     result = analysis
                 }
             } catch (e: Exception) {
-                errorMsg = "خطا: ${e.message}"
+                errorMsg = "خطا در ارتباط با سرور: ${e.message}"
             } finally {
                 isLoading = false
                 timeoutJob.cancel()
@@ -81,10 +84,25 @@ fun IranStockDetailScreen(
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize().padding(padding).background(RigourBackground)) {
             if (isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator(color = Color(0xFF00BCD4)) }
+                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    CircularProgressIndicator(color = Color(0xFF00BCD4))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("در حال دریافت اطلاعات از بازار...", color = Color.White, fontSize = 14.sp)
+                }
             } else if (errorMsg != null) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = errorMsg!!, color = Color.Red, fontSize = 16.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.padding(24.dp))
+                Column(modifier = Modifier.fillMaxSize().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    Text(text = "⚠️", fontSize = 48.sp, modifier = Modifier.padding(bottom = 16.dp))
+                    Text(text = errorMsg!!, color = Color(0xFFFCA5A5), fontSize = 16.sp, textAlign = TextAlign.Center, lineHeight = 24.sp)
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Button(
+                        onClick = { retryTrigger++ },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00BCD4)),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("تلاش مجدد", color = Color.White, fontWeight = FontWeight.Bold)
+                    }
                 }
             } else if (result != null) {
                 val tech = result!!.technical
@@ -97,7 +115,6 @@ fun IranStockDetailScreen(
                     modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // 1. قیمت و سیگنال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -108,22 +125,16 @@ fun IranStockDetailScreen(
                                 text = "${StringsDictionary.get("iran_stock_price", lang)}: ${String.format("%,.0f", tech.currentPrice)}",
                                 color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold
                             )
-                            
-                            // برچسب وضعیت دیتا
                             Text(
                                 text = tech.dataSourceNotice ?: "",
                                 color = if (tech.provenance.name == "LIVE_EXCHANGE") Color(0xFF22C55E) else Color(0xFFEAB308),
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier.padding(top = 4.dp)
+                                fontSize = 10.sp, fontWeight = FontWeight.Medium, modifier = Modifier.padding(top = 4.dp)
                             )
-
                             Spacer(modifier = Modifier.height(12.dp))
                             SignalBadge(signal = finalSignal, label = signalLabel)
                         }
                     }
 
-                    // 2. سطوح کلیدی (با حل NaN)
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -140,7 +151,6 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // 3. اندیکاتورهای تکنیکال
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -149,19 +159,15 @@ fun IranStockDetailScreen(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(text = "📊 اندیکاتورهای تکنیکال", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
-                            
                             InfoRow("شاخص قدرت نسبی (RSI)", String.format("%.1f", tech.rsi))
                             Text(tech.rsiDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(bottom = 12.dp, top = 2.dp))
-                            
                             InfoRow("هیستوگرام MACD", String.format("%.3f", tech.macdHistogram))
                             Text(tech.macdDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(bottom = 12.dp, top = 2.dp))
-                            
                             InfoRow("وضعیت بولینگر", tech.bbSignal.name)
                             Text(tech.bbDescription, color = Color(0xFF94A3B8), fontSize = 12.sp, lineHeight = 16.sp, modifier = Modifier.padding(top = 2.dp))
                         }
                     }
 
-                    // 4. اطلاعات پایه
                     if (fund != null) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
@@ -179,7 +185,6 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // 5. منطق تحلیل
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
@@ -197,7 +202,6 @@ fun IranStockDetailScreen(
     }
 }
 
-// تابع کمکی برای حل مشکل NaN و نمایش خط تیره
 private fun formatPrice(value: Double?): String {
     return if (value == null || value.isNaN() || value.isInfinite()) "---" else String.format("%,.0f", value)
 }
