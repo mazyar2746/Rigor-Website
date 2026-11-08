@@ -42,6 +42,7 @@ class IranStockAnalysisService(private val context: Context) {
                 val stockData = dataMap?.get(normalizeSymbol(stockName)) ?: return@withTimeoutOrNull null
                 if (stockData.prices.isEmpty()) return@withTimeoutOrNull null
 
+                // FIX 1: Sort candles oldest to newest, and filter out zero prices
                 val candles = stockData.prices.map { price ->
                     Candle(
                         timestamp = price.dateRaw,
@@ -51,8 +52,11 @@ class IranStockAnalysisService(private val context: Context) {
                         close = price.priceClose,
                         volume = price.volume.toDouble()
                     )
-                }
+                }.sortedBy { it.timestamp }.filter { it.close > 0.0 }
 
+                if (candles.isEmpty()) return@withTimeoutOrNull null
+
+                // FIX 2: Current price is now the newest valid close
                 val currentPrice = candles.last().close
 
                 val recent = candles.takeLast(30).map { it.close }.sorted()
