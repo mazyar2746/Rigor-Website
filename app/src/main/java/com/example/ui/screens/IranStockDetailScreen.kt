@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.SignalType
 import com.example.data.repository.FullAnalysisResult
 import com.example.data.repository.IranStockAnalysisService
-import com.example.engine.SignalInterpreter
 import com.example.i18n.Language
 import com.example.i18n.StringsDictionary
 import com.example.ui.theme.RigourBackground
@@ -85,13 +84,28 @@ fun IranStockDetailScreen(
                 val tech = result!!.technical
                 val fund = result!!.fundamental
                 
-                // اصلاح بزرگ: استفاده از overallSignal به جای rsiSignal
                 val finalSignal = tech.overallSignal 
-                val reasoning = SignalInterpreter.getReasoningText(tech, result!!.smartMoneyText, lang)
-                val signalLabel = SignalInterpreter.getSignalLabel(finalSignal, lang)
+                
+                val reasoning = when (finalSignal) {
+                    SignalType.STRONG_BUY -> "🚀 سیگنال خرید قوی صادر شد. قیمت از سطوح مقاومتی عبور کرده است (شکست مقاومت) و مومنتوم صعودی تایید می‌شود."
+                    SignalType.BUY -> "📈 سیگنال خرید. اندیکاتورها تمایل صعودی ملایم دارند و شرایط برای ورود مناسب است."
+                    SignalType.STRONG_SELL -> "⚠️ سیگنال فروش قوی صادر شد. قیمت از سطوح حمایتی به پایین شکسته است (شکست حمایت) و فشار فروش شدید است."
+                    SignalType.SELL -> "📉 سیگنال فروش. اندیکاتورها تمایل نزولی دارند و بهتر است احتیاط کنید."
+                    SignalType.NEUTRAL -> "⏸️ سیگنال خنثی. بازار در حال تعادل است و اندیکاتورها هم‌جهت نیستند. صبر کنید."
+                } + "\n\n📊 وضعیت اندیکاتورها:\n" +
+                    "• RSI: ${tech.rsiDescription}\n" +
+                    "• MACD: ${tech.macdDescription}\n" +
+                    "• بولینگر: ${tech.bbDescription}"
+
+                val signalLabel = when (finalSignal) {
+                    SignalType.STRONG_BUY -> "خرید قوی"
+                    SignalType.BUY -> "خرید"
+                    SignalType.NEUTRAL -> "خنثی / صبر کنید"
+                    SignalType.SELL -> "فروش"
+                    SignalType.STRONG_SELL -> "فروش قوی"
+                }
 
                 Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    // قیمت و سیگنال
                     Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)), shape = RoundedCornerShape(16.dp)) {
                         Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                             Text("${StringsDictionary.get("iran_stock_price", lang)}: ${formatPrice(tech.currentPrice)}", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
@@ -107,10 +121,8 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // سطوح کلیدی داینامیک
                     DynamicLevelsCard(currentPrice = tech.currentPrice, r2 = tech.resistance2, r1 = tech.resistance1, pivot = tech.pivotPoint, s1 = tech.support1, s2 = tech.support2)
 
-                    // اندیکاتورها
                     Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)), shape = RoundedCornerShape(12.dp)) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text("📊 اندیکاتورهای تکنیکال", color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -124,7 +136,6 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // اطلاعات پایه
                     if (fund != null) {
                         Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)), shape = RoundedCornerShape(12.dp)) {
                             Column(modifier = Modifier.padding(16.dp)) {
@@ -138,7 +149,6 @@ fun IranStockDetailScreen(
                         }
                     }
 
-                    // منطق تحلیل
                     Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)), shape = RoundedCornerShape(12.dp)) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text("🧠 " + StringsDictionary.get("iran_stock_reasoning_title", lang), color = Color(0xFF00BCD4), fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -152,7 +162,6 @@ fun IranStockDetailScreen(
     }
 }
 
-// کامپوزبل داینامیک سطوح
 @Composable
 fun DynamicLevelsCard(currentPrice: Double, r2: Double, r1: Double, pivot: Double, s1: Double, s2: Double) {
     val allLevels = listOf(r2, r1, s1, s2).filter { !it.isNaN() && it > 0.0 }.distinct()
@@ -172,10 +181,20 @@ fun DynamicLevelsCard(currentPrice: Double, r2: Double, r1: Double, pivot: Doubl
     }
 }
 
-// 🔥 تابع ضدگلوله: تبدیل به Long و فرمت با کاما (غیرممکنه دلار یا اعشار بده)
 private fun formatPrice(value: Double?): String {
     if (value == null || value.isNaN() || value.isInfinite()) return "---"
-    return String.format(Locale.US, "%,d", value.toLong())
+    val longValue = Math.round(value)
+    val str = Math.abs(longValue).toString()
+    val sb = StringBuilder()
+    var count = 0
+    for (i in str.length - 1 downTo 0) {
+        sb.append(str[i])
+        count++
+        if (count % 3 == 0 && i != 0) {
+            sb.append(",")
+        }
+    }
+    return if (longValue < 0) "-${sb.reverse()}" else sb.reverse().toString()
 }
 
 @Composable
