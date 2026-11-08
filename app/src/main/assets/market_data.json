@@ -555,9 +555,9 @@
       },
       {
         "priceChange": 130.0,
-        "priceMin": 4430.0,
-        "priceMax": 4640.0,
-        "priceYesterday": 4510.0,
+        "priceMin": 5330,
+        "priceMax": 5450,
+        "priceYesterday": 5300,
         "priceFirst": 4430.0,
         "last": false,
         "id": 0,
@@ -570,7 +570,9 @@
         "pDrCotVal": 4640.0,
         "zTotTran": 1118.0,
         "qTotTran5J": 21212859.0,
-        "qTotCap": 98172061150.0
+        "qTotCap": 98172061150.0,
+        "priceClose": 5440,
+        "volume": 27583356
       }
     ]
   },
@@ -1130,9 +1132,9 @@
       },
       {
         "priceChange": 510.0,
-        "priceMin": 17100.0,
-        "priceMax": 17710.0,
-        "priceYesterday": 17200.0,
+        "priceMin": 15670,
+        "priceMax": 16260,
+        "priceYesterday": 15790,
         "priceFirst": 17100.0,
         "last": false,
         "id": 0,
@@ -1145,7 +1147,9 @@
         "pDrCotVal": 17710.0,
         "zTotTran": 488.0,
         "qTotTran5J": 5294463.0,
-        "qTotCap": 93420329700.0
+        "qTotCap": 93420329700.0,
+        "priceClose": 16230,
+        "volume": 4324425
       }
     ]
   },
@@ -2280,9 +2284,9 @@
       },
       {
         "priceChange": 220.0,
-        "priceMin": 7820.0,
-        "priceMax": 7820.0,
-        "priceYesterday": 7600.0,
+        "priceMin": 10700,
+        "priceMax": 11000,
+        "priceYesterday": 11030,
         "priceFirst": 7820.0,
         "last": false,
         "id": 0,
@@ -2295,7 +2299,9 @@
         "pDrCotVal": 7820.0,
         "zTotTran": 38.0,
         "qTotTran5J": 856812.0,
-        "qTotCap": 6700269840.0
+        "qTotCap": 6700269840.0,
+        "priceClose": 10730,
+        "volume": 42277352
       }
     ]
   },
@@ -3430,9 +3436,9 @@
       },
       {
         "priceChange": 370.0,
-        "priceMin": 12670.0,
-        "priceMax": 12990.0,
-        "priceYesterday": 12620.0,
+        "priceMin": 23470,
+        "priceMax": 23740,
+        "priceYesterday": 23050,
         "priceFirst": 12990.0,
         "last": false,
         "id": 0,
@@ -3445,7 +3451,9 @@
         "pDrCotVal": 12990.0,
         "zTotTran": 594.0,
         "qTotTran5J": 10766173.0,
-        "qTotCap": 139723345320.0
+        "qTotCap": 139723345320.0,
+        "priceClose": 23740,
+        "volume": 22456516
       }
     ]
   },
@@ -4005,9 +4013,9 @@
       },
       {
         "priceChange": 320.0,
-        "priceMin": 13510.0,
-        "priceMax": 14190.0,
-        "priceYesterday": 13780.0,
+        "priceMin": 19800,
+        "priceMax": 20200,
+        "priceYesterday": 19620,
         "priceFirst": 13510.0,
         "last": false,
         "id": 0,
@@ -4020,7 +4028,9 @@
         "pDrCotVal": 14100.0,
         "zTotTran": 265.0,
         "qTotTran5J": 1045213.0,
-        "qTotCap": 14668086570.0
+        "qTotCap": 14668086570.0,
+        "priceClose": 20180,
+        "volume": 2745673
       }
     ]
   },
@@ -4580,9 +4590,9 @@
       },
       {
         "priceChange": 33.0,
-        "priceMin": 1447.0,
-        "priceMax": 1487.0,
-        "priceYesterday": 1444.0,
+        "priceMin": 1434,
+        "priceMax": 1466,
+        "priceYesterday": 1424,
         "priceFirst": 1476.0,
         "last": false,
         "id": 0,
@@ -4595,7 +4605,9 @@
         "pDrCotVal": 1477.0,
         "zTotTran": 30755.0,
         "qTotTran5J": 7086061382.0,
-        "qTotCap": 10488493224898.0
+        "qTotCap": 10488493224898.0,
+        "priceClose": 1460,
+        "volume": 3202970454
       }
     ]
   },
@@ -5730,9 +5742,9 @@
       },
       {
         "priceChange": 590.0,
-        "priceMin": 20500.0,
-        "priceMax": 20950.0,
-        "priceYesterday": 20340.0,
+        "priceMin": 21510,
+        "priceMax": 21840,
+        "priceYesterday": 21210,
         "priceFirst": 20670.0,
         "last": false,
         "id": 0,
@@ -5745,7 +5757,9 @@
         "pDrCotVal": 20930.0,
         "zTotTran": 113.0,
         "qTotTran5J": 1069859.0,
-        "qTotCap": 22392724550.0
+        "qTotCap": 22392724550.0,
+        "priceClose": 21840,
+        "volume": 15869227
       }
     ]
   },
@@ -6305,9 +6319,9 @@
       },
       {
         "priceChange": 200.0,
-        "priceMin": 6840.0,
-        "priceMax": 7230.0,
-        "priceYesterday": 7020.0,
+        "priceMin": 9040,
+        "priceMax": 9540,
+        "priceYesterday": 9310,
         "priceFirst": 7160.0,
         "last": false,
         "id": 0,
@@ -6320,7 +6334,9 @@
         "pDrCotVal": 7220.0,
         "zTotTran": 499.0,
         "qTotTran5J": 13066590.0,
-        "qTotCap": 92751115330.0
+        "qTotCap": 92751115330.0,
+        "priceClose": 9070,
+        "volume": 15988116
       }
     ]
   },
@@ -8030,9 +8046,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 61900.0,
+        "priceMin": 55450,
+        "priceMax": 58490,
+        "priceYesterday": 57160,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -8045,7 +8061,9 @@
         "pDrCotVal": 61900.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 57180,
+        "volume": 818381
       }
     ]
   },
@@ -9180,9 +9198,9 @@
       },
       {
         "priceChange": 200.0,
-        "priceMin": 7060.0,
-        "priceMax": 7250.0,
-        "priceYesterday": 7040.0,
+        "priceMin": 7720,
+        "priceMax": 7970,
+        "priceYesterday": 7740,
         "priceFirst": 7250.0,
         "last": false,
         "id": 0,
@@ -9195,7 +9213,9 @@
         "pDrCotVal": 7240.0,
         "zTotTran": 1534.0,
         "qTotTran5J": 43439214.0,
-        "qTotCap": 314440762370.0
+        "qTotCap": 314440762370.0,
+        "priceClose": 7860,
+        "volume": 47806917
       }
     ]
   },
@@ -9755,9 +9775,9 @@
       },
       {
         "priceChange": -80.0,
-        "priceMin": 3440.0,
-        "priceMax": 3590.0,
-        "priceYesterday": 3540.0,
+        "priceMin": 3290,
+        "priceMax": 3350,
+        "priceYesterday": 3260,
         "priceFirst": 3590.0,
         "last": false,
         "id": 0,
@@ -9770,7 +9790,9 @@
         "pDrCotVal": 3460.0,
         "zTotTran": 29272.0,
         "qTotTran5J": 2347516427.0,
-        "qTotCap": 8139818802920.0
+        "qTotCap": 8139818802920.0,
+        "priceClose": 3350,
+        "volume": 818476231
       }
     ]
   },
@@ -10330,9 +10352,9 @@
       },
       {
         "priceChange": 90.0,
-        "priceMin": 3720.0,
-        "priceMax": 3850.0,
-        "priceYesterday": 3740.0,
+        "priceMin": 4970,
+        "priceMax": 4970,
+        "priceYesterday": 4830,
         "priceFirst": 3800.0,
         "last": false,
         "id": 0,
@@ -10345,7 +10367,9 @@
         "pDrCotVal": 3830.0,
         "zTotTran": 489.0,
         "qTotTran5J": 16858114.0,
-        "qTotCap": 64198952770.0
+        "qTotCap": 64198952770.0,
+        "priceClose": 4970,
+        "volume": 26728113
       }
     ]
   },
@@ -10905,9 +10929,9 @@
       },
       {
         "priceChange": -60.0,
-        "priceMin": 3080.0,
-        "priceMax": 3210.0,
-        "priceYesterday": 3170.0,
+        "priceMin": 3350,
+        "priceMax": 3450,
+        "priceYesterday": 3350,
         "priceFirst": 3190.0,
         "last": false,
         "id": 0,
@@ -10920,7 +10944,9 @@
         "pDrCotVal": 3110.0,
         "zTotTran": 665.0,
         "qTotTran5J": 21008866.0,
-        "qTotCap": 65694012580.0
+        "qTotCap": 65694012580.0,
+        "priceClose": 3440,
+        "volume": 15464609
       }
     ]
   },
@@ -13205,9 +13231,9 @@
       },
       {
         "priceChange": 440.0,
-        "priceMin": 14830.0,
-        "priceMax": 15300.0,
-        "priceYesterday": 14860.0,
+        "priceMin": 19620,
+        "priceMax": 19620,
+        "priceYesterday": 19050,
         "priceFirst": 14830.0,
         "last": false,
         "id": 0,
@@ -13220,7 +13246,9 @@
         "pDrCotVal": 15300.0,
         "zTotTran": 1414.0,
         "qTotTran5J": 8765023.0,
-        "qTotCap": 133846738880.0
+        "qTotCap": 133846738880.0,
+        "priceClose": 19620,
+        "volume": 1907593
       }
     ]
   },
@@ -18955,9 +18983,9 @@
       },
       {
         "priceChange": -420.0,
-        "priceMin": 13870.0,
-        "priceMax": 14630.0,
-        "priceYesterday": 14290.0,
+        "priceMin": 13740,
+        "priceMax": 13740,
+        "priceYesterday": 14160,
         "priceFirst": 13870.0,
         "last": false,
         "id": 0,
@@ -18970,7 +18998,9 @@
         "pDrCotVal": 13870.0,
         "zTotTran": 996.0,
         "qTotTran5J": 21689708.0,
-        "qTotCap": 301701830660.0
+        "qTotCap": 301701830660.0,
+        "priceClose": 13740,
+        "volume": 956069
       }
     ]
   },
@@ -21255,9 +21285,9 @@
       },
       {
         "priceChange": 120.0,
-        "priceMin": 4820.0,
-        "priceMax": 4960.0,
-        "priceYesterday": 4820.0,
+        "priceMin": 6240,
+        "priceMax": 6400,
+        "priceYesterday": 6220,
         "priceFirst": 4960.0,
         "last": false,
         "id": 0,
@@ -21270,7 +21300,9 @@
         "pDrCotVal": 4940.0,
         "zTotTran": 3709.0,
         "qTotTran5J": 146740584.0,
-        "qTotCap": 724648966050.0
+        "qTotCap": 724648966050.0,
+        "priceClose": 6400,
+        "volume": 729628543
       }
     ]
   },
@@ -22405,9 +22437,9 @@
       },
       {
         "priceChange": 750.0,
-        "priceMin": 25970.0,
-        "priceMax": 25970.0,
-        "priceYesterday": 25220.0,
+        "priceMin": 31430,
+        "priceMax": 33240,
+        "priceYesterday": 32400,
         "priceFirst": 25970.0,
         "last": false,
         "id": 0,
@@ -22420,7 +22452,9 @@
         "pDrCotVal": 25970.0,
         "zTotTran": 418.0,
         "qTotTran5J": 16124133.0,
-        "qTotCap": 418743734010.0
+        "qTotCap": 418743734010.0,
+        "priceClose": 31560,
+        "volume": 20841599
       }
     ]
   },
@@ -22980,9 +23014,9 @@
       },
       {
         "priceChange": 360.0,
-        "priceMin": 12100.0,
-        "priceMax": 12370.0,
-        "priceYesterday": 12010.0,
+        "priceMin": 14460,
+        "priceMax": 15100,
+        "priceYesterday": 14900,
         "priceFirst": 12100.0,
         "last": false,
         "id": 0,
@@ -22995,7 +23029,9 @@
         "pDrCotVal": 12370.0,
         "zTotTran": 277.0,
         "qTotTran5J": 5917181.0,
-        "qTotCap": 73124796940.0
+        "qTotCap": 73124796940.0,
+        "priceClose": 14610,
+        "volume": 13954101
       }
     ]
   },
@@ -23555,9 +23591,9 @@
       },
       {
         "priceChange": -10.0,
-        "priceMin": 12250.0,
-        "priceMax": 12750.0,
-        "priceYesterday": 12620.0,
+        "priceMin": 12030,
+        "priceMax": 12410,
+        "priceYesterday": 12050,
         "priceFirst": 12300.0,
         "last": false,
         "id": 0,
@@ -23570,7 +23606,9 @@
         "pDrCotVal": 12610.0,
         "zTotTran": 964.0,
         "qTotTran5J": 8608304.0,
-        "qTotCap": 107073082540.0
+        "qTotCap": 107073082540.0,
+        "priceClose": 12380,
+        "volume": 4901799
       }
     ]
   },
@@ -24130,9 +24168,9 @@
       },
       {
         "priceChange": 920.0,
-        "priceMin": 53300.0,
-        "priceMax": 54970.0,
-        "priceYesterday": 53380.0,
+        "priceMin": 66600,
+        "priceMax": 68590,
+        "priceYesterday": 66600,
         "priceFirst": 54970.0,
         "last": false,
         "id": 0,
@@ -24145,7 +24183,9 @@
         "pDrCotVal": 54300.0,
         "zTotTran": 208.0,
         "qTotTran5J": 434805.0,
-        "qTotCap": 23528453690.0
+        "qTotCap": 23528453690.0,
+        "priceClose": 68300,
+        "volume": 1388622
       }
     ]
   },
@@ -24705,9 +24745,9 @@
       },
       {
         "priceChange": 140.0,
-        "priceMin": 4730.0,
-        "priceMax": 4870.0,
-        "priceYesterday": 4730.0,
+        "priceMin": 8770,
+        "priceMax": 8910,
+        "priceYesterday": 8660,
         "priceFirst": 4870.0,
         "last": false,
         "id": 0,
@@ -24720,7 +24760,9 @@
         "pDrCotVal": 4870.0,
         "zTotTran": 1712.0,
         "qTotTran5J": 44670857.0,
-        "qTotCap": 217133570030.0
+        "qTotCap": 217133570030.0,
+        "priceClose": 8900,
+        "volume": 77125124
       }
     ]
   },
@@ -25280,9 +25322,9 @@
       },
       {
         "priceChange": 60.0,
-        "priceMin": 17520.0,
-        "priceMax": 18110.0,
-        "priceYesterday": 17590.0,
+        "priceMin": 19230,
+        "priceMax": 20340,
+        "priceYesterday": 19820,
         "priceFirst": 18110.0,
         "last": false,
         "id": 0,
@@ -25295,7 +25337,9 @@
         "pDrCotVal": 17650.0,
         "zTotTran": 150.0,
         "qTotTran5J": 1516884.0,
-        "qTotCap": 26787434850.0
+        "qTotCap": 26787434850.0,
+        "priceClose": 19340,
+        "volume": 3044585
       }
     ]
   },
@@ -27005,9 +27049,9 @@
       },
       {
         "priceChange": 90.0,
-        "priceMin": 3310.0,
-        "priceMax": 3310.0,
-        "priceYesterday": 3220.0,
+        "priceMin": 4560,
+        "priceMax": 4730,
+        "priceYesterday": 4600,
         "priceFirst": 3310.0,
         "last": false,
         "id": 0,
@@ -27020,7 +27064,9 @@
         "pDrCotVal": 3310.0,
         "zTotTran": 252.0,
         "qTotTran5J": 22843729.0,
-        "qTotCap": 75612742990.0
+        "qTotCap": 75612742990.0,
+        "priceClose": 4700,
+        "volume": 48602330
       }
     ]
   },
@@ -28155,9 +28201,9 @@
       },
       {
         "priceChange": 300.0,
-        "priceMin": 10550.0,
-        "priceMax": 10580.0,
-        "priceYesterday": 10280.0,
+        "priceMin": 10020,
+        "priceMax": 10020,
+        "priceYesterday": 9730,
         "priceFirst": 10580.0,
         "last": false,
         "id": 0,
@@ -28170,7 +28216,9 @@
         "pDrCotVal": 10580.0,
         "zTotTran": 230.0,
         "qTotTran5J": 4433190.0,
-        "qTotCap": 46898277020.0
+        "qTotCap": 46898277020.0,
+        "priceClose": 10020,
+        "volume": 3447524
       }
     ]
   },
@@ -29305,9 +29353,9 @@
       },
       {
         "priceChange": 2600.0,
-        "priceMin": 87100.0,
-        "priceMax": 91800.0,
-        "priceYesterday": 89200.0,
+        "priceMin": 109900,
+        "priceMax": 114300,
+        "priceYesterday": 111000,
         "priceFirst": 87100.0,
         "last": false,
         "id": 0,
@@ -29320,7 +29368,9 @@
         "pDrCotVal": 91800.0,
         "zTotTran": 331.0,
         "qTotTran5J": 858180.0,
-        "qTotCap": 78535113000.0
+        "qTotCap": 78535113000.0,
+        "priceClose": 113600,
+        "volume": 601251
       }
     ]
   },
@@ -30455,9 +30505,9 @@
       },
       {
         "priceChange": 290.0,
-        "priceMin": 30660.0,
-        "priceMax": 31700.0,
-        "priceYesterday": 31010.0,
+        "priceMin": 28980,
+        "priceMax": 29810,
+        "priceYesterday": 29260,
         "priceFirst": 30660.0,
         "last": false,
         "id": 0,
@@ -30470,7 +30520,9 @@
         "pDrCotVal": 31300.0,
         "zTotTran": 442.0,
         "qTotTran5J": 1848890.0,
-        "qTotCap": 57896504070.0
+        "qTotCap": 57896504070.0,
+        "priceClose": 29270,
+        "volume": 3281258
       }
     ]
   },
@@ -32180,9 +32232,9 @@
       },
       {
         "priceChange": 230.0,
-        "priceMin": 8100.0,
-        "priceMax": 8100.0,
-        "priceYesterday": 7870.0,
+        "priceMin": 9180,
+        "priceMax": 9500,
+        "priceYesterday": 9240,
         "priceFirst": 8100.0,
         "last": false,
         "id": 0,
@@ -32195,7 +32247,9 @@
         "pDrCotVal": 8100.0,
         "zTotTran": 176.0,
         "qTotTran5J": 9860469.0,
-        "qTotCap": 79869798900.0
+        "qTotCap": 79869798900.0,
+        "priceClose": 9350,
+        "volume": 4742992
       }
     ]
   },
@@ -34480,9 +34534,9 @@
       },
       {
         "priceChange": 30.0,
-        "priceMin": 6640.0,
-        "priceMax": 6890.0,
-        "priceYesterday": 6720.0,
+        "priceMin": 11330,
+        "priceMax": 11450,
+        "priceYesterday": 11120,
         "priceFirst": 6640.0,
         "last": false,
         "id": 0,
@@ -34495,7 +34549,9 @@
         "pDrCotVal": 6750.0,
         "zTotTran": 42.0,
         "qTotTran5J": 701166.0,
-        "qTotCap": 4745451430.0
+        "qTotCap": 4745451430.0,
+        "priceClose": 11440,
+        "volume": 3993969
       }
     ]
   },
@@ -35055,9 +35111,9 @@
       },
       {
         "priceChange": 480.0,
-        "priceMin": 16580.0,
-        "priceMax": 16580.0,
-        "priceYesterday": 16100.0,
+        "priceMin": 19800,
+        "priceMax": 20970,
+        "priceYesterday": 20360,
         "priceFirst": 16580.0,
         "last": false,
         "id": 0,
@@ -35070,7 +35126,9 @@
         "pDrCotVal": 16580.0,
         "zTotTran": 131.0,
         "qTotTran5J": 2822216.0,
-        "qTotCap": 46792341280.0
+        "qTotCap": 46792341280.0,
+        "priceClose": 20440,
+        "volume": 82934268
       }
     ]
   },
@@ -36780,9 +36838,9 @@
       },
       {
         "priceChange": 140.0,
-        "priceMin": 4820.0,
-        "priceMax": 4820.0,
-        "priceYesterday": 4680.0,
+        "priceMin": 4810,
+        "priceMax": 4970,
+        "priceYesterday": 4830,
         "priceFirst": 4820.0,
         "last": false,
         "id": 0,
@@ -36795,7 +36853,9 @@
         "pDrCotVal": 4820.0,
         "zTotTran": 54.0,
         "qTotTran5J": 1511957.0,
-        "qTotCap": 7287632740.0
+        "qTotCap": 7287632740.0,
+        "priceClose": 4960,
+        "volume": 80816191
       }
     ]
   },
@@ -37355,9 +37415,9 @@
       },
       {
         "priceChange": 82.0,
-        "priceMin": 2840.0,
-        "priceMax": 2840.0,
-        "priceYesterday": 2758.0,
+        "priceMin": 4050,
+        "priceMax": 4050,
+        "priceYesterday": 3940,
         "priceFirst": 2840.0,
         "last": false,
         "id": 0,
@@ -37370,7 +37430,9 @@
         "pDrCotVal": 2840.0,
         "zTotTran": 690.0,
         "qTotTran5J": 235743191.0,
-        "qTotCap": 669510662440.0
+        "qTotCap": 669510662440.0,
+        "priceClose": 4050,
+        "volume": 112487700
       }
     ]
   },
@@ -37930,9 +37992,9 @@
       },
       {
         "priceChange": 270.0,
-        "priceMin": 10210.0,
-        "priceMax": 10690.0,
-        "priceYesterday": 10380.0,
+        "priceMin": 12550,
+        "priceMax": 12820,
+        "priceYesterday": 12450,
         "priceFirst": 10210.0,
         "last": false,
         "id": 0,
@@ -37945,7 +38007,9 @@
         "pDrCotVal": 10650.0,
         "zTotTran": 319.0,
         "qTotTran5J": 5744072.0,
-        "qTotCap": 60832041420.0
+        "qTotCap": 60832041420.0,
+        "priceClose": 12820,
+        "volume": 7342872
       }
     ]
   },
@@ -38505,9 +38569,9 @@
       },
       {
         "priceChange": 120.0,
-        "priceMin": 8890.0,
-        "priceMax": 9140.0,
-        "priceYesterday": 8880.0,
+        "priceMin": 10350,
+        "priceMax": 10860,
+        "priceYesterday": 10550,
         "priceFirst": 9140.0,
         "last": false,
         "id": 0,
@@ -38520,7 +38584,9 @@
         "pDrCotVal": 9000.0,
         "zTotTran": 434.0,
         "qTotTran5J": 2204793.0,
-        "qTotCap": 19871767340.0
+        "qTotCap": 19871767340.0,
+        "priceClose": 10780,
+        "volume": 11576144
       }
     ]
   },
@@ -40230,9 +40296,9 @@
       },
       {
         "priceChange": 410.0,
-        "priceMin": 17970.0,
-        "priceMax": 18440.0,
-        "priceYesterday": 17960.0,
+        "priceMin": 22800,
+        "priceMax": 23430,
+        "priceYesterday": 22750,
         "priceFirst": 18440.0,
         "last": false,
         "id": 0,
@@ -40245,7 +40311,9 @@
         "pDrCotVal": 18370.0,
         "zTotTran": 181.0,
         "qTotTran5J": 716170.0,
-        "qTotCap": 13178794740.0
+        "qTotCap": 13178794740.0,
+        "priceClose": 23110,
+        "volume": 1417125
       }
     ]
   },
@@ -40805,9 +40873,9 @@
       },
       {
         "priceChange": 60.0,
-        "priceMin": 3250.0,
-        "priceMax": 3400.0,
-        "priceYesterday": 3310.0,
+        "priceMin": 4740,
+        "priceMax": 5020,
+        "priceYesterday": 4880,
         "priceFirst": 3310.0,
         "last": false,
         "id": 0,
@@ -40820,7 +40888,9 @@
         "pDrCotVal": 3370.0,
         "zTotTran": 240.0,
         "qTotTran5J": 11391023.0,
-        "qTotCap": 38167073880.0
+        "qTotCap": 38167073880.0,
+        "priceClose": 4970,
+        "volume": 25486659
       }
     ]
   },
@@ -41380,9 +41450,9 @@
       },
       {
         "priceChange": 1410.0,
-        "priceMin": 48610.0,
-        "priceMax": 48610.0,
-        "priceYesterday": 47200.0,
+        "priceMin": 62410,
+        "priceMax": 66010,
+        "priceYesterday": 64090,
         "priceFirst": 48610.0,
         "last": false,
         "id": 0,
@@ -41395,7 +41465,9 @@
         "pDrCotVal": 48610.0,
         "zTotTran": 213.0,
         "qTotTran5J": 1711946.0,
-        "qTotCap": 83217695060.0
+        "qTotCap": 83217695060.0,
+        "priceClose": 64590,
+        "volume": 7257057
       }
     ]
   },
@@ -42530,9 +42602,9 @@
       },
       {
         "priceChange": -220.0,
-        "priceMin": 7400.0,
-        "priceMax": 7580.0,
-        "priceYesterday": 7620.0,
+        "priceMin": 5880,
+        "priceMax": 6070,
+        "priceYesterday": 5900,
         "priceFirst": 7420.0,
         "last": false,
         "id": 0,
@@ -42545,7 +42617,9 @@
         "pDrCotVal": 7400.0,
         "zTotTran": 3640.0,
         "qTotTran5J": 159716758.0,
-        "qTotCap": 1185997508550.0
+        "qTotCap": 1185997508550.0,
+        "priceClose": 6040,
+        "volume": 52579153
       }
     ]
   },
@@ -43105,9 +43179,9 @@
       },
       {
         "priceChange": 260.0,
-        "priceMin": 8970.0,
-        "priceMax": 9080.0,
-        "priceYesterday": 8820.0,
+        "priceMin": 12000,
+        "priceMax": 12000,
+        "priceYesterday": 11660,
         "priceFirst": 9080.0,
         "last": false,
         "id": 0,
@@ -43120,7 +43194,9 @@
         "pDrCotVal": 9080.0,
         "zTotTran": 1586.0,
         "qTotTran5J": 92030793.0,
-        "qTotCap": 835594945510.0
+        "qTotCap": 835594945510.0,
+        "priceClose": 12000,
+        "volume": 121421059
       }
     ]
   },
@@ -43680,9 +43756,9 @@
       },
       {
         "priceChange": 60.0,
-        "priceMin": 5190.0,
-        "priceMax": 5380.0,
-        "priceYesterday": 5280.0,
+        "priceMin": 6630,
+        "priceMax": 6630,
+        "priceYesterday": 6440,
         "priceFirst": 5380.0,
         "last": false,
         "id": 0,
@@ -43695,7 +43771,9 @@
         "pDrCotVal": 5340.0,
         "zTotTran": 159.0,
         "qTotTran5J": 3498605.0,
-        "qTotCap": 18549644230.0
+        "qTotCap": 18549644230.0,
+        "priceClose": 6630,
+        "volume": 3426887
       }
     ]
   },
@@ -45980,9 +46058,9 @@
       },
       {
         "priceChange": 190.0,
-        "priceMin": 6780.0,
-        "priceMax": 6780.0,
-        "priceYesterday": 6590.0,
+        "priceMin": 10730,
+        "priceMax": 11390,
+        "priceYesterday": 11060,
         "priceFirst": 6780.0,
         "last": false,
         "id": 0,
@@ -45995,7 +46073,9 @@
         "pDrCotVal": 6780.0,
         "zTotTran": 18413.0,
         "qTotTran5J": 15392218.0,
-        "qTotCap": 104359238040.0
+        "qTotCap": 104359238040.0,
+        "priceClose": 10900,
+        "volume": 144262249
       }
     ]
   },
@@ -46555,9 +46635,9 @@
       },
       {
         "priceChange": 370.0,
-        "priceMin": 12200.0,
-        "priceMax": 12770.0,
-        "priceYesterday": 12400.0,
+        "priceMin": 11800,
+        "priceMax": 12030,
+        "priceYesterday": 11680,
         "priceFirst": 12750.0,
         "last": false,
         "id": 0,
@@ -46570,7 +46650,9 @@
         "pDrCotVal": 12770.0,
         "zTotTran": 21071.0,
         "qTotTran5J": 582699275.0,
-        "qTotCap": 7409324989040.0
+        "qTotCap": 7409324989040.0,
+        "priceClose": 12010,
+        "volume": 390318707
       }
     ]
   },
@@ -47130,9 +47212,9 @@
       },
       {
         "priceChange": 30.0,
-        "priceMin": 5910.0,
-        "priceMax": 6230.0,
-        "priceYesterday": 6090.0,
+        "priceMin": 9020,
+        "priceMax": 9020,
+        "priceYesterday": 8760,
         "priceFirst": 5910.0,
         "last": false,
         "id": 0,
@@ -47145,7 +47227,9 @@
         "pDrCotVal": 6120.0,
         "zTotTran": 3860.0,
         "qTotTran5J": 69844412.0,
-        "qTotCap": 419872230300.0
+        "qTotCap": 419872230300.0,
+        "priceClose": 9020,
+        "volume": 23647563
       }
     ]
   },
@@ -47705,9 +47789,9 @@
       },
       {
         "priceChange": 1100.0,
-        "priceMin": 295500.0,
-        "priceMax": 307800.0,
-        "priceYesterday": 301200.0,
+        "priceMin": 325000,
+        "priceMax": 332100,
+        "priceYesterday": 322500,
         "priceFirst": 306600.0,
         "last": false,
         "id": 0,
@@ -47720,7 +47804,9 @@
         "pDrCotVal": 302300.0,
         "zTotTran": 36472.0,
         "qTotTran5J": 35183432.0,
-        "qTotCap": 10657880972100.0
+        "qTotCap": 10657880972100.0,
+        "priceClose": 330300,
+        "volume": 28258053
       }
     ]
   },
@@ -48280,9 +48366,9 @@
       },
       {
         "priceChange": 500.0,
-        "priceMin": 17000.0,
-        "priceMax": 17450.0,
-        "priceYesterday": 16950.0,
+        "priceMin": 15260,
+        "priceMax": 15260,
+        "priceYesterday": 14820,
         "priceFirst": 17000.0,
         "last": false,
         "id": 0,
@@ -48295,7 +48381,9 @@
         "pDrCotVal": 17450.0,
         "zTotTran": 697.0,
         "qTotTran5J": 9129453.0,
-        "qTotCap": 158963030140.0
+        "qTotCap": 158963030140.0,
+        "priceClose": 15260,
+        "volume": 4717631
       }
     ]
   },
@@ -50005,9 +50093,9 @@
       },
       {
         "priceChange": -960.0,
-        "priceMin": 48890.0,
-        "priceMax": 51750.0,
-        "priceYesterday": 50400.0,
+        "priceMin": 51000,
+        "priceMax": 52160,
+        "priceYesterday": 51480,
         "priceFirst": 50030.0,
         "last": false,
         "id": 0,
@@ -50020,7 +50108,9 @@
         "pDrCotVal": 49440.0,
         "zTotTran": 1063.0,
         "qTotTran5J": 2681236.0,
-        "qTotCap": 131810419700.0
+        "qTotCap": 131810419700.0,
+        "priceClose": 51490,
+        "volume": 1631966
       }
     ]
   },
@@ -50580,9 +50670,9 @@
       },
       {
         "priceChange": 320.0,
-        "priceMin": 10700.0,
-        "priceMax": 11000.0,
-        "priceYesterday": 10680.0,
+        "priceMin": 15380,
+        "priceMax": 16220,
+        "priceYesterday": 15850,
         "priceFirst": 10980.0,
         "last": false,
         "id": 0,
@@ -50595,7 +50685,9 @@
         "pDrCotVal": 11000.0,
         "zTotTran": 2062.0,
         "qTotTran5J": 53577678.0,
-        "qTotCap": 588423072600.0
+        "qTotCap": 588423072600.0,
+        "priceClose": 15560,
+        "volume": 41375927
       }
     ]
   },
@@ -52305,9 +52397,9 @@
       },
       {
         "priceChange": 240.0,
-        "priceMin": 8140.0,
-        "priceMax": 8250.0,
-        "priceYesterday": 8010.0,
+        "priceMin": 11560,
+        "priceMax": 12050,
+        "priceYesterday": 11700,
         "priceFirst": 8200.0,
         "last": false,
         "id": 0,
@@ -52320,7 +52412,9 @@
         "pDrCotVal": 8250.0,
         "zTotTran": 663.0,
         "qTotTran5J": 44728445.0,
-        "qTotCap": 368957097100.0
+        "qTotCap": 368957097100.0,
+        "priceClose": 11880,
+        "volume": 35145609
       }
     ]
   },
@@ -52880,9 +52974,9 @@
       },
       {
         "priceChange": 43.0,
-        "priceMin": 2299.0,
-        "priceMax": 2364.0,
-        "priceYesterday": 2296.0,
+        "priceMin": 2880,
+        "priceMax": 2961,
+        "priceYesterday": 2875,
         "priceFirst": 2299.0,
         "last": false,
         "id": 0,
@@ -52895,7 +52989,9 @@
         "pDrCotVal": 2339.0,
         "zTotTran": 458.0,
         "qTotTran5J": 18371642.0,
-        "qTotCap": 43247726887.0
+        "qTotCap": 43247726887.0,
+        "priceClose": 2961,
+        "volume": 24117703
       }
     ]
   },
@@ -54030,9 +54126,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 22500.0,
-        "priceMax": 23310.0,
-        "priceYesterday": 22870.0,
+        "priceMin": 23000,
+        "priceMax": 23500,
+        "priceYesterday": 22820,
         "priceFirst": 22840.0,
         "last": false,
         "id": 0,
@@ -54045,7 +54141,9 @@
         "pDrCotVal": 22980.0,
         "zTotTran": 1142.0,
         "qTotTran5J": 3964940.0,
-        "qTotCap": 91059851160.0
+        "qTotCap": 91059851160.0,
+        "priceClose": 23480,
+        "volume": 2589974
       }
     ]
   },
@@ -56330,9 +56428,9 @@
       },
       {
         "priceChange": 120.0,
-        "priceMin": 4360.0,
-        "priceMax": 4360.0,
-        "priceYesterday": 4240.0,
+        "priceMin": 4650,
+        "priceMax": 4810,
+        "priceYesterday": 4670,
         "priceFirst": 4360.0,
         "last": false,
         "id": 0,
@@ -56345,7 +56443,9 @@
         "pDrCotVal": 4360.0,
         "zTotTran": 755.0,
         "qTotTran5J": 8525997.0,
-        "qTotCap": 37173346920.0
+        "qTotCap": 37173346920.0,
+        "priceClose": 4790,
+        "volume": 12242260
       }
     ]
   },
@@ -58055,9 +58155,9 @@
       },
       {
         "priceChange": 290.0,
-        "priceMin": 9890.0,
-        "priceMax": 10080.0,
-        "priceYesterday": 9790.0,
+        "priceMin": 13550,
+        "priceMax": 13990,
+        "priceYesterday": 13920,
         "priceFirst": 9940.0,
         "last": false,
         "id": 0,
@@ -58070,7 +58170,9 @@
         "pDrCotVal": 10080.0,
         "zTotTran": 334.0,
         "qTotTran5J": 9652539.0,
-        "qTotCap": 97118005830.0
+        "qTotCap": 97118005830.0,
+        "priceClose": 13780,
+        "volume": 5990316
       }
     ]
   },
@@ -59205,9 +59307,9 @@
       },
       {
         "priceChange": -200.0,
-        "priceMin": 6510.0,
-        "priceMax": 6710.0,
-        "priceYesterday": 6710.0,
+        "priceMin": 9470,
+        "priceMax": 9470,
+        "priceYesterday": 9200,
         "priceFirst": 6510.0,
         "last": false,
         "id": 0,
@@ -59220,7 +59322,9 @@
         "pDrCotVal": 6510.0,
         "zTotTran": 2986.0,
         "qTotTran5J": 40319794.0,
-        "qTotCap": 263248302510.0
+        "qTotCap": 263248302510.0,
+        "priceClose": 9470,
+        "volume": 7161911
       }
     ]
   },
@@ -59780,9 +59884,9 @@
       },
       {
         "priceChange": 710.0,
-        "priceMin": 24120.0,
-        "priceMax": 24580.0,
-        "priceYesterday": 23870.0,
+        "priceMin": 26400,
+        "priceMax": 26690,
+        "priceYesterday": 25920,
         "priceFirst": 24580.0,
         "last": false,
         "id": 0,
@@ -59795,7 +59899,9 @@
         "pDrCotVal": 24580.0,
         "zTotTran": 404.0,
         "qTotTran5J": 4926832.0,
-        "qTotCap": 121025644570.0
+        "qTotCap": 121025644570.0,
+        "priceClose": 26660,
+        "volume": 810122
       }
     ]
   },
@@ -60930,9 +61036,9 @@
       },
       {
         "priceChange": 70.0,
-        "priceMin": 2380.0,
-        "priceMax": 2424.0,
-        "priceYesterday": 2354.0,
+        "priceMin": 2630,
+        "priceMax": 2709,
+        "priceYesterday": 2673,
         "priceFirst": 2424.0,
         "last": false,
         "id": 0,
@@ -60945,7 +61051,9 @@
         "pDrCotVal": 2424.0,
         "zTotTran": 612.0,
         "qTotTran5J": 93919137.0,
-        "qTotCap": 226535720192.0
+        "qTotCap": 226535720192.0,
+        "priceClose": 2681,
+        "volume": 659565380
       }
     ]
   },
@@ -61505,9 +61613,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 3830.0,
-        "priceMax": 4050.0,
-        "priceYesterday": 3940.0,
+        "priceMin": 6340,
+        "priceMax": 6630,
+        "priceYesterday": 6530,
         "priceFirst": 3950.0,
         "last": false,
         "id": 0,
@@ -61520,7 +61628,9 @@
         "pDrCotVal": 4050.0,
         "zTotTran": 389.0,
         "qTotTran5J": 10758871.0,
-        "qTotCap": 43069547960.0
+        "qTotCap": 43069547960.0,
+        "priceClose": 6450,
+        "volume": 13499699
       }
     ]
   },
@@ -62080,9 +62190,9 @@
       },
       {
         "priceChange": 360.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 33730.0,
+        "priceMin": 1767,
+        "priceMax": 1833,
+        "priceYesterday": 1780,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -62095,7 +62205,9 @@
         "pDrCotVal": 34090.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 1813,
+        "volume": 118804797
       }
     ]
   },
@@ -64955,9 +65067,9 @@
       },
       {
         "priceChange": 50.0,
-        "priceMin": 2121.0,
-        "priceMax": 2177.0,
-        "priceYesterday": 2114.0,
+        "priceMin": 2368,
+        "priceMax": 2404,
+        "priceYesterday": 2369,
         "priceFirst": 2177.0,
         "last": false,
         "id": 0,
@@ -64970,7 +65082,9 @@
         "pDrCotVal": 2164.0,
         "zTotTran": 149.0,
         "qTotTran5J": 2575086.0,
-        "qTotCap": 5561940058.0
+        "qTotCap": 5561940058.0,
+        "priceClose": 2384,
+        "volume": 2294394
       }
     ]
   },
@@ -66680,9 +66794,9 @@
       },
       {
         "priceChange": 720.0,
-        "priceMin": 24810.0,
-        "priceMax": 24810.0,
-        "priceYesterday": 24090.0,
+        "priceMin": 19980,
+        "priceMax": 19980,
+        "priceYesterday": 20590,
         "priceFirst": 24810.0,
         "last": false,
         "id": 0,
@@ -66695,7 +66809,9 @@
         "pDrCotVal": 24810.0,
         "zTotTran": 100.0,
         "qTotTran5J": 2136859.0,
-        "qTotCap": 53015471790.0
+        "qTotCap": 53015471790.0,
+        "priceClose": 19980,
+        "volume": 55809
       }
     ]
   },
@@ -67255,9 +67371,9 @@
       },
       {
         "priceChange": -25.0,
-        "priceMin": 2575.0,
-        "priceMax": 2654.0,
-        "priceYesterday": 2654.0,
+        "priceMin": 2925,
+        "priceMax": 3087,
+        "priceYesterday": 2998,
         "priceFirst": 2578.0,
         "last": false,
         "id": 0,
@@ -67270,7 +67386,9 @@
         "pDrCotVal": 2629.0,
         "zTotTran": 800.0,
         "qTotTran5J": 32355021.0,
-        "qTotCap": 83834573621.0
+        "qTotCap": 83834573621.0,
+        "priceClose": 3072,
+        "volume": 31629717
       }
     ]
   },
@@ -71280,9 +71398,9 @@
       },
       {
         "priceChange": 540.0,
-        "priceMin": 18580.0,
-        "priceMax": 18690.0,
-        "priceYesterday": 18150.0,
+        "priceMin": 23230,
+        "priceMax": 23610,
+        "priceYesterday": 22930,
         "priceFirst": 18690.0,
         "last": false,
         "id": 0,
@@ -71295,7 +71413,9 @@
         "pDrCotVal": 18690.0,
         "zTotTran": 858.0,
         "qTotTran5J": 12576152.0,
-        "qTotCap": 235017060610.0
+        "qTotCap": 235017060610.0,
+        "priceClose": 23600,
+        "volume": 17820818
       }
     ]
   },
@@ -71855,9 +71975,9 @@
       },
       {
         "priceChange": 190.0,
-        "priceMin": 6710.0,
-        "priceMax": 6770.0,
-        "priceYesterday": 6580.0,
+        "priceMin": 7700,
+        "priceMax": 7900,
+        "priceYesterday": 7670,
         "priceFirst": 6770.0,
         "last": false,
         "id": 0,
@@ -71870,7 +71990,9 @@
         "pDrCotVal": 6770.0,
         "zTotTran": 1301.0,
         "qTotTran5J": 41033572.0,
-        "qTotCap": 277759535690.0
+        "qTotCap": 277759535690.0,
+        "priceClose": 7890,
+        "volume": 25740965
       }
     ]
   },
@@ -73005,9 +73127,9 @@
       },
       {
         "priceChange": 60.0,
-        "priceMin": 4170.0,
-        "priceMax": 4410.0,
-        "priceYesterday": 4290.0,
+        "priceMin": 4570,
+        "priceMax": 4800,
+        "priceYesterday": 4710,
         "priceFirst": 4200.0,
         "last": false,
         "id": 0,
@@ -73020,7 +73142,9 @@
         "pDrCotVal": 4350.0,
         "zTotTran": 2120.0,
         "qTotTran5J": 123711620.0,
-        "qTotCap": 535550234250.0
+        "qTotCap": 535550234250.0,
+        "priceClose": 4680,
+        "volume": 52378256
       }
     ]
   },
@@ -74730,9 +74854,9 @@
       },
       {
         "priceChange": 320.0,
-        "priceMin": 13250.0,
-        "priceMax": 13490.0,
-        "priceYesterday": 13100.0,
+        "priceMin": 13660,
+        "priceMax": 14150,
+        "priceYesterday": 14080,
         "priceFirst": 13460.0,
         "last": false,
         "id": 0,
@@ -74745,7 +74869,9 @@
         "pDrCotVal": 13420.0,
         "zTotTran": 2534.0,
         "qTotTran5J": 49616609.0,
-        "qTotCap": 668427107220.0
+        "qTotCap": 668427107220.0,
+        "priceClose": 13880,
+        "volume": 36923250
       }
     ]
   },
@@ -77030,9 +77156,9 @@
       },
       {
         "priceChange": -140.0,
-        "priceMin": 13250.0,
-        "priceMax": 13640.0,
-        "priceYesterday": 13650.0,
+        "priceMin": 14570,
+        "priceMax": 15290,
+        "priceYesterday": 14900,
         "priceFirst": 13250.0,
         "last": false,
         "id": 0,
@@ -77045,7 +77171,9 @@
         "pDrCotVal": 13510.0,
         "zTotTran": 3182.0,
         "qTotTran5J": 62443208.0,
-        "qTotCap": 831946683730.0
+        "qTotCap": 831946683730.0,
+        "priceClose": 14970,
+        "volume": 27425805
       }
     ]
   },
@@ -78755,9 +78883,9 @@
       },
       {
         "priceChange": 600.0,
-        "priceMin": 165500.0,
-        "priceMax": 171300.0,
-        "priceYesterday": 166400.0,
+        "priceMin": 162200,
+        "priceMax": 162900,
+        "priceYesterday": 158200,
         "priceFirst": 171300.0,
         "last": false,
         "id": 0,
@@ -78770,7 +78898,9 @@
         "pDrCotVal": 167000.0,
         "zTotTran": 726.0,
         "qTotTran5J": 802507.0,
-        "qTotCap": 135322576400.0
+        "qTotCap": 135322576400.0,
+        "priceClose": 162900,
+        "volume": 5842089
       }
     ]
   },
@@ -79330,9 +79460,9 @@
       },
       {
         "priceChange": 420.0,
-        "priceMin": 14490.0,
-        "priceMax": 14690.0,
-        "priceYesterday": 14270.0,
+        "priceMin": 13320,
+        "priceMax": 13700,
+        "priceYesterday": 13350,
         "priceFirst": 14670.0,
         "last": false,
         "id": 0,
@@ -79345,7 +79475,9 @@
         "pDrCotVal": 14690.0,
         "zTotTran": 685.0,
         "qTotTran5J": 11108036.0,
-        "qTotCap": 163074677080.0
+        "qTotCap": 163074677080.0,
+        "priceClose": 13470,
+        "volume": 4158043
       }
     ]
   },
@@ -81055,9 +81187,9 @@
       },
       {
         "priceChange": 200.0,
-        "priceMin": 6790.0,
-        "priceMax": 6990.0,
-        "priceYesterday": 6790.0,
+        "priceMin": 7110,
+        "priceMax": 7240,
+        "priceYesterday": 7120,
         "priceFirst": 6790.0,
         "last": false,
         "id": 0,
@@ -81070,7 +81202,9 @@
         "pDrCotVal": 6990.0,
         "zTotTran": 345.0,
         "qTotTran5J": 19269839.0,
-        "qTotCap": 134624781060.0
+        "qTotCap": 134624781060.0,
+        "priceClose": 7170,
+        "volume": 6547695
       }
     ]
   },
@@ -81630,9 +81764,9 @@
       },
       {
         "priceChange": -1710.0,
-        "priceMin": 91100.0,
-        "priceMax": 96010.0,
-        "priceYesterday": 93850.0,
+        "priceMin": 97400,
+        "priceMax": 102070,
+        "priceYesterday": 99100,
         "priceFirst": 92300.0,
         "last": false,
         "id": 0,
@@ -81645,7 +81779,9 @@
         "pDrCotVal": 92140.0,
         "zTotTran": 2287.0,
         "qTotTran5J": 4596823.0,
-        "qTotCap": 426387747760.0
+        "qTotCap": 426387747760.0,
+        "priceClose": 101370,
+        "volume": 7681432
       }
     ]
   },
@@ -82205,9 +82341,9 @@
       },
       {
         "priceChange": 500.0,
-        "priceMin": 17170.0,
-        "priceMax": 17410.0,
-        "priceYesterday": 16910.0,
+        "priceMin": 22300,
+        "priceMax": 22300,
+        "priceYesterday": 21660,
         "priceFirst": 17410.0,
         "last": false,
         "id": 0,
@@ -82220,7 +82356,9 @@
         "pDrCotVal": 17410.0,
         "zTotTran": 1185.0,
         "qTotTran5J": 14402714.0,
-        "qTotCap": 250426239510.0
+        "qTotCap": 250426239510.0,
+        "priceClose": 22300,
+        "volume": 5025583
       }
     ]
   },
@@ -83930,9 +84068,9 @@
       },
       {
         "priceChange": 10.0,
-        "priceMin": 61980.0,
-        "priceMax": 65000.0,
-        "priceYesterday": 63890.0,
+        "priceMin": 80150,
+        "priceMax": 85060,
+        "priceYesterday": 82620,
         "priceFirst": 61980.0,
         "last": false,
         "id": 0,
@@ -83945,7 +84083,9 @@
         "pDrCotVal": 63900.0,
         "zTotTran": 292.0,
         "qTotTran5J": 650818.0,
-        "qTotCap": 40446310600.0
+        "qTotCap": 40446310600.0,
+        "priceClose": 80290,
+        "volume": 2081013
       }
     ]
   },
@@ -84505,9 +84645,9 @@
       },
       {
         "priceChange": 370.0,
-        "priceMin": 22750.0,
-        "priceMax": 23270.0,
-        "priceYesterday": 22600.0,
+        "priceMin": 29710,
+        "priceMax": 31530,
+        "priceYesterday": 30620,
         "priceFirst": 22750.0,
         "last": false,
         "id": 0,
@@ -84520,7 +84660,9 @@
         "pDrCotVal": 22970.0,
         "zTotTran": 176.0,
         "qTotTran5J": 2437257.0,
-        "qTotCap": 56075132920.0
+        "qTotCap": 56075132920.0,
+        "priceClose": 29930,
+        "volume": 2953826
       }
     ]
   },
@@ -86805,9 +86947,9 @@
       },
       {
         "priceChange": 53.0,
-        "priceMin": 1785.0,
-        "priceMax": 1837.0,
-        "priceYesterday": 1784.0,
+        "priceMin": 1886,
+        "priceMax": 1945,
+        "priceYesterday": 1889,
         "priceFirst": 1833.0,
         "last": false,
         "id": 0,
@@ -86820,7 +86962,9 @@
         "pDrCotVal": 1837.0,
         "zTotTran": 1762.0,
         "qTotTran5J": 93684902.0,
-        "qTotCap": 171654145224.0
+        "qTotCap": 171654145224.0,
+        "priceClose": 1925,
+        "volume": 93070891
       }
     ]
   },
@@ -88530,9 +88674,9 @@
       },
       {
         "priceChange": 38.0,
-        "priceMin": 1370.0,
-        "priceMax": 1423.0,
-        "priceYesterday": 1382.0,
+        "priceMin": 1564,
+        "priceMax": 1649,
+        "priceYesterday": 1612,
         "priceFirst": 1370.0,
         "last": false,
         "id": 0,
@@ -88545,7 +88689,9 @@
         "pDrCotVal": 1420.0,
         "zTotTran": 1535.0,
         "qTotTran5J": 59765451.0,
-        "qTotCap": 84185947828.0
+        "qTotCap": 84185947828.0,
+        "priceClose": 1619,
+        "volume": 98004499
       }
     ]
   },
@@ -89105,9 +89251,9 @@
       },
       {
         "priceChange": 160.0,
-        "priceMin": 5430.0,
-        "priceMax": 5510.0,
-        "priceYesterday": 5350.0,
+        "priceMin": 7960,
+        "priceMax": 8320,
+        "priceYesterday": 8130,
         "priceFirst": 5510.0,
         "last": false,
         "id": 0,
@@ -89120,7 +89266,9 @@
         "pDrCotVal": 5510.0,
         "zTotTran": 127.0,
         "qTotTran5J": 4108197.0,
-        "qTotCap": 22625309470.0
+        "qTotCap": 22625309470.0,
+        "priceClose": 8120,
+        "volume": 8203750
       }
     ]
   },
@@ -93130,9 +93278,9 @@
       },
       {
         "priceChange": 770.0,
-        "priceMin": 25960.0,
-        "priceMax": 26670.0,
-        "priceYesterday": 25900.0,
+        "priceMin": 33040,
+        "priceMax": 34560,
+        "priceYesterday": 33750,
         "priceFirst": 26500.0,
         "last": false,
         "id": 0,
@@ -93145,7 +93293,9 @@
         "pDrCotVal": 26670.0,
         "zTotTran": 1071.0,
         "qTotTran5J": 19487039.0,
-        "qTotCap": 519590876220.0
+        "qTotCap": 519590876220.0,
+        "priceClose": 34080,
+        "volume": 6768418
       }
     ]
   },
@@ -95430,9 +95580,9 @@
       },
       {
         "priceChange": 6300.0,
-        "priceMin": 208000.0,
-        "priceMax": 219400.0,
-        "priceYesterday": 213100.0,
+        "priceMin": 294300,
+        "priceMax": 310200,
+        "priceYesterday": 301200,
         "priceFirst": 208000.0,
         "last": false,
         "id": 0,
@@ -95445,7 +95595,9 @@
         "pDrCotVal": 219400.0,
         "zTotTran": 998.0,
         "qTotTran5J": 1555834.0,
-        "qTotCap": 340061412300.0
+        "qTotCap": 340061412300.0,
+        "priceClose": 302200,
+        "volume": 613034
       }
     ]
   },
@@ -97155,9 +97307,9 @@
       },
       {
         "priceChange": 490.0,
-        "priceMin": 17000.0,
-        "priceMax": 17220.0,
-        "priceYesterday": 16720.0,
+        "priceMin": 18320,
+        "priceMax": 19400,
+        "priceYesterday": 18840,
         "priceFirst": 17160.0,
         "last": false,
         "id": 0,
@@ -97170,7 +97322,9 @@
         "pDrCotVal": 17210.0,
         "zTotTran": 132.0,
         "qTotTran5J": 1755467.0,
-        "qTotCap": 30161553190.0
+        "qTotCap": 30161553190.0,
+        "priceClose": 18940,
+        "volume": 1103274
       }
     ]
   },
@@ -98305,9 +98459,9 @@
       },
       {
         "priceChange": 810.0,
-        "priceMin": 26450.0,
-        "priceMax": 28070.0,
-        "priceYesterday": 27260.0,
+        "priceMin": 40100,
+        "priceMax": 41590,
+        "priceYesterday": 41330,
         "priceFirst": 26450.0,
         "last": false,
         "id": 0,
@@ -98320,7 +98474,9 @@
         "pDrCotVal": 28070.0,
         "zTotTran": 950.0,
         "qTotTran5J": 24711248.0,
-        "qTotCap": 686538654130.0
+        "qTotCap": 686538654130.0,
+        "priceClose": 40430,
+        "volume": 5503368
       }
     ]
   },
@@ -104055,9 +104211,9 @@
       },
       {
         "priceChange": 1150.0,
-        "priceMin": 39550.0,
-        "priceMax": 39550.0,
-        "priceYesterday": 38400.0,
+        "priceMin": 53010,
+        "priceMax": 53970,
+        "priceYesterday": 52400,
         "priceFirst": 39550.0,
         "last": false,
         "id": 0,
@@ -104070,7 +104226,9 @@
         "pDrCotVal": 39550.0,
         "zTotTran": 282.0,
         "qTotTran5J": 2274541.0,
-        "qTotCap": 89958096550.0
+        "qTotCap": 89958096550.0,
+        "priceClose": 53970,
+        "volume": 4374954
       }
     ]
   },
@@ -105205,9 +105363,9 @@
       },
       {
         "priceChange": -2490.0,
-        "priceMin": 80600.0,
-        "priceMax": 84570.0,
-        "priceYesterday": 83090.0,
+        "priceMin": 103200,
+        "priceMax": 105500,
+        "priceYesterday": 102480,
         "priceFirst": 84570.0,
         "last": false,
         "id": 0,
@@ -105220,7 +105378,9 @@
         "pDrCotVal": 80600.0,
         "zTotTran": 695.0,
         "qTotTran5J": 2340403.0,
-        "qTotCap": 190193993180.0
+        "qTotCap": 190193993180.0,
+        "priceClose": 105300,
+        "volume": 335007
       }
     ]
   },
@@ -106930,9 +107090,9 @@
       },
       {
         "priceChange": -90.0,
-        "priceMin": 3600.0,
-        "priceMax": 3820.0,
-        "priceYesterday": 3710.0,
+        "priceMin": 3510,
+        "priceMax": 3560,
+        "priceYesterday": 3460,
         "priceFirst": 3730.0,
         "last": false,
         "id": 0,
@@ -106945,7 +107105,9 @@
         "pDrCotVal": 3620.0,
         "zTotTran": 873.0,
         "qTotTran5J": 40037907.0,
-        "qTotCap": 146267914670.0
+        "qTotCap": 146267914670.0,
+        "priceClose": 3560,
+        "volume": 24093185
       }
     ]
   },
@@ -107296,9 +107458,9 @@
       },
       {
         "priceChange": 4626.0,
-        "priceMin": 5626.0,
-        "priceMax": 5974.0,
-        "priceYesterday": 1000.0,
+        "priceMin": 7000,
+        "priceMax": 7020,
+        "priceYesterday": 6820,
         "priceFirst": 5800.0,
         "last": false,
         "id": 0,
@@ -107311,7 +107473,9 @@
         "pDrCotVal": 5626.0,
         "zTotTran": 312.0,
         "qTotTran5J": 14123626.0,
-        "qTotCap": 80317274435.0
+        "qTotCap": 80317274435.0,
+        "priceClose": 7020,
+        "volume": 508819
       }
     ]
   },
@@ -107871,9 +108035,9 @@
       },
       {
         "priceChange": -30.0,
-        "priceMin": 4430.0,
-        "priceMax": 4630.0,
-        "priceYesterday": 4520.0,
+        "priceMin": 4790,
+        "priceMax": 5010,
+        "priceYesterday": 4890,
         "priceFirst": 4500.0,
         "last": false,
         "id": 0,
@@ -107886,7 +108050,9 @@
         "pDrCotVal": 4490.0,
         "zTotTran": 337.0,
         "qTotTran5J": 9396668.0,
-        "qTotCap": 42264465250.0
+        "qTotCap": 42264465250.0,
+        "priceClose": 4920,
+        "volume": 7315973
       }
     ]
   },
@@ -108446,9 +108612,9 @@
       },
       {
         "priceChange": 22.0,
-        "priceMin": 771.0,
-        "priceMax": 771.0,
-        "priceYesterday": 749.0,
+        "priceMin": 834,
+        "priceMax": 846,
+        "priceYesterday": 822,
         "priceFirst": 771.0,
         "last": false,
         "id": 0,
@@ -108461,7 +108627,9 @@
         "pDrCotVal": 771.0,
         "zTotTran": 485.0,
         "qTotTran5J": 221824242.0,
-        "qTotCap": 171026490582.0
+        "qTotCap": 171026490582.0,
+        "priceClose": 845,
+        "volume": 161236351
       }
     ]
   },
@@ -110171,9 +110339,9 @@
       },
       {
         "priceChange": -550.0,
-        "priceMin": 17870.0,
-        "priceMax": 17870.0,
-        "priceYesterday": 18420.0,
+        "priceMin": 16960,
+        "priceMax": 16960,
+        "priceYesterday": 17480,
         "priceFirst": 17870.0,
         "last": false,
         "id": 0,
@@ -110186,7 +110354,9 @@
         "pDrCotVal": 17870.0,
         "zTotTran": 225.0,
         "qTotTran5J": 3237032.0,
-        "qTotCap": 57845761840.0
+        "qTotCap": 57845761840.0,
+        "priceClose": 16960,
+        "volume": 4933
       }
     ]
   },
@@ -111896,9 +112066,9 @@
       },
       {
         "priceChange": 37.0,
-        "priceMin": 2040.0,
-        "priceMax": 2123.0,
-        "priceYesterday": 2063.0,
+        "priceMin": 2180,
+        "priceMax": 2238,
+        "priceYesterday": 2173,
         "priceFirst": 2081.0,
         "last": false,
         "id": 0,
@@ -111911,7 +112081,9 @@
         "pDrCotVal": 2100.0,
         "zTotTran": 796.0,
         "qTotTran5J": 44930374.0,
-        "qTotCap": 94023136479.0
+        "qTotCap": 94023136479.0,
+        "priceClose": 2238,
+        "volume": 347422496
       }
     ]
   },
@@ -115921,9 +116093,9 @@
       },
       {
         "priceChange": 90.0,
-        "priceMin": 6490.0,
-        "priceMax": 6640.0,
-        "priceYesterday": 6450.0,
+        "priceMin": 6220,
+        "priceMax": 6360,
+        "priceYesterday": 6180,
         "priceFirst": 6640.0,
         "last": false,
         "id": 0,
@@ -115936,7 +116108,9 @@
         "pDrCotVal": 6540.0,
         "zTotTran": 480.0,
         "qTotTran5J": 13591948.0,
-        "qTotCap": 89923080440.0
+        "qTotCap": 89923080440.0,
+        "priceClose": 6330,
+        "volume": 7004779
       }
     ]
   },
@@ -117071,9 +117245,9 @@
       },
       {
         "priceChange": 790.0,
-        "priceMin": 42210.0,
-        "priceMax": 42670.0,
-        "priceYesterday": 41430.0,
+        "priceMin": 40200,
+        "priceMax": 42010,
+        "priceYesterday": 40790,
         "priceFirst": 42250.0,
         "last": false,
         "id": 0,
@@ -117086,7 +117260,9 @@
         "pDrCotVal": 42220.0,
         "zTotTran": 599.0,
         "qTotTran5J": 3091766.0,
-        "qTotCap": 131127444470.0
+        "qTotCap": 131127444470.0,
+        "priceClose": 41990,
+        "volume": 3316334
       }
     ]
   },
@@ -120521,9 +120697,9 @@
       },
       {
         "priceChange": 2.0,
-        "priceMin": 1604.0,
-        "priceMax": 1643.0,
-        "priceYesterday": 1602.0,
+        "priceMin": 2333,
+        "priceMax": 2333,
+        "priceYesterday": 2266,
         "priceFirst": 1608.0,
         "last": false,
         "id": 0,
@@ -120536,7 +120712,9 @@
         "pDrCotVal": 1604.0,
         "zTotTran": 547.0,
         "qTotTran5J": 15951052.0,
-        "qTotCap": 25792776784.0
+        "qTotCap": 25792776784.0,
+        "priceClose": 2333,
+        "volume": 11729094
       }
     ]
   },
@@ -125121,9 +125299,9 @@
       },
       {
         "priceChange": 100.0,
-        "priceMin": 3740.0,
-        "priceMax": 3750.0,
-        "priceYesterday": 3650.0,
+        "priceMin": 4310,
+        "priceMax": 4420,
+        "priceYesterday": 4300,
         "priceFirst": 3740.0,
         "last": false,
         "id": 0,
@@ -125136,7 +125314,9 @@
         "pDrCotVal": 3750.0,
         "zTotTran": 410.0,
         "qTotTran5J": 16242160.0,
-        "qTotCap": 60906102520.0
+        "qTotCap": 60906102520.0,
+        "priceClose": 4400,
+        "volume": 3000720
       }
     ]
   },
@@ -126271,9 +126451,9 @@
       },
       {
         "priceChange": -310.0,
-        "priceMin": 10300.0,
-        "priceMax": 10630.0,
-        "priceYesterday": 10610.0,
+        "priceMin": 8310,
+        "priceMax": 8470,
+        "priceYesterday": 8230,
         "priceFirst": 10630.0,
         "last": false,
         "id": 0,
@@ -126286,7 +126466,9 @@
         "pDrCotVal": 10300.0,
         "zTotTran": 130.0,
         "qTotTran5J": 3177251.0,
-        "qTotCap": 32802751270.0
+        "qTotCap": 32802751270.0,
+        "priceClose": 8460,
+        "volume": 3715513
       }
     ]
   },
@@ -129721,9 +129903,9 @@
       },
       {
         "priceChange": -240.0,
-        "priceMin": 8010.0,
-        "priceMax": 8490.0,
-        "priceYesterday": 8250.0,
+        "priceMin": 10500,
+        "priceMax": 10760,
+        "priceYesterday": 10450,
         "priceFirst": 8360.0,
         "last": false,
         "id": 0,
@@ -129736,7 +129918,9 @@
         "pDrCotVal": 8010.0,
         "zTotTran": 391.0,
         "qTotTran5J": 6952505.0,
-        "qTotCap": 56751275480.0
+        "qTotCap": 56751275480.0,
+        "priceClose": 10760,
+        "volume": 9246455
       }
     ]
   },
@@ -134896,9 +135080,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 3170.0,
-        "priceMax": 3350.0,
-        "priceYesterday": 3260.0,
+        "priceMin": 4020,
+        "priceMax": 4250,
+        "priceYesterday": 4130,
         "priceFirst": 3280.0,
         "last": false,
         "id": 0,
@@ -134911,7 +135095,9 @@
         "pDrCotVal": 3260.0,
         "zTotTran": 401.0,
         "qTotTran5J": 12946425.0,
-        "qTotCap": 41983270360.0
+        "qTotCap": 41983270360.0,
+        "priceClose": 4170,
+        "volume": 17461155
       }
     ]
   },
@@ -135471,9 +135657,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 9710.0,
-        "priceMax": 10150.0,
-        "priceYesterday": 9870.0,
+        "priceMin": 11330,
+        "priceMax": 11830,
+        "priceYesterday": 11490,
         "priceFirst": 10150.0,
         "last": false,
         "id": 0,
@@ -135486,7 +135672,9 @@
         "pDrCotVal": 9870.0,
         "zTotTran": 741.0,
         "qTotTran5J": 19814322.0,
-        "qTotCap": 196773875770.0
+        "qTotCap": 196773875770.0,
+        "priceClose": 11720,
+        "volume": 9251882
       }
     ]
   },
@@ -137771,9 +137959,9 @@
       },
       {
         "priceChange": -150.0,
-        "priceMin": 6270.0,
-        "priceMax": 6430.0,
-        "priceYesterday": 6460.0,
+        "priceMin": 9240,
+        "priceMax": 9380,
+        "priceYesterday": 9110,
         "priceFirst": 6270.0,
         "last": false,
         "id": 0,
@@ -137786,7 +137974,9 @@
         "pDrCotVal": 6310.0,
         "zTotTran": 1456.0,
         "qTotTran5J": 28514574.0,
-        "qTotCap": 179451661770.0
+        "qTotCap": 179451661770.0,
+        "priceClose": 9360,
+        "volume": 19911830
       }
     ]
   },
@@ -138346,9 +138536,9 @@
       },
       {
         "priceChange": 250.0,
-        "priceMin": 8520.0,
-        "priceMax": 8740.0,
-        "priceYesterday": 8490.0,
+        "priceMin": 9190,
+        "priceMax": 9400,
+        "priceYesterday": 9200,
         "priceFirst": 8700.0,
         "last": false,
         "id": 0,
@@ -138361,7 +138551,9 @@
         "pDrCotVal": 8740.0,
         "zTotTran": 918.0,
         "qTotTran5J": 59174160.0,
-        "qTotCap": 511455049300.0
+        "qTotCap": 511455049300.0,
+        "priceClose": 9240,
+        "volume": 53589776
       }
     ]
   },
@@ -140071,9 +140263,9 @@
       },
       {
         "priceChange": -140.0,
-        "priceMin": 4630.0,
-        "priceMax": 4630.0,
-        "priceYesterday": 4770.0,
+        "priceMin": 3220,
+        "priceMax": 3340,
+        "priceYesterday": 3250,
         "priceFirst": 4630.0,
         "last": false,
         "id": 0,
@@ -140086,7 +140278,9 @@
         "pDrCotVal": 4630.0,
         "zTotTran": 113.0,
         "qTotTran5J": 4156771.0,
-        "qTotCap": 19245849730.0
+        "qTotCap": 19245849730.0,
+        "priceClose": 3310,
+        "volume": 15062041
       }
     ]
   },
@@ -140646,9 +140840,9 @@
       },
       {
         "priceChange": 210.0,
-        "priceMin": 7210.0,
-        "priceMax": 7220.0,
-        "priceYesterday": 7010.0,
+        "priceMin": 6750,
+        "priceMax": 6800,
+        "priceYesterday": 6950,
         "priceFirst": 7220.0,
         "last": false,
         "id": 0,
@@ -140661,7 +140855,9 @@
         "pDrCotVal": 7220.0,
         "zTotTran": 233.0,
         "qTotTran5J": 11348117.0,
-        "qTotCap": 81932704740.0
+        "qTotCap": 81932704740.0,
+        "priceClose": 6750,
+        "volume": 7723031
       }
     ]
   },
@@ -142371,9 +142567,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 12200.0,
+        "priceMin": 16980,
+        "priceMax": 16980,
+        "priceYesterday": 16490,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -142386,7 +142582,9 @@
         "pDrCotVal": 12200.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 16980,
+        "volume": 21984967
       }
     ]
   },
@@ -142946,9 +143144,9 @@
       },
       {
         "priceChange": -22.0,
-        "priceMin": 991.0,
-        "priceMax": 1045.0,
-        "priceYesterday": 1020.0,
+        "priceMin": 1117,
+        "priceMax": 1126,
+        "priceYesterday": 1094,
         "priceFirst": 1000.0,
         "last": false,
         "id": 0,
@@ -142961,7 +143159,9 @@
         "pDrCotVal": 998.0,
         "zTotTran": 6587.0,
         "qTotTran5J": 1020880892.0,
-        "qTotCap": 1036282920241.0
+        "qTotCap": 1036282920241.0,
+        "priceClose": 1126,
+        "volume": 368947003
       }
     ]
   },
@@ -146515,9 +146715,9 @@
       },
       {
         "priceChange": 90.0,
-        "priceMin": 3640.0,
-        "priceMax": 3830.0,
-        "priceYesterday": 3720.0,
+        "priceMin": 4240,
+        "priceMax": 4500,
+        "priceYesterday": 4370,
         "priceFirst": 3820.0,
         "last": false,
         "id": 0,
@@ -146530,7 +146730,9 @@
         "pDrCotVal": 3810.0,
         "zTotTran": 561.0,
         "qTotTran5J": 39868854.0,
-        "qTotCap": 151662491680.0
+        "qTotCap": 151662491680.0,
+        "priceClose": 4430,
+        "volume": 84656166
       }
     ]
   },
@@ -150540,9 +150742,9 @@
       },
       {
         "priceChange": 170.0,
-        "priceMin": 33300.0,
-        "priceMax": 34800.0,
-        "priceYesterday": 34110.0,
+        "priceMin": 35530,
+        "priceMax": 35530,
+        "priceYesterday": 34500,
         "priceFirst": 34100.0,
         "last": false,
         "id": 0,
@@ -150555,7 +150757,9 @@
         "pDrCotVal": 34280.0,
         "zTotTran": 2258.0,
         "qTotTran5J": 17535243.0,
-        "qTotCap": 599680342150.0
+        "qTotCap": 599680342150.0,
+        "priceClose": 35530,
+        "volume": 37664783
       }
     ]
   },
@@ -152265,9 +152469,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 3690.0,
-        "priceMax": 3910.0,
-        "priceYesterday": 3800.0,
+        "priceMin": 4680,
+        "priceMax": 4910,
+        "priceYesterday": 4770,
         "priceFirst": 3870.0,
         "last": false,
         "id": 0,
@@ -152280,7 +152484,9 @@
         "pDrCotVal": 3910.0,
         "zTotTran": 1971.0,
         "qTotTran5J": 91696849.0,
-        "qTotCap": 355087611900.0
+        "qTotCap": 355087611900.0,
+        "priceClose": 4860,
+        "volume": 65829894
       }
     ]
   },
@@ -152840,9 +153046,9 @@
       },
       {
         "priceChange": 160.0,
-        "priceMin": 5450.0,
-        "priceMax": 5740.0,
-        "priceYesterday": 5580.0,
+        "priceMin": 5590,
+        "priceMax": 5890,
+        "priceYesterday": 5760,
         "priceFirst": 5450.0,
         "last": false,
         "id": 0,
@@ -152855,7 +153061,9 @@
         "pDrCotVal": 5740.0,
         "zTotTran": 902.0,
         "qTotTran5J": 36277472.0,
-        "qTotCap": 207835025730.0
+        "qTotCap": 207835025730.0,
+        "priceClose": 5710,
+        "volume": 35772509
       }
     ]
   },
@@ -154565,9 +154773,9 @@
       },
       {
         "priceChange": 270.0,
-        "priceMin": 21320.0,
-        "priceMax": 22450.0,
-        "priceYesterday": 21960.0,
+        "priceMin": 27010,
+        "priceMax": 28400,
+        "priceYesterday": 27810,
         "priceFirst": 22100.0,
         "last": false,
         "id": 0,
@@ -154580,7 +154788,9 @@
         "pDrCotVal": 22230.0,
         "zTotTran": 143.0,
         "qTotTran5J": 997049.0,
-        "qTotCap": 21896321190.0
+        "qTotCap": 21896321190.0,
+        "priceClose": 27750,
+        "volume": 637497
       }
     ]
   },
@@ -155140,9 +155350,9 @@
       },
       {
         "priceChange": -160.0,
-        "priceMin": 6250.0,
-        "priceMax": 6600.0,
-        "priceYesterday": 6440.0,
+        "priceMin": 6780,
+        "priceMax": 6960,
+        "priceYesterday": 6780,
         "priceFirst": 6260.0,
         "last": false,
         "id": 0,
@@ -155155,7 +155365,9 @@
         "pDrCotVal": 6280.0,
         "zTotTran": 984.0,
         "qTotTran5J": 37118761.0,
-        "qTotCap": 233460239400.0
+        "qTotCap": 233460239400.0,
+        "priceClose": 6860,
+        "volume": 10597508
       }
     ]
   },
@@ -158015,9 +158227,9 @@
       },
       {
         "priceChange": 880.0,
-        "priceMin": 28700.0,
-        "priceMax": 30250.0,
-        "priceYesterday": 29370.0,
+        "priceMin": 27700,
+        "priceMax": 28580,
+        "priceYesterday": 27910,
         "priceFirst": 28700.0,
         "last": false,
         "id": 0,
@@ -158030,7 +158242,9 @@
         "pDrCotVal": 30250.0,
         "zTotTran": 415.0,
         "qTotTran5J": 2558958.0,
-        "qTotCap": 77173875090.0
+        "qTotCap": 77173875090.0,
+        "priceClose": 28130,
+        "volume": 2794641
       }
     ]
   },
@@ -160315,9 +160529,9 @@
       },
       {
         "priceChange": 57.0,
-        "priceMin": 1977.0,
-        "priceMax": 1977.0,
-        "priceYesterday": 1920.0,
+        "priceMin": 2399,
+        "priceMax": 2500,
+        "priceYesterday": 2473,
         "priceFirst": 1977.0,
         "last": false,
         "id": 0,
@@ -160330,7 +160544,9 @@
         "pDrCotVal": 1977.0,
         "zTotTran": 240.0,
         "qTotTran5J": 52534492.0,
-        "qTotCap": 103860690684.0
+        "qTotCap": 103860690684.0,
+        "priceClose": 2405,
+        "volume": 808084338
       }
     ]
   },
@@ -163765,9 +163981,9 @@
       },
       {
         "priceChange": 240.0,
-        "priceMin": 8300.0,
-        "priceMax": 8480.0,
-        "priceYesterday": 8240.0,
+        "priceMin": 10020,
+        "priceMax": 10440,
+        "priceYesterday": 10140,
         "priceFirst": 8410.0,
         "last": false,
         "id": 0,
@@ -163780,7 +163996,9 @@
         "pDrCotVal": 8480.0,
         "zTotTran": 902.0,
         "qTotTran5J": 16890854.0,
-        "qTotCap": 142892280980.0
+        "qTotCap": 142892280980.0,
+        "priceClose": 10410,
+        "volume": 16108578
       }
     ]
   },
@@ -164915,9 +165133,9 @@
       },
       {
         "priceChange": 30.0,
-        "priceMin": 9250.0,
-        "priceMax": 9810.0,
-        "priceYesterday": 9530.0,
+        "priceMin": 11870,
+        "priceMax": 12380,
+        "priceYesterday": 12020,
         "priceFirst": 9500.0,
         "last": false,
         "id": 0,
@@ -164930,7 +165148,9 @@
         "pDrCotVal": 9560.0,
         "zTotTran": 538.0,
         "qTotTran5J": 8626371.0,
-        "qTotCap": 81890724830.0
+        "qTotCap": 81890724830.0,
+        "priceClose": 12350,
+        "volume": 12899211
       }
     ]
   },
@@ -166065,9 +166285,9 @@
       },
       {
         "priceChange": 69.0,
-        "priceMin": 2388.0,
-        "priceMax": 2388.0,
-        "priceYesterday": 2319.0,
+        "priceMin": 3600,
+        "priceMax": 3650,
+        "priceYesterday": 3550,
         "priceFirst": 2388.0,
         "last": false,
         "id": 0,
@@ -166080,7 +166300,9 @@
         "pDrCotVal": 2388.0,
         "zTotTran": 132.0,
         "qTotTran5J": 37583295.0,
-        "qTotCap": 89748908460.0
+        "qTotCap": 89748908460.0,
+        "priceClose": 3640,
+        "volume": 108062237
       }
     ]
   },
@@ -166640,9 +166862,9 @@
       },
       {
         "priceChange": -370.0,
-        "priceMin": 12100.0,
-        "priceMax": 12740.0,
-        "priceYesterday": 12470.0,
+        "priceMin": 14080,
+        "priceMax": 14610,
+        "priceYesterday": 14190,
         "priceFirst": 12600.0,
         "last": false,
         "id": 0,
@@ -166655,7 +166877,9 @@
         "pDrCotVal": 12100.0,
         "zTotTran": 14398.0,
         "qTotTran5J": 404265834.0,
-        "qTotCap": 4908565280170.0
+        "qTotCap": 4908565280170.0,
+        "priceClose": 14500,
+        "volume": 112099478
       }
     ]
   },
@@ -169515,9 +169739,9 @@
       },
       {
         "priceChange": 1680.0,
-        "priceMin": 55010.0,
-        "priceMax": 57970.0,
-        "priceYesterday": 56290.0,
+        "priceMin": 64000,
+        "priceMax": 65860,
+        "priceYesterday": 63950,
         "priceFirst": 55010.0,
         "last": false,
         "id": 0,
@@ -169530,7 +169754,9 @@
         "pDrCotVal": 57970.0,
         "zTotTran": 188.0,
         "qTotTran5J": 536277.0,
-        "qTotCap": 30997604370.0
+        "qTotCap": 30997604370.0,
+        "priceClose": 65650,
+        "volume": 542647
       }
     ]
   },
@@ -170090,9 +170316,9 @@
       },
       {
         "priceChange": -15.0,
-        "priceMin": 1973.0,
-        "priceMax": 2088.0,
-        "priceYesterday": 2034.0,
+        "priceMin": 1961,
+        "priceMax": 2035,
+        "priceYesterday": 1976,
         "priceFirst": 1996.0,
         "last": false,
         "id": 0,
@@ -170105,7 +170331,9 @@
         "pDrCotVal": 2019.0,
         "zTotTran": 791.0,
         "qTotTran5J": 59520880.0,
-        "qTotCap": 120617742114.0
+        "qTotCap": 120617742114.0,
+        "priceClose": 2026,
+        "volume": 61004553
       }
     ]
   },
@@ -171815,9 +172043,9 @@
       },
       {
         "priceChange": 900.0,
-        "priceMin": 30000.0,
-        "priceMax": 31150.0,
-        "priceYesterday": 30250.0,
+        "priceMin": 35800,
+        "priceMax": 37900,
+        "priceYesterday": 36850,
         "priceFirst": 30700.0,
         "last": false,
         "id": 0,
@@ -171830,7 +172058,9 @@
         "pDrCotVal": 31150.0,
         "zTotTran": 692.0,
         "qTotTran5J": 6361773.0,
-        "qTotCap": 197515209910.0
+        "qTotCap": 197515209910.0,
+        "priceClose": 36770,
+        "volume": 4747675
       }
     ]
   },
@@ -174115,9 +174345,9 @@
       },
       {
         "priceChange": 75.0,
-        "priceMin": 2460.0,
-        "priceMax": 2584.0,
-        "priceYesterday": 2509.0,
+        "priceMin": 2700,
+        "priceMax": 2781,
+        "priceYesterday": 2700,
         "priceFirst": 2509.0,
         "last": false,
         "id": 0,
@@ -174130,7 +174360,9 @@
         "pDrCotVal": 2584.0,
         "zTotTran": 4024.0,
         "qTotTran5J": 338498522.0,
-        "qTotCap": 858674862642.0
+        "qTotCap": 858674862642.0,
+        "priceClose": 2778,
+        "volume": 448392416
       }
     ]
   },
@@ -175265,9 +175497,9 @@
       },
       {
         "priceChange": 690.0,
-        "priceMin": 23210.0,
-        "priceMax": 23750.0,
-        "priceYesterday": 23060.0,
+        "priceMin": 29210,
+        "priceMax": 30690,
+        "priceYesterday": 30110,
         "priceFirst": 23700.0,
         "last": false,
         "id": 0,
@@ -175280,7 +175512,9 @@
         "pDrCotVal": 23750.0,
         "zTotTran": 953.0,
         "qTotTran5J": 10737694.0,
-        "qTotCap": 254656386130.0
+        "qTotCap": 254656386130.0,
+        "priceClose": 29790,
+        "volume": 11545788
       }
     ]
   },
@@ -175840,9 +176074,9 @@
       },
       {
         "priceChange": -1260.0,
-        "priceMin": 41070.0,
-        "priceMax": 42180.0,
-        "priceYesterday": 42330.0,
+        "priceMin": 38320,
+        "priceMax": 40350,
+        "priceYesterday": 39310,
         "priceFirst": 41070.0,
         "last": false,
         "id": 0,
@@ -175855,7 +176089,9 @@
         "pDrCotVal": 41070.0,
         "zTotTran": 281.0,
         "qTotTran5J": 802762.0,
-        "qTotCap": 32986210500.0
+        "qTotCap": 32986210500.0,
+        "priceClose": 38970,
+        "volume": 421966
       }
     ]
   },
@@ -178140,9 +178376,9 @@
       },
       {
         "priceChange": -1020.0,
-        "priceMin": 33110.0,
-        "priceMax": 34000.0,
-        "priceYesterday": 34130.0,
+        "priceMin": 44140,
+        "priceMax": 46840,
+        "priceYesterday": 45500,
         "priceFirst": 33110.0,
         "last": false,
         "id": 0,
@@ -178155,7 +178391,9 @@
         "pDrCotVal": 33110.0,
         "zTotTran": 706.0,
         "qTotTran5J": 5524127.0,
-        "qTotCap": 182977262240.0
+        "qTotCap": 182977262240.0,
+        "priceClose": 44380,
+        "volume": 2860006
       }
     ]
   },
@@ -182740,9 +182978,9 @@
       },
       {
         "priceChange": -74.0,
-        "priceMin": 2409.0,
-        "priceMax": 2409.0,
-        "priceYesterday": 2483.0,
+        "priceMin": 2497,
+        "priceMax": 2557,
+        "priceYesterday": 2574,
         "priceFirst": 2409.0,
         "last": false,
         "id": 0,
@@ -182755,7 +182993,9 @@
         "pDrCotVal": 2409.0,
         "zTotTran": 163.0,
         "qTotTran5J": 16982410.0,
-        "qTotCap": 40910625690.0
+        "qTotCap": 40910625690.0,
+        "priceClose": 2503,
+        "volume": 99167275
       }
     ]
   },
@@ -184465,9 +184705,9 @@
       },
       {
         "priceChange": 310.0,
-        "priceMin": 10540.0,
-        "priceMax": 10800.0,
-        "priceYesterday": 10490.0,
+        "priceMin": 13210,
+        "priceMax": 13230,
+        "priceYesterday": 13610,
         "priceFirst": 10800.0,
         "last": false,
         "id": 0,
@@ -184480,7 +184720,9 @@
         "pDrCotVal": 10800.0,
         "zTotTran": 652.0,
         "qTotTran5J": 23804567.0,
-        "qTotCap": 257032956940.0
+        "qTotCap": 257032956940.0,
+        "priceClose": 13210,
+        "volume": 17219509
       }
     ]
   },
@@ -185615,9 +185857,9 @@
       },
       {
         "priceChange": 28.0,
-        "priceMin": 962.0,
-        "priceMax": 969.0,
-        "priceYesterday": 941.0,
+        "priceMin": 1021,
+        "priceMax": 1045,
+        "priceYesterday": 1015,
         "priceFirst": 968.0,
         "last": false,
         "id": 0,
@@ -185630,7 +185872,9 @@
         "pDrCotVal": 969.0,
         "zTotTran": 6651.0,
         "qTotTran5J": 2539244576.0,
-        "qTotCap": 2460245385350.0
+        "qTotCap": 2460245385350.0,
+        "priceClose": 1045,
+        "volume": 1835384021
       }
     ]
   },
@@ -186765,9 +187009,9 @@
       },
       {
         "priceChange": 290.0,
-        "priceMin": 10020.0,
-        "priceMax": 10200.0,
-        "priceYesterday": 9910.0,
+        "priceMin": 13030,
+        "priceMax": 13670,
+        "priceYesterday": 13360,
         "priceFirst": 10170.0,
         "last": false,
         "id": 0,
@@ -186780,7 +187024,9 @@
         "pDrCotVal": 10200.0,
         "zTotTran": 458.0,
         "qTotTran5J": 12179259.0,
-        "qTotCap": 124183384410.0
+        "qTotCap": 124183384410.0,
+        "priceClose": 13510,
+        "volume": 12036221
       }
     ]
   },
@@ -189065,9 +189311,9 @@
       },
       {
         "priceChange": -240.0,
-        "priceMin": 8230.0,
-        "priceMax": 8550.0,
-        "priceYesterday": 8480.0,
+        "priceMin": 10230,
+        "priceMax": 10230,
+        "priceYesterday": 9940,
         "priceFirst": 8250.0,
         "last": false,
         "id": 0,
@@ -189080,7 +189326,9 @@
         "pDrCotVal": 8240.0,
         "zTotTran": 857.0,
         "qTotTran5J": 12945859.0,
-        "qTotCap": 107103511240.0
+        "qTotCap": 107103511240.0,
+        "priceClose": 10230,
+        "volume": 24599566
       }
     ]
   },
@@ -191365,9 +191613,9 @@
       },
       {
         "priceChange": 80.0,
-        "priceMin": 2820.0,
-        "priceMax": 2980.0,
-        "priceYesterday": 2900.0,
+        "priceMin": 3710,
+        "priceMax": 3740,
+        "priceYesterday": 3640,
         "priceFirst": 2950.0,
         "last": false,
         "id": 0,
@@ -191380,7 +191628,9 @@
         "pDrCotVal": 2980.0,
         "zTotTran": 13127.0,
         "qTotTran5J": 1510286717.0,
-        "qTotCap": 4468156193700.0
+        "qTotCap": 4468156193700.0,
+        "priceClose": 3740,
+        "volume": 723283348
       }
     ]
   },
@@ -193090,9 +193340,9 @@
       },
       {
         "priceChange": 270.0,
-        "priceMin": 9450.0,
-        "priceMax": 9450.0,
-        "priceYesterday": 9180.0,
+        "priceMin": 9070,
+        "priceMax": 9500,
+        "priceYesterday": 9230,
         "priceFirst": 9450.0,
         "last": false,
         "id": 0,
@@ -193105,7 +193355,9 @@
         "pDrCotVal": 9450.0,
         "zTotTran": 303.0,
         "qTotTran5J": 19579226.0,
-        "qTotCap": 185023685700.0
+        "qTotCap": 185023685700.0,
+        "priceClose": 9390,
+        "volume": 35077749
       }
     ]
   },
@@ -194815,9 +195067,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 19010.0,
+        "priceMin": 19530,
+        "priceMax": 20470,
+        "priceYesterday": 19880,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -194830,7 +195082,9 @@
         "pDrCotVal": 19000.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 20320,
+        "volume": 2238999
       }
     ]
   },
@@ -196540,9 +196794,9 @@
       },
       {
         "priceChange": -20.0,
-        "priceMin": 3760.0,
-        "priceMax": 3890.0,
-        "priceYesterday": 3780.0,
+        "priceMin": 4160,
+        "priceMax": 4320,
+        "priceYesterday": 4200,
         "priceFirst": 3890.0,
         "last": false,
         "id": 0,
@@ -196555,7 +196809,9 @@
         "pDrCotVal": 3760.0,
         "zTotTran": 93.0,
         "qTotTran5J": 1848591.0,
-        "qTotCap": 7101392470.0
+        "qTotCap": 7101392470.0,
+        "priceClose": 4220,
+        "volume": 3920175
       }
     ]
   },
@@ -197115,9 +197371,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 11770.0,
+        "priceMin": 12200,
+        "priceMax": 12820,
+        "priceYesterday": 12450,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -197130,7 +197386,9 @@
         "pDrCotVal": 11780.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 12590,
+        "volume": 13017392
       }
     ]
   },
@@ -197690,9 +197948,9 @@
       },
       {
         "priceChange": -60.0,
-        "priceMin": 7560.0,
-        "priceMax": 7970.0,
-        "priceYesterday": 7790.0,
+        "priceMin": 7120,
+        "priceMax": 7290,
+        "priceYesterday": 7080,
         "priceFirst": 7970.0,
         "last": false,
         "id": 0,
@@ -197705,7 +197963,9 @@
         "pDrCotVal": 7730.0,
         "zTotTran": 359.0,
         "qTotTran5J": 4978138.0,
-        "qTotCap": 38017854800.0
+        "qTotCap": 38017854800.0,
+        "priceClose": 7280,
+        "volume": 13736088
       }
     ]
   },
@@ -201715,9 +201975,9 @@
       },
       {
         "priceChange": 2350.0,
-        "priceMin": 19810.0,
-        "priceMax": 21030.0,
-        "priceYesterday": 18660.0,
+        "priceMin": 23970,
+        "priceMax": 23970,
+        "priceYesterday": 23280,
         "priceFirst": 20420.0,
         "last": false,
         "id": 0,
@@ -201730,7 +201990,9 @@
         "pDrCotVal": 21010.0,
         "zTotTran": 291993.0,
         "qTotTran5J": 2487861594.0,
-        "qTotCap": 51165793262850.0
+        "qTotCap": 51165793262850.0,
+        "priceClose": 23970,
+        "volume": 98204544
       }
     ]
   },
@@ -202865,9 +203127,9 @@
       },
       {
         "priceChange": 340.0,
-        "priceMin": 17440.0,
-        "priceMax": 17950.0,
-        "priceYesterday": 17440.0,
+        "priceMin": 22140,
+        "priceMax": 22400,
+        "priceYesterday": 22820,
         "priceFirst": 17440.0,
         "last": false,
         "id": 0,
@@ -202880,7 +203142,9 @@
         "pDrCotVal": 17780.0,
         "zTotTran": 163.0,
         "qTotTran5J": 940621.0,
-        "qTotCap": 16626815410.0
+        "qTotCap": 16626815410.0,
+        "priceClose": 22150,
+        "volume": 10616847
       }
     ]
   },
@@ -203440,9 +203704,9 @@
       },
       {
         "priceChange": -70.0,
-        "priceMin": 13030.0,
-        "priceMax": 13630.0,
-        "priceYesterday": 13290.0,
+        "priceMin": 17310,
+        "priceMax": 18220,
+        "priceYesterday": 17690,
         "priceFirst": 13320.0,
         "last": false,
         "id": 0,
@@ -203455,7 +203719,9 @@
         "pDrCotVal": 13220.0,
         "zTotTran": 1461.0,
         "qTotTran5J": 24844388.0,
-        "qTotCap": 328614726070.0
+        "qTotCap": 328614726070.0,
+        "priceClose": 18090,
+        "volume": 13001118
       }
     ]
   },
@@ -204015,9 +204281,9 @@
       },
       {
         "priceChange": -460.0,
-        "priceMin": 15080.0,
-        "priceMax": 15460.0,
-        "priceYesterday": 15540.0,
+        "priceMin": 12560,
+        "priceMax": 13090,
+        "priceYesterday": 12710,
         "priceFirst": 15080.0,
         "last": false,
         "id": 0,
@@ -204030,7 +204296,9 @@
         "pDrCotVal": 15080.0,
         "zTotTran": 4806.0,
         "qTotTran5J": 74978672.0,
-        "qTotCap": 1131099895720.0
+        "qTotCap": 1131099895720.0,
+        "priceClose": 12910,
+        "volume": 37954339
       }
     ]
   },
@@ -205740,9 +206008,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 6750.0,
+        "priceMin": 6730,
+        "priceMax": 6800,
+        "priceYesterday": 6930,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -205755,7 +206023,9 @@
         "pDrCotVal": 6750.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 6730,
+        "volume": 35565465
       }
     ]
   },
@@ -208040,9 +208310,9 @@
       },
       {
         "priceChange": 53.0,
-        "priceMin": 1760.0,
-        "priceMax": 1844.0,
-        "priceYesterday": 1791.0,
+        "priceMin": 2092,
+        "priceMax": 2139,
+        "priceYesterday": 2077,
         "priceFirst": 1760.0,
         "last": false,
         "id": 0,
@@ -208055,7 +208325,9 @@
         "pDrCotVal": 1844.0,
         "zTotTran": 185.0,
         "qTotTran5J": 19595096.0,
-        "qTotCap": 35960148911.0
+        "qTotCap": 35960148911.0,
+        "priceClose": 2124,
+        "volume": 7401839
       }
     ]
   },
@@ -208615,9 +208887,9 @@
       },
       {
         "priceChange": 220.0,
-        "priceMin": 17450.0,
-        "priceMax": 18450.0,
-        "priceYesterday": 17950.0,
+        "priceMin": 19180,
+        "priceMax": 19180,
+        "priceYesterday": 18630,
         "priceFirst": 17450.0,
         "last": false,
         "id": 0,
@@ -208630,7 +208902,9 @@
         "pDrCotVal": 18170.0,
         "zTotTran": 162.0,
         "qTotTran5J": 1005150.0,
-        "qTotCap": 18257440780.0
+        "qTotCap": 18257440780.0,
+        "priceClose": 19180,
+        "volume": 757695
       }
     ]
   },
@@ -209765,9 +210039,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 10400.0,
-        "priceMax": 10770.0,
-        "priceYesterday": 10460.0,
+        "priceMin": 12750,
+        "priceMax": 13390,
+        "priceYesterday": 13000,
         "priceFirst": 10730.0,
         "last": false,
         "id": 0,
@@ -209780,7 +210054,9 @@
         "pDrCotVal": 10570.0,
         "zTotTran": 866.0,
         "qTotTran5J": 9021988.0,
-        "qTotCap": 96235160670.0
+        "qTotCap": 96235160670.0,
+        "priceClose": 13310,
+        "volume": 11365696
       }
     ]
   },
@@ -210340,9 +210616,9 @@
       },
       {
         "priceChange": 1070.0,
-        "priceMin": 65980.0,
-        "priceMax": 67180.0,
-        "priceYesterday": 65230.0,
+        "priceMin": 75530,
+        "priceMax": 76170,
+        "priceYesterday": 73960,
         "priceFirst": 67170.0,
         "last": false,
         "id": 0,
@@ -210355,7 +210631,9 @@
         "pDrCotVal": 66300.0,
         "zTotTran": 563.0,
         "qTotTran5J": 3626433.0,
-        "qTotCap": 242557638960.0
+        "qTotCap": 242557638960.0,
+        "priceClose": 76170,
+        "volume": 24403602
       }
     ]
   },
@@ -210915,9 +211193,9 @@
       },
       {
         "priceChange": 80.0,
-        "priceMin": 5500.0,
-        "priceMax": 5720.0,
-        "priceYesterday": 5580.0,
+        "priceMin": 7780,
+        "priceMax": 7780,
+        "priceYesterday": 7560,
         "priceFirst": 5720.0,
         "last": false,
         "id": 0,
@@ -210930,7 +211208,9 @@
         "pDrCotVal": 5660.0,
         "zTotTran": 407.0,
         "qTotTran5J": 8330557.0,
-        "qTotCap": 46874948630.0
+        "qTotCap": 46874948630.0,
+        "priceClose": 7780,
+        "volume": 11918328
       }
     ]
   },
@@ -212640,9 +212920,9 @@
       },
       {
         "priceChange": -39.0,
-        "priceMin": 2013.0,
-        "priceMax": 2099.0,
-        "priceYesterday": 2075.0,
+        "priceMin": 2171,
+        "priceMax": 2223,
+        "priceYesterday": 2159,
         "priceFirst": 2014.0,
         "last": false,
         "id": 0,
@@ -212655,7 +212935,9 @@
         "pDrCotVal": 2036.0,
         "zTotTran": 1228.0,
         "qTotTran5J": 101932922.0,
-        "qTotCap": 206820122187.0
+        "qTotCap": 206820122187.0,
+        "priceClose": 2202,
+        "volume": 44021959
       }
     ]
   },
@@ -213215,9 +213497,9 @@
       },
       {
         "priceChange": 150.0,
-        "priceMin": 8360.0,
-        "priceMax": 8800.0,
-        "priceYesterday": 8550.0,
+        "priceMin": 9490,
+        "priceMax": 9490,
+        "priceYesterday": 9220,
         "priceFirst": 8360.0,
         "last": false,
         "id": 0,
@@ -213230,7 +213512,9 @@
         "pDrCotVal": 8700.0,
         "zTotTran": 504.0,
         "qTotTran5J": 9867610.0,
-        "qTotCap": 86651774080.0
+        "qTotCap": 86651774080.0,
+        "priceClose": 9490,
+        "volume": 528734
       }
     ]
   },
@@ -213790,9 +214074,9 @@
       },
       {
         "priceChange": 69.0,
-        "priceMin": 2377.0,
-        "priceMax": 2377.0,
-        "priceYesterday": 2308.0,
+        "priceMin": 1871,
+        "priceMax": 1924,
+        "priceYesterday": 1868,
         "priceFirst": 2377.0,
         "last": false,
         "id": 0,
@@ -213805,7 +214089,9 @@
         "pDrCotVal": 2377.0,
         "zTotTran": 3199.0,
         "qTotTran5J": 1192366938.0,
-        "qTotCap": 2834256211626.0
+        "qTotCap": 2834256211626.0,
+        "priceClose": 1922,
+        "volume": 437212300
       }
     ]
   },
@@ -215515,9 +215801,9 @@
       },
       {
         "priceChange": 1120.0,
-        "priceMin": 36860.0,
-        "priceMax": 38600.0,
-        "priceYesterday": 37480.0,
+        "priceMin": 42420,
+        "priceMax": 44100,
+        "priceYesterday": 43690,
         "priceFirst": 38500.0,
         "last": false,
         "id": 0,
@@ -215530,7 +215816,9 @@
         "pDrCotVal": 38600.0,
         "zTotTran": 216.0,
         "qTotTran5J": 1190035.0,
-        "qTotCap": 45364137200.0
+        "qTotCap": 45364137200.0,
+        "priceClose": 43300,
+        "volume": 1247230
       }
     ]
   },
@@ -217240,9 +217528,9 @@
       },
       {
         "priceChange": 51.0,
-        "priceMin": 2330.0,
-        "priceMax": 2454.0,
-        "priceYesterday": 2388.0,
+        "priceMin": 3170,
+        "priceMax": 3320,
+        "priceYesterday": 3260,
         "priceFirst": 2376.0,
         "last": false,
         "id": 0,
@@ -217255,7 +217543,9 @@
         "pDrCotVal": 2439.0,
         "zTotTran": 1164.0,
         "qTotTran5J": 66416900.0,
-        "qTotCap": 159367287494.0
+        "qTotCap": 159367287494.0,
+        "priceClose": 3210,
+        "volume": 240731933
       }
     ]
   },
@@ -217815,9 +218105,9 @@
       },
       {
         "priceChange": 80.0,
-        "priceMin": 2940.0,
-        "priceMax": 3070.0,
-        "priceYesterday": 2990.0,
+        "priceMin": 3160,
+        "priceMax": 3160,
+        "priceYesterday": 3070,
         "priceFirst": 3030.0,
         "last": false,
         "id": 0,
@@ -217830,7 +218120,9 @@
         "pDrCotVal": 3070.0,
         "zTotTran": 1195.0,
         "qTotTran5J": 77240905.0,
-        "qTotCap": 236746903690.0
+        "qTotCap": 236746903690.0,
+        "priceClose": 3160,
+        "volume": 52966602
       }
     ]
   },
@@ -218390,9 +218682,9 @@
       },
       {
         "priceChange": -240.0,
-        "priceMin": 8030.0,
-        "priceMax": 8200.0,
-        "priceYesterday": 8270.0,
+        "priceMin": 9780,
+        "priceMax": 10380,
+        "priceYesterday": 10080,
         "priceFirst": 8040.0,
         "last": false,
         "id": 0,
@@ -218405,7 +218697,9 @@
         "pDrCotVal": 8030.0,
         "zTotTran": 2819.0,
         "qTotTran5J": 21001012.0,
-        "qTotCap": 168741393850.0
+        "qTotCap": 168741393850.0,
+        "priceClose": 10200,
+        "volume": 31769617
       }
     ]
   },
@@ -218965,9 +219259,9 @@
       },
       {
         "priceChange": 490.0,
-        "priceMin": 22100.0,
-        "priceMax": 22740.0,
-        "priceYesterday": 22080.0,
+        "priceMin": 30840,
+        "priceMax": 32070,
+        "priceYesterday": 31790,
         "priceFirst": 22740.0,
         "last": false,
         "id": 0,
@@ -218980,7 +219274,9 @@
         "pDrCotVal": 22570.0,
         "zTotTran": 45.0,
         "qTotTran5J": 66575.0,
-        "qTotCap": 1481825950.0
+        "qTotCap": 1481825950.0,
+        "priceClose": 31430,
+        "volume": 3646155
       }
     ]
   },
@@ -219540,9 +219836,9 @@
       },
       {
         "priceChange": 1830.0,
-        "priceMin": 79150.0,
-        "priceMax": 82840.0,
-        "priceYesterday": 80740.0,
+        "priceMin": 119100,
+        "priceMax": 124000,
+        "priceYesterday": 122700,
         "priceFirst": 81550.0,
         "last": false,
         "id": 0,
@@ -219555,7 +219851,9 @@
         "pDrCotVal": 82570.0,
         "zTotTran": 470.0,
         "qTotTran5J": 1323815.0,
-        "qTotCap": 107304872150.0
+        "qTotCap": 107304872150.0,
+        "priceClose": 122500,
+        "volume": 1043184
       }
     ]
   },
@@ -221265,9 +221563,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 8720.0,
+        "priceMin": 10520,
+        "priceMax": 10620,
+        "priceYesterday": 10320,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -221280,7 +221578,9 @@
         "pDrCotVal": 8990.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 10620,
+        "volume": 151247632
       }
     ]
   },
@@ -224140,9 +224440,9 @@
       },
       {
         "priceChange": 62.0,
-        "priceMin": 2074.0,
-        "priceMax": 2136.0,
-        "priceYesterday": 2074.0,
+        "priceMin": 3300,
+        "priceMax": 3300,
+        "priceYesterday": 3210,
         "priceFirst": 2128.0,
         "last": false,
         "id": 0,
@@ -224155,7 +224455,9 @@
         "pDrCotVal": 2136.0,
         "zTotTran": 517.0,
         "qTotTran5J": 35000807.0,
-        "qTotCap": 74539438908.0
+        "qTotCap": 74539438908.0,
+        "priceClose": 3300,
+        "volume": 48135431
       }
     ]
   },
@@ -224715,9 +225017,9 @@
       },
       {
         "priceChange": -18.0,
-        "priceMin": 1851.0,
-        "priceMax": 1951.0,
-        "priceYesterday": 1908.0,
+        "priceMin": 1922,
+        "priceMax": 1994,
+        "priceYesterday": 1936,
         "priceFirst": 1857.0,
         "last": false,
         "id": 0,
@@ -224730,7 +225032,9 @@
         "pDrCotVal": 1890.0,
         "zTotTran": 1710.0,
         "qTotTran5J": 87339373.0,
-        "qTotCap": 163312454889.0
+        "qTotCap": 163312454889.0,
+        "priceClose": 1977,
+        "volume": 84538022
       }
     ]
   },
@@ -225865,9 +226169,9 @@
       },
       {
         "priceChange": 1580.0,
-        "priceMin": 54380.0,
-        "priceMax": 54380.0,
-        "priceYesterday": 52800.0,
+        "priceMin": 64820,
+        "priceMax": 68670,
+        "priceYesterday": 66820,
         "priceFirst": 54380.0,
         "last": false,
         "id": 0,
@@ -225880,7 +226184,9 @@
         "pDrCotVal": 54380.0,
         "zTotTran": 465.0,
         "qTotTran5J": 3505010.0,
-        "qTotCap": 190602443800.0
+        "qTotCap": 190602443800.0,
+        "priceClose": 65400,
+        "volume": 2059328
       }
     ]
   },
@@ -227590,9 +227896,9 @@
       },
       {
         "priceChange": 472.0,
-        "priceMin": 16290.0,
-        "priceMax": 16290.0,
-        "priceYesterday": 15818.0,
+        "priceMin": 29850,
+        "priceMax": 30590,
+        "priceYesterday": 29700,
         "priceFirst": 16290.0,
         "last": false,
         "id": 0,
@@ -227605,7 +227911,9 @@
         "pDrCotVal": 16290.0,
         "zTotTran": 6590.0,
         "qTotTran5J": 15920335.0,
-        "qTotCap": 259342257150.0
+        "qTotCap": 259342257150.0,
+        "priceClose": 30570,
+        "volume": 43409566
       }
     ]
   },
@@ -228165,9 +228473,9 @@
       },
       {
         "priceChange": 870.0,
-        "priceMin": 30130.0,
-        "priceMax": 30130.0,
-        "priceYesterday": 29260.0,
+        "priceMin": 44550,
+        "priceMax": 45730,
+        "priceYesterday": 44400,
         "priceFirst": 30130.0,
         "last": false,
         "id": 0,
@@ -228180,7 +228488,9 @@
         "pDrCotVal": 30130.0,
         "zTotTran": 148.0,
         "qTotTran5J": 1241208.0,
-        "qTotCap": 37397597040.0
+        "qTotCap": 37397597040.0,
+        "priceClose": 45670,
+        "volume": 7335284
       }
     ]
   },
@@ -228740,9 +229050,9 @@
       },
       {
         "priceChange": 1300.0,
-        "priceMin": 43010.0,
-        "priceMax": 44870.0,
-        "priceYesterday": 43570.0,
+        "priceMin": 64010,
+        "priceMax": 67680,
+        "priceYesterday": 65710,
         "priceFirst": 43590.0,
         "last": false,
         "id": 0,
@@ -228755,7 +229065,9 @@
         "pDrCotVal": 44870.0,
         "zTotTran": 447.0,
         "qTotTran5J": 2931679.0,
-        "qTotCap": 130425662860.0
+        "qTotCap": 130425662860.0,
+        "priceClose": 67300,
+        "volume": 3043433
       }
     ]
   },
@@ -229890,9 +230202,9 @@
       },
       {
         "priceChange": 190.0,
-        "priceMin": 14410.0,
-        "priceMax": 15160.0,
-        "priceYesterday": 14720.0,
+        "priceMin": 12340,
+        "priceMax": 12760,
+        "priceYesterday": 12390,
         "priceFirst": 15070.0,
         "last": false,
         "id": 0,
@@ -229905,7 +230217,9 @@
         "pDrCotVal": 14910.0,
         "zTotTran": 15317.0,
         "qTotTran5J": 356262364.0,
-        "qTotCap": 5341499233820.0
+        "qTotCap": 5341499233820.0,
+        "priceClose": 12690,
+        "volume": 416701864
       }
     ]
   },
@@ -230465,9 +230779,9 @@
       },
       {
         "priceChange": 260.0,
-        "priceMin": 8980.0,
-        "priceMax": 9040.0,
-        "priceYesterday": 8780.0,
+        "priceMin": 11740,
+        "priceMax": 12090,
+        "priceYesterday": 11740,
         "priceFirst": 9040.0,
         "last": false,
         "id": 0,
@@ -230480,7 +230794,9 @@
         "pDrCotVal": 9040.0,
         "zTotTran": 442.0,
         "qTotTran5J": 21891889.0,
-        "qTotCap": 197871440170.0
+        "qTotCap": 197871440170.0,
+        "priceClose": 12030,
+        "volume": 36158734
       }
     ]
   },
@@ -232190,9 +232506,9 @@
       },
       {
         "priceChange": 550.0,
-        "priceMin": 18590.0,
-        "priceMax": 18990.0,
-        "priceYesterday": 18440.0,
+        "priceMin": 20610,
+        "priceMax": 21180,
+        "priceYesterday": 20570,
         "priceFirst": 18990.0,
         "last": false,
         "id": 0,
@@ -232205,7 +232521,9 @@
         "pDrCotVal": 18990.0,
         "zTotTran": 350.0,
         "qTotTran5J": 7622436.0,
-        "qTotCap": 144538353070.0
+        "qTotCap": 144538353070.0,
+        "priceClose": 21150,
+        "volume": 23520616
       }
     ]
   },
@@ -233915,9 +234233,9 @@
       },
       {
         "priceChange": 210.0,
-        "priceMin": 7990.0,
-        "priceMax": 8220.0,
-        "priceYesterday": 7990.0,
+        "priceMin": 10960,
+        "priceMax": 10960,
+        "priceYesterday": 10650,
         "priceFirst": 8150.0,
         "last": false,
         "id": 0,
@@ -233930,7 +234248,9 @@
         "pDrCotVal": 8200.0,
         "zTotTran": 3813.0,
         "qTotTran5J": 144740934.0,
-        "qTotCap": 1184805454800.0
+        "qTotCap": 1184805454800.0,
+        "priceClose": 10960,
+        "volume": 9009051
       }
     ]
   },
@@ -236790,9 +237110,9 @@
       },
       {
         "priceChange": -89.0,
-        "priceMin": 2897.0,
-        "priceMax": 2975.0,
-        "priceYesterday": 2986.0,
+        "priceMin": 3070,
+        "priceMax": 3170,
+        "priceYesterday": 3080,
         "priceFirst": 2898.0,
         "last": false,
         "id": 0,
@@ -236805,7 +237125,9 @@
         "pDrCotVal": 2897.0,
         "zTotTran": 285.0,
         "qTotTran5J": 34816416.0,
-        "qTotCap": 101066154409.0
+        "qTotCap": 101066154409.0,
+        "priceClose": 3150,
+        "volume": 18629942
       }
     ]
   },
@@ -237940,9 +238262,9 @@
       },
       {
         "priceChange": -2.0,
-        "priceMin": 2240.0,
-        "priceMax": 2309.0,
-        "priceYesterday": 2283.0,
+        "priceMin": 2497,
+        "priceMax": 2614,
+        "priceYesterday": 2562,
         "priceFirst": 2240.0,
         "last": false,
         "id": 0,
@@ -237955,7 +238277,9 @@
         "pDrCotVal": 2281.0,
         "zTotTran": 99.0,
         "qTotTran5J": 3283990.0,
-        "qTotCap": 7513409272.0
+        "qTotCap": 7513409272.0,
+        "priceClose": 2515,
+        "volume": 26926990
       }
     ]
   },
@@ -238515,9 +238839,9 @@
       },
       {
         "priceChange": 1460.0,
-        "priceMin": 48490.0,
-        "priceMax": 50140.0,
-        "priceYesterday": 48680.0,
+        "priceMin": 61000,
+        "priceMax": 63920,
+        "priceYesterday": 62380,
         "priceFirst": 48490.0,
         "last": false,
         "id": 0,
@@ -238530,7 +238854,9 @@
         "pDrCotVal": 50140.0,
         "zTotTran": 577.0,
         "qTotTran5J": 2334823.0,
-        "qTotCap": 116719249860.0
+        "qTotCap": 116719249860.0,
+        "priceClose": 62010,
+        "volume": 2180346
       }
     ]
   },
@@ -241965,9 +242291,9 @@
       },
       {
         "priceChange": 1990.0,
-        "priceMin": 73470.0,
-        "priceMax": 75670.0,
-        "priceYesterday": 73470.0,
+        "priceMin": 102200,
+        "priceMax": 104700,
+        "priceYesterday": 101660,
         "priceFirst": 75660.0,
         "last": false,
         "id": 0,
@@ -241980,7 +242306,9 @@
         "pDrCotVal": 75460.0,
         "zTotTran": 1099.0,
         "qTotTran5J": 2537481.0,
-        "qTotCap": 189683057480.0
+        "qTotCap": 189683057480.0,
+        "priceClose": 104600,
+        "volume": 11873498
       }
     ]
   },
@@ -242540,9 +242868,9 @@
       },
       {
         "priceChange": -100.0,
-        "priceMin": 4850.0,
-        "priceMax": 5090.0,
-        "priceYesterday": 4990.0,
+        "priceMin": 7090,
+        "priceMax": 7300,
+        "priceYesterday": 7090,
         "priceFirst": 4890.0,
         "last": false,
         "id": 0,
@@ -242555,7 +242883,9 @@
         "pDrCotVal": 4890.0,
         "zTotTran": 3715.0,
         "qTotTran5J": 62614753.0,
-        "qTotCap": 305829873290.0
+        "qTotCap": 305829873290.0,
+        "priceClose": 7260,
+        "volume": 25302576
       }
     ]
   },
@@ -243690,9 +244020,9 @@
       },
       {
         "priceChange": -160.0,
-        "priceMin": 9300.0,
-        "priceMax": 9760.0,
-        "priceYesterday": 9580.0,
+        "priceMin": 7890,
+        "priceMax": 8150,
+        "priceYesterday": 7920,
         "priceFirst": 9700.0,
         "last": false,
         "id": 0,
@@ -243705,7 +244035,9 @@
         "pDrCotVal": 9420.0,
         "zTotTran": 4511.0,
         "qTotTran5J": 145710736.0,
-        "qTotCap": 1387450196730.0
+        "qTotCap": 1387450196730.0,
+        "priceClose": 8110,
+        "volume": 81414165
       }
     ]
   },
@@ -244265,9 +244597,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 4090.0,
-        "priceMax": 4090.0,
-        "priceYesterday": 3980.0,
+        "priceMin": 3500,
+        "priceMax": 3610,
+        "priceYesterday": 3580,
         "priceFirst": 4090.0,
         "last": false,
         "id": 0,
@@ -244280,7 +244612,9 @@
         "pDrCotVal": 4090.0,
         "zTotTran": 66.0,
         "qTotTran5J": 2632459.0,
-        "qTotCap": 10766757310.0
+        "qTotCap": 10766757310.0,
+        "priceClose": 3560,
+        "volume": 4158803
       }
     ]
   },
@@ -245990,9 +246324,9 @@
       },
       {
         "priceChange": -27.0,
-        "priceMin": 1498.0,
-        "priceMax": 1530.0,
-        "priceYesterday": 1544.0,
+        "priceMin": 3038,
+        "priceMax": 3038,
+        "priceYesterday": 2950,
         "priceFirst": 1498.0,
         "last": false,
         "id": 0,
@@ -246005,7 +246339,9 @@
         "pDrCotVal": 1517.0,
         "zTotTran": 2667.0,
         "qTotTran5J": 468599571.0,
-        "qTotCap": 703000344833.0
+        "qTotCap": 703000344833.0,
+        "priceClose": 3038,
+        "volume": 37520925
       }
     ]
   },
@@ -249440,9 +249776,9 @@
       },
       {
         "priceChange": 25.0,
-        "priceMin": 1209.0,
-        "priceMax": 1265.0,
-        "priceYesterday": 1230.0,
+        "priceMin": 1338,
+        "priceMax": 1383,
+        "priceYesterday": 1343,
         "priceFirst": 1265.0,
         "last": false,
         "id": 0,
@@ -249455,7 +249791,9 @@
         "pDrCotVal": 1255.0,
         "zTotTran": 386.0,
         "qTotTran5J": 30428364.0,
-        "qTotCap": 37615251416.0
+        "qTotCap": 37615251416.0,
+        "priceClose": 1369,
+        "volume": 52616906
       }
     ]
   },
@@ -250590,9 +250928,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 11380.0,
+        "priceMin": 12720,
+        "priceMax": 13090,
+        "priceYesterday": 12710,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -250605,7 +250943,9 @@
         "pDrCotVal": 11380.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 13020,
+        "volume": 40978029
       }
     ]
   },
@@ -251165,9 +251505,9 @@
       },
       {
         "priceChange": 340.0,
-        "priceMin": 21990.0,
-        "priceMax": 23330.0,
-        "priceYesterday": 22660.0,
+        "priceMin": 21910,
+        "priceMax": 22800,
+        "priceYesterday": 22140,
         "priceFirst": 22750.0,
         "last": false,
         "id": 0,
@@ -251180,7 +251520,9 @@
         "pDrCotVal": 23000.0,
         "zTotTran": 419.0,
         "qTotTran5J": 3488985.0,
-        "qTotCap": 79255938010.0
+        "qTotCap": 79255938010.0,
+        "priceClose": 22560,
+        "volume": 5798917
       }
     ]
   },
@@ -252315,9 +252657,9 @@
       },
       {
         "priceChange": -120.0,
-        "priceMin": 7940.0,
-        "priceMax": 8150.0,
-        "priceYesterday": 8180.0,
+        "priceMin": 9920,
+        "priceMax": 9980,
+        "priceYesterday": 9690,
         "priceFirst": 8000.0,
         "last": false,
         "id": 0,
@@ -252330,7 +252672,9 @@
         "pDrCotVal": 8060.0,
         "zTotTran": 451.0,
         "qTotTran5J": 22999139.0,
-        "qTotCap": 183645893290.0
+        "qTotCap": 183645893290.0,
+        "priceClose": 9980,
+        "volume": 24037969
       }
     ]
   },
@@ -254040,9 +254384,9 @@
       },
       {
         "priceChange": -690.0,
-        "priceMin": 26680.0,
-        "priceMax": 28320.0,
-        "priceYesterday": 27500.0,
+        "priceMin": 24760,
+        "priceMax": 26140,
+        "priceYesterday": 25380,
         "priceFirst": 26990.0,
         "last": false,
         "id": 0,
@@ -254055,7 +254399,9 @@
         "pDrCotVal": 26810.0,
         "zTotTran": 757.0,
         "qTotTran5J": 5065590.0,
-        "qTotCap": 137435179400.0
+        "qTotCap": 137435179400.0,
+        "priceClose": 25760,
+        "volume": 2899380
       }
     ]
   },
@@ -254615,9 +254961,9 @@
       },
       {
         "priceChange": 66.0,
-        "priceMin": 2244.0,
-        "priceMax": 2294.0,
-        "priceYesterday": 2228.0,
+        "priceMin": 2217,
+        "priceMax": 2302,
+        "priceYesterday": 2235,
         "priceFirst": 2244.0,
         "last": false,
         "id": 0,
@@ -254630,7 +254976,9 @@
         "pDrCotVal": 2294.0,
         "zTotTran": 564.0,
         "qTotTran5J": 49019396.0,
-        "qTotCap": 112184587380.0
+        "qTotCap": 112184587380.0,
+        "priceClose": 2264,
+        "volume": 38583119
       }
     ]
   },
@@ -255765,9 +256113,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 4950.0,
-        "priceMax": 5110.0,
-        "priceYesterday": 4970.0,
+        "priceMin": 4880,
+        "priceMax": 4970,
+        "priceYesterday": 4830,
         "priceFirst": 5100.0,
         "last": false,
         "id": 0,
@@ -255780,7 +256128,9 @@
         "pDrCotVal": 5080.0,
         "zTotTran": 214.0,
         "qTotTran5J": 4565232.0,
-        "qTotCap": 23085851460.0
+        "qTotCap": 23085851460.0,
+        "priceClose": 4940,
+        "volume": 6939096
       }
     ]
   },
@@ -257490,9 +257840,9 @@
       },
       {
         "priceChange": 190.0,
-        "priceMin": 6610.0,
-        "priceMax": 6850.0,
-        "priceYesterday": 6660.0,
+        "priceMin": 8730,
+        "priceMax": 9160,
+        "priceYesterday": 8900,
         "priceFirst": 6850.0,
         "last": false,
         "id": 0,
@@ -257505,7 +257855,9 @@
         "pDrCotVal": 6850.0,
         "zTotTran": 304.0,
         "qTotTran5J": 6858025.0,
-        "qTotCap": 46789196750.0
+        "qTotCap": 46789196750.0,
+        "priceClose": 9020,
+        "volume": 17260100
       }
     ]
   },
@@ -258065,9 +258417,9 @@
       },
       {
         "priceChange": 180.0,
-        "priceMin": 6220.0,
-        "priceMax": 6350.0,
-        "priceYesterday": 6170.0,
+        "priceMin": 5860,
+        "priceMax": 6110,
+        "priceYesterday": 5940,
         "priceFirst": 6300.0,
         "last": false,
         "id": 0,
@@ -258080,7 +258432,9 @@
         "pDrCotVal": 6350.0,
         "zTotTran": 762.0,
         "qTotTran5J": 30042831.0,
-        "qTotCap": 190692726660.0
+        "qTotCap": 190692726660.0,
+        "priceClose": 6090,
+        "volume": 12178824
       }
     ]
   },
@@ -259215,9 +259569,9 @@
       },
       {
         "priceChange": 40.0,
-        "priceMin": 9460.0,
-        "priceMax": 9900.0,
-        "priceYesterday": 9630.0,
+        "priceMin": 9730,
+        "priceMax": 10260,
+        "priceYesterday": 10030,
         "priceFirst": 9720.0,
         "last": false,
         "id": 0,
@@ -259230,7 +259584,9 @@
         "pDrCotVal": 9670.0,
         "zTotTran": 278.0,
         "qTotTran5J": 10551990.0,
-        "qTotCap": 102153654280.0
+        "qTotCap": 102153654280.0,
+        "priceClose": 10150,
+        "volume": 4326013
       }
     ]
   },
@@ -259790,9 +260146,9 @@
       },
       {
         "priceChange": 5400.0,
-        "priceMin": 182600.0,
-        "priceMax": 186700.0,
-        "priceYesterday": 181300.0,
+        "priceMin": 270700,
+        "priceMax": 287300,
+        "priceYesterday": 279000,
         "priceFirst": 186700.0,
         "last": false,
         "id": 0,
@@ -259805,7 +260161,9 @@
         "pDrCotVal": 186700.0,
         "zTotTran": 580.0,
         "qTotTran5J": 198813.0,
-        "qTotCap": 37105383700.0
+        "qTotCap": 37105383700.0,
+        "priceClose": 279800,
+        "volume": 482826
       }
     ]
   },
@@ -260365,9 +260723,9 @@
       },
       {
         "priceChange": -200.0,
-        "priceMin": 219500.0,
-        "priceMax": 226000.0,
-        "priceYesterday": 226200.0,
+        "priceMin": 268900,
+        "priceMax": 268900,
+        "priceYesterday": 261100,
         "priceFirst": 219500.0,
         "last": false,
         "id": 0,
@@ -260380,7 +260738,9 @@
         "pDrCotVal": 226000.0,
         "zTotTran": 163.0,
         "qTotTran5J": 105205.0,
-        "qTotCap": 23641943000.0
+        "qTotCap": 23641943000.0,
+        "priceClose": 268900,
+        "volume": 53564
       }
     ]
   },
@@ -260940,9 +261300,9 @@
       },
       {
         "priceChange": 4000.0,
-        "priceMin": 138000.0,
-        "priceMax": 140600.0,
-        "priceYesterday": 136600.0,
+        "priceMin": 170300,
+        "priceMax": 176600,
+        "priceYesterday": 175300,
         "priceFirst": 138000.0,
         "last": false,
         "id": 0,
@@ -260955,7 +261315,9 @@
         "pDrCotVal": 140600.0,
         "zTotTran": 396.0,
         "qTotTran5J": 588940.0,
-        "qTotCap": 82467948300.0
+        "qTotCap": 82467948300.0,
+        "priceClose": 173600,
+        "volume": 381849
       }
     ]
   },
@@ -261515,9 +261877,9 @@
       },
       {
         "priceChange": 200.0,
-        "priceMin": 6860.0,
-        "priceMax": 6960.0,
-        "priceYesterday": 6760.0,
+        "priceMin": 11090,
+        "priceMax": 11090,
+        "priceYesterday": 10770,
         "priceFirst": 6920.0,
         "last": false,
         "id": 0,
@@ -261530,7 +261892,9 @@
         "pDrCotVal": 6960.0,
         "zTotTran": 478.0,
         "qTotTran5J": 26753954.0,
-        "qTotCap": 186144610000.0
+        "qTotCap": 186144610000.0,
+        "priceClose": 11090,
+        "volume": 20286197
       }
     ]
   },
@@ -262665,9 +263029,9 @@
       },
       {
         "priceChange": 430.0,
-        "priceMin": 15240.0,
-        "priceMax": 15280.0,
-        "priceYesterday": 14840.0,
+        "priceMin": 10740,
+        "priceMax": 11230,
+        "priceYesterday": 10920,
         "priceFirst": 15270.0,
         "last": false,
         "id": 0,
@@ -262680,7 +263044,9 @@
         "pDrCotVal": 15270.0,
         "zTotTran": 103.0,
         "qTotTran5J": 2084859.0,
-        "qTotCap": 31843171860.0
+        "qTotCap": 31843171860.0,
+        "priceClose": 11030,
+        "volume": 571944
       }
     ]
   },
@@ -265540,9 +265906,9 @@
       },
       {
         "priceChange": 2700.0,
-        "priceMin": 88800.0,
-        "priceMax": 93800.0,
-        "priceYesterday": 91100.0,
+        "priceMin": 105000,
+        "priceMax": 108000,
+        "priceYesterday": 105400,
         "priceFirst": 88800.0,
         "last": false,
         "id": 0,
@@ -265555,7 +265921,9 @@
         "pDrCotVal": 93800.0,
         "zTotTran": 280.0,
         "qTotTran5J": 513707.0,
-        "qTotCap": 47882202800.0
+        "qTotCap": 47882202800.0,
+        "priceClose": 106300,
+        "volume": 711518
       }
     ]
   },
@@ -267265,9 +267633,9 @@
       },
       {
         "priceChange": 530.0,
-        "priceMin": 17780.0,
-        "priceMax": 18250.0,
-        "priceYesterday": 17720.0,
+        "priceMin": 16110,
+        "priceMax": 16600,
+        "priceYesterday": 16120,
         "priceFirst": 18250.0,
         "last": false,
         "id": 0,
@@ -267280,7 +267648,9 @@
         "pDrCotVal": 18250.0,
         "zTotTran": 1363.0,
         "qTotTran5J": 23909569.0,
-        "qTotCap": 435127989910.0
+        "qTotCap": 435127989910.0,
+        "priceClose": 16520,
+        "volume": 7191257
       }
     ]
   },
@@ -271865,9 +272235,9 @@
       },
       {
         "priceChange": -310.0,
-        "priceMin": 10060.0,
-        "priceMax": 10600.0,
-        "priceYesterday": 10370.0,
+        "priceMin": 10450,
+        "priceMax": 10450,
+        "priceYesterday": 10150,
         "priceFirst": 10600.0,
         "last": false,
         "id": 0,
@@ -271880,7 +272250,9 @@
         "pDrCotVal": 10060.0,
         "zTotTran": 926.0,
         "qTotTran5J": 8058588.0,
-        "qTotCap": 81251954750.0
+        "qTotCap": 81251954750.0,
+        "priceClose": 10450,
+        "volume": 18439354
       }
     ]
   },
@@ -274740,9 +275112,9 @@
       },
       {
         "priceChange": 150.0,
-        "priceMin": 50770.0,
-        "priceMax": 53890.0,
-        "priceYesterday": 52330.0,
+        "priceMin": 62550,
+        "priceMax": 62550,
+        "priceYesterday": 60730,
         "priceFirst": 51800.0,
         "last": false,
         "id": 0,
@@ -274755,7 +275127,9 @@
         "pDrCotVal": 52480.0,
         "zTotTran": 732.0,
         "qTotTran5J": 2386599.0,
-        "qTotCap": 126560997720.0
+        "qTotCap": 126560997720.0,
+        "priceClose": 62550,
+        "volume": 8801513
       }
     ]
   },
@@ -275315,9 +275689,9 @@
       },
       {
         "priceChange": 180.0,
-        "priceMin": 6230.0,
-        "priceMax": 6230.0,
-        "priceYesterday": 6050.0,
+        "priceMin": 8030,
+        "priceMax": 8470,
+        "priceYesterday": 8270,
         "priceFirst": 6230.0,
         "last": false,
         "id": 0,
@@ -275330,7 +275704,9 @@
         "pDrCotVal": 6230.0,
         "zTotTran": 811.0,
         "qTotTran5J": 103435861.0,
-        "qTotCap": 644405414030.0
+        "qTotCap": 644405414030.0,
+        "priceClose": 8210,
+        "volume": 46160717
       }
     ]
   },
@@ -276465,9 +276841,9 @@
       },
       {
         "priceChange": 11.0,
-        "priceMin": 2120.0,
-        "priceMax": 2221.0,
-        "priceYesterday": 2185.0,
+        "priceMin": 2067,
+        "priceMax": 2117,
+        "priceYesterday": 2056,
         "priceFirst": 2121.0,
         "last": false,
         "id": 0,
@@ -276480,7 +276856,9 @@
         "pDrCotVal": 2196.0,
         "zTotTran": 764.0,
         "qTotTran5J": 40242409.0,
-        "qTotCap": 86338386121.0
+        "qTotCap": 86338386121.0,
+        "priceClose": 2113,
+        "volume": 45020816
       }
     ]
   },
@@ -277615,9 +277993,9 @@
       },
       {
         "priceChange": 310.0,
-        "priceMin": 10570.0,
-        "priceMax": 10730.0,
-        "priceYesterday": 10420.0,
+        "priceMin": 11080,
+        "priceMax": 11080,
+        "priceYesterday": 10760,
         "priceFirst": 10730.0,
         "last": false,
         "id": 0,
@@ -277630,7 +278008,9 @@
         "pDrCotVal": 10730.0,
         "zTotTran": 505.0,
         "qTotTran5J": 7435196.0,
-        "qTotCap": 79749405440.0
+        "qTotCap": 79749405440.0,
+        "priceClose": 11080,
+        "volume": 5617604
       }
     ]
   },
@@ -278765,9 +279145,9 @@
       },
       {
         "priceChange": 700.0,
-        "priceMin": 103300.0,
-        "priceMax": 108400.0,
-        "priceYesterday": 106300.0,
+        "priceMin": 150000,
+        "priceMax": 151400,
+        "priceYesterday": 147000,
         "priceFirst": 107700.0,
         "last": false,
         "id": 0,
@@ -278780,7 +279160,9 @@
         "pDrCotVal": 107000.0,
         "zTotTran": 1014.0,
         "qTotTran5J": 1522723.0,
-        "qTotCap": 161770194300.0
+        "qTotCap": 161770194300.0,
+        "priceClose": 151400,
+        "volume": 1201344
       }
     ]
   },
@@ -280319,9 +280701,9 @@
       },
       {
         "priceChange": 30.0,
-        "priceMin": 2930.0,
-        "priceMax": 3100.0,
-        "priceYesterday": 3020.0,
+        "priceMin": 3160,
+        "priceMax": 3180,
+        "priceYesterday": 3090,
         "priceFirst": 2930.0,
         "last": false,
         "id": 0,
@@ -280334,7 +280716,9 @@
         "pDrCotVal": 3050.0,
         "zTotTran": 1196.0,
         "qTotTran5J": 60339151.0,
-        "qTotCap": 179021591740.0
+        "qTotCap": 179021591740.0,
+        "priceClose": 3180,
+        "volume": 17026747
       }
     ]
   },
@@ -282044,9 +282428,9 @@
       },
       {
         "priceChange": 120.0,
-        "priceMin": 4180.0,
-        "priceMax": 4400.0,
-        "priceYesterday": 4280.0,
+        "priceMin": 5250,
+        "priceMax": 5570,
+        "priceYesterday": 5410,
         "priceFirst": 4180.0,
         "last": false,
         "id": 0,
@@ -282059,7 +282443,9 @@
         "pDrCotVal": 4400.0,
         "zTotTran": 334.0,
         "qTotTran5J": 10390985.0,
-        "qTotCap": 45430233820.0
+        "qTotCap": 45430233820.0,
+        "priceClose": 5470,
+        "volume": 10006716
       }
     ]
   },
@@ -284344,9 +284730,9 @@
       },
       {
         "priceChange": -11.0,
-        "priceMin": 678.0,
-        "priceMax": 715.0,
-        "priceYesterday": 696.0,
+        "priceMin": 583,
+        "priceMax": 600,
+        "priceYesterday": 583,
         "priceFirst": 705.0,
         "last": false,
         "id": 0,
@@ -284359,7 +284745,9 @@
         "pDrCotVal": 685.0,
         "zTotTran": 10763.0,
         "qTotTran5J": 3601892686.0,
-        "qTotCap": 2518363852933.0
+        "qTotCap": 2518363852933.0,
+        "priceClose": 598,
+        "volume": 1859335137
       }
     ]
   },
@@ -284919,9 +285307,9 @@
       },
       {
         "priceChange": 10.0,
-        "priceMin": 3610.0,
-        "priceMax": 3770.0,
-        "priceYesterday": 3720.0,
+        "priceMin": 4490,
+        "priceMax": 4740,
+        "priceYesterday": 4620,
         "priceFirst": 3650.0,
         "last": false,
         "id": 0,
@@ -284934,7 +285322,9 @@
         "pDrCotVal": 3730.0,
         "zTotTran": 1030.0,
         "qTotTran5J": 36021527.0,
-        "qTotCap": 131899294750.0
+        "qTotCap": 131899294750.0,
+        "priceClose": 4590,
+        "volume": 190542459
       }
     ]
   },
@@ -287219,9 +287609,9 @@
       },
       {
         "priceChange": 40.0,
-        "priceMin": 2960.0,
-        "priceMax": 3130.0,
-        "priceYesterday": 3050.0,
+        "priceMin": 3570,
+        "priceMax": 3690,
+        "priceYesterday": 3590,
         "priceFirst": 3050.0,
         "last": false,
         "id": 0,
@@ -287234,7 +287624,9 @@
         "pDrCotVal": 3090.0,
         "zTotTran": 878.0,
         "qTotTran5J": 40312755.0,
-        "qTotCap": 123149863720.0
+        "qTotCap": 123149863720.0,
+        "priceClose": 3650,
+        "volume": 52377496
       }
     ]
   },
@@ -287794,9 +288186,9 @@
       },
       {
         "priceChange": 810.0,
-        "priceMin": 26720.0,
-        "priceMax": 27820.0,
-        "priceYesterday": 27010.0,
+        "priceMin": 45790,
+        "priceMax": 48500,
+        "priceYesterday": 47200,
         "priceFirst": 27500.0,
         "last": false,
         "id": 0,
@@ -287809,7 +288201,9 @@
         "pDrCotVal": 27820.0,
         "zTotTran": 382.0,
         "qTotTran5J": 9098918.0,
-        "qTotCap": 252554346520.0
+        "qTotCap": 252554346520.0,
+        "priceClose": 45910,
+        "volume": 6677346
       }
     ]
   },
@@ -290669,9 +291063,9 @@
       },
       {
         "priceChange": 140.0,
-        "priceMin": 10750.0,
-        "priceMax": 11020.0,
-        "priceYesterday": 10700.0,
+        "priceMin": 9740,
+        "priceMax": 9820,
+        "priceYesterday": 9540,
         "priceFirst": 11020.0,
         "last": false,
         "id": 0,
@@ -290684,7 +291078,9 @@
         "pDrCotVal": 10840.0,
         "zTotTran": 3540.0,
         "qTotTran5J": 78042927.0,
-        "qTotCap": 855979771510.0
+        "qTotCap": 855979771510.0,
+        "priceClose": 9820,
+        "volume": 9948829
       }
     ]
   },
@@ -291244,9 +291640,9 @@
       },
       {
         "priceChange": 90.0,
-        "priceMin": 3280.0,
-        "priceMax": 3350.0,
-        "priceYesterday": 3260.0,
+        "priceMin": 4410,
+        "priceMax": 4410,
+        "priceYesterday": 4290,
         "priceFirst": 3350.0,
         "last": false,
         "id": 0,
@@ -291259,7 +291655,9 @@
         "pDrCotVal": 3350.0,
         "zTotTran": 21174.0,
         "qTotTran5J": 2210827100.0,
-        "qTotCap": 7398241941410.0
+        "qTotCap": 7398241941410.0,
+        "priceClose": 4410,
+        "volume": 860303768
       }
     ]
   },
@@ -292394,9 +292792,9 @@
       },
       {
         "priceChange": -20.0,
-        "priceMin": 3860.0,
-        "priceMax": 4030.0,
-        "priceYesterday": 3930.0,
+        "priceMin": 3790,
+        "priceMax": 3910,
+        "priceYesterday": 3800,
         "priceFirst": 4030.0,
         "last": false,
         "id": 0,
@@ -292409,7 +292807,9 @@
         "pDrCotVal": 3910.0,
         "zTotTran": 1671.0,
         "qTotTran5J": 103572850.0,
-        "qTotCap": 409134547370.0
+        "qTotCap": 409134547370.0,
+        "priceClose": 3900,
+        "volume": 87381721
       }
     ]
   },
@@ -292969,9 +293369,9 @@
       },
       {
         "priceChange": 100.0,
-        "priceMin": 3580.0,
-        "priceMax": 3650.0,
-        "priceYesterday": 3550.0,
+        "priceMin": 4260,
+        "priceMax": 4380,
+        "priceYesterday": 4260,
         "priceFirst": 3650.0,
         "last": false,
         "id": 0,
@@ -292984,7 +293384,9 @@
         "pDrCotVal": 3650.0,
         "zTotTran": 6891.0,
         "qTotTran5J": 537136589.0,
-        "qTotCap": 1956946250510.0
+        "qTotCap": 1956946250510.0,
+        "priceClose": 4370,
+        "volume": 73014919
       }
     ]
   },
@@ -294694,9 +295096,9 @@
       },
       {
         "priceChange": 480.0,
-        "priceMin": 16150.0,
-        "priceMax": 16590.0,
-        "priceYesterday": 16110.0,
+        "priceMin": 20970,
+        "priceMax": 21570,
+        "priceYesterday": 20950,
         "priceFirst": 16390.0,
         "last": false,
         "id": 0,
@@ -294709,7 +295111,9 @@
         "pDrCotVal": 16590.0,
         "zTotTran": 1837.0,
         "qTotTran5J": 38094679.0,
-        "qTotCap": 631061641200.0
+        "qTotCap": 631061641200.0,
+        "priceClose": 21550,
+        "volume": 12777695
       }
     ]
   },
@@ -295269,9 +295673,9 @@
       },
       {
         "priceChange": 170.0,
-        "priceMin": 5870.0,
-        "priceMax": 5950.0,
-        "priceYesterday": 5780.0,
+        "priceMin": 6510,
+        "priceMax": 6850,
+        "priceYesterday": 6710,
         "priceFirst": 5920.0,
         "last": false,
         "id": 0,
@@ -295284,7 +295688,9 @@
         "pDrCotVal": 5950.0,
         "zTotTran": 342.0,
         "qTotTran5J": 10109216.0,
-        "qTotCap": 60034155940.0
+        "qTotCap": 60034155940.0,
+        "priceClose": 6710,
+        "volume": 20501904
       }
     ]
   },
@@ -295844,9 +296250,9 @@
       },
       {
         "priceChange": -10.0,
-        "priceMin": 5500.0,
-        "priceMax": 5740.0,
-        "priceYesterday": 5670.0,
+        "priceMin": 6240,
+        "priceMax": 6460,
+        "priceYesterday": 6280,
         "priceFirst": 5610.0,
         "last": false,
         "id": 0,
@@ -295859,7 +296265,9 @@
         "pDrCotVal": 5660.0,
         "zTotTran": 3783.0,
         "qTotTran5J": 130622885.0,
-        "qTotCap": 727661348830.0
+        "qTotCap": 727661348830.0,
+        "priceClose": 6430,
+        "volume": 82530035
       }
     ]
   },
@@ -298144,9 +298552,9 @@
       },
       {
         "priceChange": 180.0,
-        "priceMin": 6140.0,
-        "priceMax": 6190.0,
-        "priceYesterday": 6010.0,
+        "priceMin": 4190,
+        "priceMax": 4330,
+        "priceYesterday": 4210,
         "priceFirst": 6190.0,
         "last": false,
         "id": 0,
@@ -298159,7 +298567,9 @@
         "pDrCotVal": 6190.0,
         "zTotTran": 482.0,
         "qTotTran5J": 28923913.0,
-        "qTotCap": 178939152170.0
+        "qTotCap": 178939152170.0,
+        "priceClose": 4260,
+        "volume": 83220185
       }
     ]
   },
@@ -301019,9 +301429,9 @@
       },
       {
         "priceChange": 80.0,
-        "priceMin": 2840.0,
-        "priceMax": 2920.0,
-        "priceYesterday": 2840.0,
+        "priceMin": 2841,
+        "priceMax": 2946,
+        "priceYesterday": 2861,
         "priceFirst": 2890.0,
         "last": false,
         "id": 0,
@@ -301034,7 +301444,9 @@
         "pDrCotVal": 2920.0,
         "zTotTran": 105.0,
         "qTotTran5J": 5066695.0,
-        "qTotCap": 14650098440.0
+        "qTotCap": 14650098440.0,
+        "priceClose": 2926,
+        "volume": 28397879
       }
     ]
   },
@@ -301594,9 +302006,9 @@
       },
       {
         "priceChange": -110.0,
-        "priceMin": 3600.0,
-        "priceMax": 3800.0,
-        "priceYesterday": 3710.0,
+        "priceMin": 3880,
+        "priceMax": 4020,
+        "priceYesterday": 3990,
         "priceFirst": 3600.0,
         "last": false,
         "id": 0,
@@ -301609,7 +302021,9 @@
         "pDrCotVal": 3600.0,
         "zTotTran": 280.0,
         "qTotTran5J": 10468762.0,
-        "qTotCap": 38262636080.0
+        "qTotCap": 38262636080.0,
+        "priceClose": 3910,
+        "volume": 5814612
       }
     ]
   },
@@ -304469,9 +304883,9 @@
       },
       {
         "priceChange": 100.0,
-        "priceMin": 3550.0,
-        "priceMax": 3750.0,
-        "priceYesterday": 3650.0,
+        "priceMin": 5080,
+        "priceMax": 5380,
+        "priceYesterday": 5230,
         "priceFirst": 3550.0,
         "last": false,
         "id": 0,
@@ -304484,7 +304898,9 @@
         "pDrCotVal": 3750.0,
         "zTotTran": 913.0,
         "qTotTran5J": 16054430.0,
-        "qTotCap": 59051901190.0
+        "qTotCap": 59051901190.0,
+        "priceClose": 5230,
+        "volume": 52594079
       }
     ]
   },
@@ -305044,9 +305460,9 @@
       },
       {
         "priceChange": 240.0,
-        "priceMin": 8560.0,
-        "priceMax": 8560.0,
-        "priceYesterday": 8320.0,
+        "priceMin": 8450,
+        "priceMax": 8610,
+        "priceYesterday": 8360,
         "priceFirst": 8560.0,
         "last": false,
         "id": 0,
@@ -305059,7 +305475,9 @@
         "pDrCotVal": 8560.0,
         "zTotTran": 316.0,
         "qTotTran5J": 1705293.0,
-        "qTotCap": 14597308080.0
+        "qTotCap": 14597308080.0,
+        "priceClose": 8600,
+        "volume": 15837934
       }
     ]
   },
@@ -305619,9 +306037,9 @@
       },
       {
         "priceChange": 60.0,
-        "priceMin": 2810.0,
-        "priceMax": 2960.0,
-        "priceYesterday": 2890.0,
+        "priceMin": 3460,
+        "priceMax": 3610,
+        "priceYesterday": 3510,
         "priceFirst": 2960.0,
         "last": false,
         "id": 0,
@@ -305634,7 +306052,9 @@
         "pDrCotVal": 2950.0,
         "zTotTran": 841.0,
         "qTotTran5J": 72633970.0,
-        "qTotCap": 205636283440.0
+        "qTotCap": 205636283440.0,
+        "priceClose": 3570,
+        "volume": 37708148
       }
     ]
   },
@@ -307344,9 +307764,9 @@
       },
       {
         "priceChange": -520.0,
-        "priceMin": 17030.0,
-        "priceMax": 18040.0,
-        "priceYesterday": 17550.0,
+        "priceMin": 17840,
+        "priceMax": 17840,
+        "priceYesterday": 17330,
         "priceFirst": 17170.0,
         "last": false,
         "id": 0,
@@ -307359,7 +307779,9 @@
         "pDrCotVal": 17030.0,
         "zTotTran": 1433.0,
         "qTotTran5J": 12044415.0,
-        "qTotCap": 207039791930.0
+        "qTotCap": 207039791930.0,
+        "priceClose": 17840,
+        "volume": 1175258
       }
     ]
   },
@@ -307919,9 +308341,9 @@
       },
       {
         "priceChange": -10.0,
-        "priceMin": 2399.0,
-        "priceMax": 2540.0,
-        "priceYesterday": 2471.0,
+        "priceMin": 2676,
+        "priceMax": 2755,
+        "priceYesterday": 2675,
         "priceFirst": 2410.0,
         "last": false,
         "id": 0,
@@ -307934,7 +308356,9 @@
         "pDrCotVal": 2461.0,
         "zTotTran": 693.0,
         "qTotTran5J": 29324398.0,
-        "qTotCap": 71443229343.0
+        "qTotCap": 71443229343.0,
+        "priceClose": 2748,
+        "volume": 46216950
       }
     ]
   },
@@ -308494,9 +308918,9 @@
       },
       {
         "priceChange": 1530.0,
-        "priceMin": 52200.0,
-        "priceMax": 52670.0,
-        "priceYesterday": 51140.0,
+        "priceMin": 59160,
+        "priceMax": 62790,
+        "priceYesterday": 60970,
         "priceFirst": 52670.0,
         "last": false,
         "id": 0,
@@ -308509,7 +308933,9 @@
         "pDrCotVal": 52670.0,
         "zTotTran": 1854.0,
         "qTotTran5J": 1669577.0,
-        "qTotCap": 87926063100.0
+        "qTotCap": 87926063100.0,
+        "priceClose": 61690,
+        "volume": 1415275
       }
     ]
   },
@@ -310794,9 +311220,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 3760.0,
-        "priceMax": 3920.0,
-        "priceYesterday": 3870.0,
+        "priceMin": 4030,
+        "priceMax": 4120,
+        "priceYesterday": 4000,
         "priceFirst": 3800.0,
         "last": false,
         "id": 0,
@@ -310809,7 +311235,9 @@
         "pDrCotVal": 3870.0,
         "zTotTran": 14995.0,
         "qTotTran5J": 832754263.0,
-        "qTotCap": 3195914344720.0
+        "qTotCap": 3195914344720.0,
+        "priceClose": 4110,
+        "volume": 263061365
       }
     ]
   },
@@ -311944,9 +312372,9 @@
       },
       {
         "priceChange": 620.0,
-        "priceMin": 20410.0,
-        "priceMax": 21550.0,
-        "priceYesterday": 20930.0,
+        "priceMin": 34000,
+        "priceMax": 34350,
+        "priceYesterday": 33350,
         "priceFirst": 20510.0,
         "last": false,
         "id": 0,
@@ -311959,7 +312387,9 @@
         "pDrCotVal": 21550.0,
         "zTotTran": 4364.0,
         "qTotTran5J": 54415059.0,
-        "qTotCap": 1150110893090.0
+        "qTotCap": 1150110893090.0,
+        "priceClose": 34350,
+        "volume": 43987461
       }
     ]
   },
@@ -312519,9 +312949,9 @@
       },
       {
         "priceChange": 32.0,
-        "priceMin": 1444.0,
-        "priceMax": 1509.0,
-        "priceYesterday": 1474.0,
+        "priceMin": 1421,
+        "priceMax": 1460,
+        "priceYesterday": 1418,
         "priceFirst": 1480.0,
         "last": false,
         "id": 0,
@@ -312534,7 +312964,9 @@
         "pDrCotVal": 1506.0,
         "zTotTran": 2743.0,
         "qTotTran5J": 278250085.0,
-        "qTotCap": 414162260920.0
+        "qTotCap": 414162260920.0,
+        "priceClose": 1451,
+        "volume": 269970626
       }
     ]
   },
@@ -314244,9 +314676,9 @@
       },
       {
         "priceChange": 790.0,
-        "priceMin": 66010.0,
-        "priceMax": 69490.0,
-        "priceYesterday": 67600.0,
+        "priceMin": 81240,
+        "priceMax": 85180,
+        "priceYesterday": 83750,
         "priceFirst": 69490.0,
         "last": false,
         "id": 0,
@@ -314259,7 +314691,9 @@
         "pDrCotVal": 68390.0,
         "zTotTran": 719.0,
         "qTotTran5J": 1601047.0,
-        "qTotCap": 109029504710.0
+        "qTotCap": 109029504710.0,
+        "priceClose": 82830,
+        "volume": 7791601
       }
     ]
   },
@@ -318269,9 +318703,9 @@
       },
       {
         "priceChange": -90.0,
-        "priceMin": 3200.0,
-        "priceMax": 3250.0,
-        "priceYesterday": 3290.0,
+        "priceMin": 2970,
+        "priceMax": 3130,
+        "priceYesterday": 3040,
         "priceFirst": 3200.0,
         "last": false,
         "id": 0,
@@ -318284,7 +318718,9 @@
         "pDrCotVal": 3200.0,
         "zTotTran": 522.0,
         "qTotTran5J": 23530212.0,
-        "qTotCap": 75341381420.0
+        "qTotCap": 75341381420.0,
+        "priceClose": 3110,
+        "volume": 21294857
       }
     ]
   },
@@ -319419,9 +319855,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 3720.0,
-        "priceMax": 3940.0,
-        "priceYesterday": 3830.0,
+        "priceMin": 3830,
+        "priceMax": 3930,
+        "priceYesterday": 3820,
         "priceFirst": 3740.0,
         "last": false,
         "id": 0,
@@ -319434,7 +319870,9 @@
         "pDrCotVal": 3940.0,
         "zTotTran": 2054.0,
         "qTotTran5J": 159125757.0,
-        "qTotCap": 613220247540.0
+        "qTotCap": 613220247540.0,
+        "priceClose": 3920,
+        "volume": 29763672
       }
     ]
   },
@@ -324594,9 +325032,9 @@
       },
       {
         "priceChange": 40.0,
-        "priceMin": 8310.0,
-        "priceMax": 8600.0,
-        "priceYesterday": 8560.0,
+        "priceMin": 12310,
+        "priceMax": 12580,
+        "priceYesterday": 12220,
         "priceFirst": 8310.0,
         "last": false,
         "id": 0,
@@ -324609,7 +325047,9 @@
         "pDrCotVal": 8600.0,
         "zTotTran": 719.0,
         "qTotTran5J": 27756100.0,
-        "qTotCap": 231434633920.0
+        "qTotCap": 231434633920.0,
+        "priceClose": 12580,
+        "volume": 16293967
       }
     ]
   },
@@ -326894,9 +327334,9 @@
       },
       {
         "priceChange": 190.0,
-        "priceMin": 6300.0,
-        "priceMax": 6570.0,
-        "priceYesterday": 6380.0,
+        "priceMin": 6140,
+        "priceMax": 6320,
+        "priceYesterday": 6140,
         "priceFirst": 6400.0,
         "last": false,
         "id": 0,
@@ -326909,7 +327349,9 @@
         "pDrCotVal": 6570.0,
         "zTotTran": 11771.0,
         "qTotTran5J": 708071258.0,
-        "qTotCap": 4623201887820.0
+        "qTotCap": 4623201887820.0,
+        "priceClose": 6300,
+        "volume": 543302527
       }
     ]
   },
@@ -327469,9 +327911,9 @@
       },
       {
         "priceChange": 60.0,
-        "priceMin": 12730.0,
-        "priceMax": 12780.0,
-        "priceYesterday": 12710.0,
+        "priceMin": 13640,
+        "priceMax": 13710,
+        "priceYesterday": 13650,
         "priceFirst": 12730.0,
         "last": false,
         "id": 0,
@@ -327484,7 +327926,9 @@
         "pDrCotVal": 12770.0,
         "zTotTran": 295.0,
         "qTotTran5J": 4998686.0,
-        "qTotCap": 63818130610.0
+        "qTotCap": 63818130610.0,
+        "priceClose": 13670,
+        "volume": 4441219
       }
     ]
   },
@@ -328044,9 +328488,9 @@
       },
       {
         "priceChange": 80.0,
-        "priceMin": 7840.0,
-        "priceMax": 8030.0,
-        "priceYesterday": 7860.0,
+        "priceMin": 8700,
+        "priceMax": 9010,
+        "priceYesterday": 8870,
         "priceFirst": 7990.0,
         "last": false,
         "id": 0,
@@ -328059,7 +328503,9 @@
         "pDrCotVal": 7940.0,
         "zTotTran": 359.0,
         "qTotTran5J": 3699783.0,
-        "qTotCap": 29264757410.0
+        "qTotCap": 29264757410.0,
+        "priceClose": 8850,
+        "volume": 7198641
       }
     ]
   },
@@ -330344,9 +330790,9 @@
       },
       {
         "priceChange": -260.0,
-        "priceMin": 8550.0,
-        "priceMax": 8920.0,
-        "priceYesterday": 8810.0,
+        "priceMin": 8970,
+        "priceMax": 9380,
+        "priceYesterday": 9160,
         "priceFirst": 8580.0,
         "last": false,
         "id": 0,
@@ -330359,7 +330805,9 @@
         "pDrCotVal": 8550.0,
         "zTotTran": 1666.0,
         "qTotTran5J": 35745742.0,
-        "qTotCap": 306342326260.0
+        "qTotCap": 306342326260.0,
+        "priceClose": 9260,
+        "volume": 6840018
       }
     ]
   },
@@ -333794,9 +334242,9 @@
       },
       {
         "priceChange": 780.0,
-        "priceMin": 26930.0,
-        "priceMax": 26930.0,
-        "priceYesterday": 26150.0,
+        "priceMin": 26720,
+        "priceMax": 27250,
+        "priceYesterday": 26460,
         "priceFirst": 26930.0,
         "last": false,
         "id": 0,
@@ -333809,7 +334257,9 @@
         "pDrCotVal": 26930.0,
         "zTotTran": 70.0,
         "qTotTran5J": 1241757.0,
-        "qTotCap": 33440516010.0
+        "qTotCap": 33440516010.0,
+        "priceClose": 27200,
+        "volume": 15093880
       }
     ]
   },
@@ -336094,9 +336544,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 2620.0,
+        "priceMin": 2640,
+        "priceMax": 2716,
+        "priceYesterday": 2637,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -336109,7 +336559,9 @@
         "pDrCotVal": 2620.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 2695,
+        "volume": 64179112
       }
     ]
   },
@@ -337819,9 +338271,9 @@
       },
       {
         "priceChange": 55.0,
-        "priceMin": 1870.0,
-        "priceMax": 1889.0,
-        "priceYesterday": 1834.0,
+        "priceMin": 2100,
+        "priceMax": 2188,
+        "priceYesterday": 2162,
         "priceFirst": 1889.0,
         "last": false,
         "id": 0,
@@ -337834,7 +338286,9 @@
         "pDrCotVal": 1889.0,
         "zTotTran": 181.0,
         "qTotTran5J": 22613257.0,
-        "qTotCap": 42716034083.0
+        "qTotCap": 42716034083.0,
+        "priceClose": 2141,
+        "volume": 27944944
       }
     ]
   },
@@ -338969,9 +339423,9 @@
       },
       {
         "priceChange": 160.0,
-        "priceMin": 8120.0,
-        "priceMax": 8450.0,
-        "priceYesterday": 8270.0,
+        "priceMin": 7980,
+        "priceMax": 8250,
+        "priceYesterday": 8010,
         "priceFirst": 8420.0,
         "last": false,
         "id": 0,
@@ -338984,7 +339438,9 @@
         "pDrCotVal": 8430.0,
         "zTotTran": 247.0,
         "qTotTran5J": 3723721.0,
-        "qTotCap": 30896103840.0
+        "qTotCap": 30896103840.0,
+        "priceClose": 8220,
+        "volume": 9781172
       }
     ]
   },
@@ -340119,9 +340575,9 @@
       },
       {
         "priceChange": -230.0,
-        "priceMin": 10500.0,
-        "priceMax": 11070.0,
-        "priceYesterday": 10770.0,
+        "priceMin": 9380,
+        "priceMax": 9730,
+        "priceYesterday": 9450,
         "priceFirst": 10800.0,
         "last": false,
         "id": 0,
@@ -340134,7 +340590,9 @@
         "pDrCotVal": 10540.0,
         "zTotTran": 328.0,
         "qTotTran5J": 2241571.0,
-        "qTotCap": 23781494240.0
+        "qTotCap": 23781494240.0,
+        "priceClose": 9670,
+        "volume": 85669909
       }
     ]
   },
@@ -341269,9 +341727,9 @@
       },
       {
         "priceChange": 190.0,
-        "priceMin": 6410.0,
-        "priceMax": 6710.0,
-        "priceYesterday": 6520.0,
+        "priceMin": 10780,
+        "priceMax": 11100,
+        "priceYesterday": 10780,
         "priceFirst": 6410.0,
         "last": false,
         "id": 0,
@@ -341284,7 +341742,9 @@
         "pDrCotVal": 6710.0,
         "zTotTran": 1016.0,
         "qTotTran5J": 26291449.0,
-        "qTotCap": 175218006380.0
+        "qTotCap": 175218006380.0,
+        "priceClose": 11060,
+        "volume": 161723143
       }
     ]
   },
@@ -344144,9 +344604,9 @@
       },
       {
         "priceChange": 350.0,
-        "priceMin": 11400.0,
-        "priceMax": 12040.0,
-        "priceYesterday": 11690.0,
+        "priceMin": 12470,
+        "priceMax": 12800,
+        "priceYesterday": 12430,
         "priceFirst": 11520.0,
         "last": false,
         "id": 0,
@@ -344159,7 +344619,9 @@
         "pDrCotVal": 12040.0,
         "zTotTran": 750.0,
         "qTotTran5J": 12274454.0,
-        "qTotCap": 145296718500.0
+        "qTotCap": 145296718500.0,
+        "priceClose": 12730,
+        "volume": 8154000
       }
     ]
   },
@@ -344719,9 +345181,9 @@
       },
       {
         "priceChange": 510.0,
-        "priceMin": 17740.0,
-        "priceMax": 17740.0,
-        "priceYesterday": 17230.0,
+        "priceMin": 22160,
+        "priceMax": 22490,
+        "priceYesterday": 21840,
         "priceFirst": 17740.0,
         "last": false,
         "id": 0,
@@ -344734,7 +345196,9 @@
         "pDrCotVal": 17740.0,
         "zTotTran": 368.0,
         "qTotTran5J": 9121199.0,
-        "qTotCap": 161810070260.0
+        "qTotCap": 161810070260.0,
+        "priceClose": 22490,
+        "volume": 33994859
       }
     ]
   },
@@ -347594,9 +348058,9 @@
       },
       {
         "priceChange": -860.0,
-        "priceMin": 27860.0,
-        "priceMax": 28810.0,
-        "priceYesterday": 28720.0,
+        "priceMin": 28170,
+        "priceMax": 28280,
+        "priceYesterday": 27460,
         "priceFirst": 27860.0,
         "last": false,
         "id": 0,
@@ -347609,7 +348073,9 @@
         "pDrCotVal": 27860.0,
         "zTotTran": 576.0,
         "qTotTran5J": 3331519.0,
-        "qTotCap": 93476209860.0
+        "qTotCap": 93476209860.0,
+        "priceClose": 28270,
+        "volume": 570735
       }
     ]
   },
@@ -348744,9 +349210,9 @@
       },
       {
         "priceChange": 9.0,
-        "priceMin": 2126.0,
-        "priceMax": 2249.0,
-        "priceYesterday": 2191.0,
+        "priceMin": 2581,
+        "priceMax": 2656,
+        "priceYesterday": 2579,
         "priceFirst": 2249.0,
         "last": false,
         "id": 0,
@@ -348759,7 +349225,9 @@
         "pDrCotVal": 2200.0,
         "zTotTran": 449.0,
         "qTotTran5J": 23565172.0,
-        "qTotCap": 51257448376.0
+        "qTotCap": 51257448376.0,
+        "priceClose": 2651,
+        "volume": 68624062
       }
     ]
   },
@@ -354494,9 +354962,9 @@
       },
       {
         "priceChange": 350.0,
-        "priceMin": 11760.0,
-        "priceMax": 12100.0,
-        "priceYesterday": 11750.0,
+        "priceMin": 14600,
+        "priceMax": 14600,
+        "priceYesterday": 14180,
         "priceFirst": 11760.0,
         "last": false,
         "id": 0,
@@ -354509,7 +354977,9 @@
         "pDrCotVal": 12100.0,
         "zTotTran": 411.0,
         "qTotTran5J": 4428692.0,
-        "qTotCap": 53173970890.0
+        "qTotCap": 53173970890.0,
+        "priceClose": 14600,
+        "volume": 9115721
       }
     ]
   },
@@ -355069,9 +355539,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 3750.0,
-        "priceMax": 3820.0,
-        "priceYesterday": 3710.0,
+        "priceMin": 3770,
+        "priceMax": 3850,
+        "priceYesterday": 3810,
         "priceFirst": 3820.0,
         "last": false,
         "id": 0,
@@ -355084,7 +355554,9 @@
         "pDrCotVal": 3820.0,
         "zTotTran": 923.0,
         "qTotTran5J": 66737734.0,
-        "qTotCap": 254809779300.0
+        "qTotCap": 254809779300.0,
+        "priceClose": 3810,
+        "volume": 56693447
       }
     ]
   },
@@ -356219,9 +356691,9 @@
       },
       {
         "priceChange": -1550.0,
-        "priceMin": 54470.0,
-        "priceMax": 55990.0,
-        "priceYesterday": 56150.0,
+        "priceMin": 72030,
+        "priceMax": 76470,
+        "priceYesterday": 74250,
         "priceFirst": 55940.0,
         "last": false,
         "id": 0,
@@ -356234,7 +356706,9 @@
         "pDrCotVal": 54600.0,
         "zTotTran": 8374.0,
         "qTotTran5J": 35223309.0,
-        "qTotCap": 1922987086530.0
+        "qTotCap": 1922987086530.0,
+        "priceClose": 74250,
+        "volume": 22128852
       }
     ]
   },
@@ -356794,9 +357268,9 @@
       },
       {
         "priceChange": 140.0,
-        "priceMin": 4920.0,
-        "priceMax": 4940.0,
-        "priceYesterday": 4800.0,
+        "priceMin": 4950,
+        "priceMax": 5130,
+        "priceYesterday": 5020,
         "priceFirst": 4940.0,
         "last": false,
         "id": 0,
@@ -356809,7 +357283,9 @@
         "pDrCotVal": 4940.0,
         "zTotTran": 315.0,
         "qTotTran5J": 10174914.0,
-        "qTotCap": 50253777230.0
+        "qTotCap": 50253777230.0,
+        "priceClose": 5030,
+        "volume": 4837356
       }
     ]
   },
@@ -357944,9 +358420,9 @@
       },
       {
         "priceChange": -140.0,
-        "priceMin": 7210.0,
-        "priceMax": 7550.0,
-        "priceYesterday": 7430.0,
+        "priceMin": 5560,
+        "priceMax": 5720,
+        "priceYesterday": 5560,
         "priceFirst": 7250.0,
         "last": false,
         "id": 0,
@@ -357959,7 +358435,9 @@
         "pDrCotVal": 7290.0,
         "zTotTran": 3553.0,
         "qTotTran5J": 111538244.0,
-        "qTotCap": 809401960080.0
+        "qTotCap": 809401960080.0,
+        "priceClose": 5700,
+        "volume": 43196974
       }
     ]
   },
@@ -359669,9 +360147,9 @@
       },
       {
         "priceChange": 90.0,
-        "priceMin": 3170.0,
-        "priceMax": 3350.0,
-        "priceYesterday": 3260.0,
+        "priceMin": 3950,
+        "priceMax": 4050,
+        "priceYesterday": 3940,
         "priceFirst": 3210.0,
         "last": false,
         "id": 0,
@@ -359684,7 +360162,9 @@
         "pDrCotVal": 3350.0,
         "zTotTran": 15109.0,
         "qTotTran5J": 832240877.0,
-        "qTotCap": 2720531016720.0
+        "qTotCap": 2720531016720.0,
+        "priceClose": 4040,
+        "volume": 349139325
       }
     ]
   },
@@ -361394,9 +361874,9 @@
       },
       {
         "priceChange": -290.0,
-        "priceMin": 14120.0,
-        "priceMax": 14980.0,
-        "priceYesterday": 14550.0,
+        "priceMin": 13670,
+        "priceMax": 14160,
+        "priceYesterday": 14090,
         "priceFirst": 14980.0,
         "last": false,
         "id": 0,
@@ -361409,7 +361889,9 @@
         "pDrCotVal": 14260.0,
         "zTotTran": 5082.0,
         "qTotTran5J": 84085957.0,
-        "qTotCap": 1224670240420.0
+        "qTotCap": 1224670240420.0,
+        "priceClose": 13800,
+        "volume": 32057952
       }
     ]
   },
@@ -362544,9 +363026,9 @@
       },
       {
         "priceChange": 2270.0,
-        "priceMin": 78210.0,
-        "priceMax": 78210.0,
-        "priceYesterday": 75940.0,
+        "priceMin": 68760,
+        "priceMax": 70830,
+        "priceYesterday": 70880,
         "priceFirst": 78210.0,
         "last": false,
         "id": 0,
@@ -362559,7 +363041,9 @@
         "pDrCotVal": 78210.0,
         "zTotTran": 256.0,
         "qTotTran5J": 2269407.0,
-        "qTotCap": 177490321470.0
+        "qTotCap": 177490321470.0,
+        "priceClose": 69110,
+        "volume": 10948268
       }
     ]
   },
@@ -363119,9 +363603,9 @@
       },
       {
         "priceChange": 340.0,
-        "priceMin": 11260.0,
-        "priceMax": 11940.0,
-        "priceYesterday": 11600.0,
+        "priceMin": 10180,
+        "priceMax": 10320,
+        "priceYesterday": 10020,
         "priceFirst": 11320.0,
         "last": false,
         "id": 0,
@@ -363134,7 +363618,9 @@
         "pDrCotVal": 11940.0,
         "zTotTran": 807.0,
         "qTotTran5J": 7136254.0,
-        "qTotCap": 83539507750.0
+        "qTotCap": 83539507750.0,
+        "priceClose": 10300,
+        "volume": 9247647
       }
     ]
   },
@@ -363694,9 +364180,9 @@
       },
       {
         "priceChange": 70.0,
-        "priceMin": 6610.0,
-        "priceMax": 6950.0,
-        "priceYesterday": 6810.0,
+        "priceMin": 6670,
+        "priceMax": 7050,
+        "priceYesterday": 6870,
         "priceFirst": 6640.0,
         "last": false,
         "id": 0,
@@ -363709,7 +364195,9 @@
         "pDrCotVal": 6880.0,
         "zTotTran": 327.0,
         "qTotTran5J": 6558462.0,
-        "qTotCap": 44311926400.0
+        "qTotCap": 44311926400.0,
+        "priceClose": 6710,
+        "volume": 4931912
       }
     ]
   },
@@ -364269,9 +364757,9 @@
       },
       {
         "priceChange": -2.0,
-        "priceMin": 906.0,
-        "priceMax": 950.0,
-        "priceYesterday": 934.0,
+        "priceMin": 1918,
+        "priceMax": 1918,
+        "priceYesterday": 1863,
         "priceFirst": 908.0,
         "last": false,
         "id": 0,
@@ -364284,7 +364772,9 @@
         "pDrCotVal": 932.0,
         "zTotTran": 694.0,
         "qTotTran5J": 83832851.0,
-        "qTotCap": 77224073153.0
+        "qTotCap": 77224073153.0,
+        "priceClose": 1918,
+        "volume": 40494804
       }
     ]
   },
@@ -366569,9 +367059,9 @@
       },
       {
         "priceChange": 65.0,
-        "priceMin": 2301.0,
-        "priceMax": 2443.0,
-        "priceYesterday": 2372.0,
+        "priceMin": 2848,
+        "priceMax": 2854,
+        "priceYesterday": 2771,
         "priceFirst": 2330.0,
         "last": false,
         "id": 0,
@@ -366584,7 +367074,9 @@
         "pDrCotVal": 2437.0,
         "zTotTran": 534.0,
         "qTotTran5J": 28960865.0,
-        "qTotCap": 68519154111.0
+        "qTotCap": 68519154111.0,
+        "priceClose": 2854,
+        "volume": 69988730
       }
     ]
   },
@@ -367719,9 +368211,9 @@
       },
       {
         "priceChange": -1590.0,
-        "priceMin": 52060.0,
-        "priceMax": 54990.0,
-        "priceYesterday": 53660.0,
+        "priceMin": 48710,
+        "priceMax": 50560,
+        "priceYesterday": 49090,
         "priceFirst": 54260.0,
         "last": false,
         "id": 0,
@@ -367734,7 +368226,9 @@
         "pDrCotVal": 52070.0,
         "zTotTran": 5162.0,
         "qTotTran5J": 48042374.0,
-        "qTotCap": 2509986121680.0
+        "qTotCap": 2509986121680.0,
+        "priceClose": 50040,
+        "volume": 8391050
       }
     ]
   },
@@ -370019,9 +370513,9 @@
       },
       {
         "priceChange": 450.0,
-        "priceMin": 15310.0,
-        "priceMax": 15540.0,
-        "priceYesterday": 15090.0,
+        "priceMin": 17100,
+        "priceMax": 17670,
+        "priceYesterday": 17160,
         "priceFirst": 15540.0,
         "last": false,
         "id": 0,
@@ -370034,7 +370528,9 @@
         "pDrCotVal": 15540.0,
         "zTotTran": 5125.0,
         "qTotTran5J": 191080287.0,
-        "qTotCap": 2968268197580.0
+        "qTotCap": 2968268197580.0,
+        "priceClose": 17540,
+        "volume": 29237850
       }
     ]
   },
@@ -372319,9 +372815,9 @@
       },
       {
         "priceChange": -220.0,
-        "priceMin": 18550.0,
-        "priceMax": 19150.0,
-        "priceYesterday": 19120.0,
+        "priceMin": 18990,
+        "priceMax": 19700,
+        "priceYesterday": 19230,
         "priceFirst": 18550.0,
         "last": false,
         "id": 0,
@@ -372334,7 +372830,9 @@
         "pDrCotVal": 18900.0,
         "zTotTran": 864.0,
         "qTotTran5J": 15227841.0,
-        "qTotCap": 283090760090.0
+        "qTotCap": 283090760090.0,
+        "priceClose": 19280,
+        "volume": 3860002
       }
     ]
   },
@@ -373469,9 +373967,9 @@
       },
       {
         "priceChange": 10600.0,
-        "priceMin": 355500.0,
-        "priceMax": 364200.0,
-        "priceYesterday": 353600.0,
+        "priceMin": 447700,
+        "priceMax": 465000,
+        "priceYesterday": 461500,
         "priceFirst": 357100.0,
         "last": false,
         "id": 0,
@@ -373484,7 +373982,9 @@
         "pDrCotVal": 364200.0,
         "zTotTran": 1902.0,
         "qTotTran5J": 1566888.0,
-        "qTotCap": 569664784800.0
+        "qTotCap": 569664784800.0,
+        "priceClose": 449400,
+        "volume": 2357271
       }
     ]
   },
@@ -374619,9 +375119,9 @@
       },
       {
         "priceChange": 690.0,
-        "priceMin": 23450.0,
-        "priceMax": 24840.0,
-        "priceYesterday": 24140.0,
+        "priceMin": 32590,
+        "priceMax": 32590,
+        "priceYesterday": 31740,
         "priceFirst": 23450.0,
         "last": false,
         "id": 0,
@@ -374634,7 +375134,9 @@
         "pDrCotVal": 24830.0,
         "zTotTran": 202.0,
         "qTotTran5J": 2026427.0,
-        "qTotCap": 48925436650.0
+        "qTotCap": 48925436650.0,
+        "priceClose": 32590,
+        "volume": 306
       }
     ]
   },
@@ -376919,9 +377421,9 @@
       },
       {
         "priceChange": -250.0,
-        "priceMin": 8250.0,
-        "priceMax": 8480.0,
-        "priceYesterday": 8500.0,
+        "priceMin": 11480,
+        "priceMax": 12000,
+        "priceYesterday": 11830,
         "priceFirst": 8250.0,
         "last": false,
         "id": 0,
@@ -376934,7 +377436,9 @@
         "pDrCotVal": 8250.0,
         "zTotTran": 1292.0,
         "qTotTran5J": 17222690.0,
-        "qTotCap": 142770780200.0
+        "qTotCap": 142770780200.0,
+        "priceClose": 11520,
+        "volume": 20165776
       }
     ]
   },
@@ -381519,9 +382023,9 @@
       },
       {
         "priceChange": 820.0,
-        "priceMin": 27700.0,
-        "priceMax": 28440.0,
-        "priceYesterday": 27620.0,
+        "priceMin": 26800,
+        "priceMax": 27060,
+        "priceYesterday": 26280,
         "priceFirst": 28440.0,
         "last": false,
         "id": 0,
@@ -381534,7 +382038,9 @@
         "pDrCotVal": 28440.0,
         "zTotTran": 293.0,
         "qTotTran5J": 2255068.0,
-        "qTotCap": 64019552100.0
+        "qTotCap": 64019552100.0,
+        "priceClose": 27020,
+        "volume": 1647235
       }
     ]
   },
@@ -383819,9 +384325,9 @@
       },
       {
         "priceChange": 50.0,
-        "priceMin": 5060.0,
-        "priceMax": 5340.0,
-        "priceYesterday": 5190.0,
+        "priceMin": 6840,
+        "priceMax": 6840,
+        "priceYesterday": 7050,
         "priceFirst": 5170.0,
         "last": false,
         "id": 0,
@@ -383834,7 +384340,9 @@
         "pDrCotVal": 5240.0,
         "zTotTran": 150.0,
         "qTotTran5J": 3020242.0,
-        "qTotCap": 15936862190.0
+        "qTotCap": 15936862190.0,
+        "priceClose": 6840,
+        "volume": 792396
       }
     ]
   },
@@ -384969,9 +385477,9 @@
       },
       {
         "priceChange": -120.0,
-        "priceMin": 11430.0,
-        "priceMax": 12120.0,
-        "priceYesterday": 11780.0,
+        "priceMin": 10990,
+        "priceMax": 11140,
+        "priceYesterday": 10820,
         "priceFirst": 11760.0,
         "last": false,
         "id": 0,
@@ -384984,7 +385492,9 @@
         "pDrCotVal": 11660.0,
         "zTotTran": 2135.0,
         "qTotTran5J": 28501408.0,
-        "qTotCap": 335407980420.0
+        "qTotCap": 335407980420.0,
+        "priceClose": 11140,
+        "volume": 11159520
       }
     ]
   },
@@ -386119,9 +386629,9 @@
       },
       {
         "priceChange": 700.0,
-        "priceMin": 8640.0,
-        "priceMax": 8890.0,
-        "priceYesterday": 8190.0,
+        "priceMin": 11750,
+        "priceMax": 12080,
+        "priceYesterday": 11740,
         "priceFirst": 8640.0,
         "last": false,
         "id": 0,
@@ -386134,7 +386644,9 @@
         "pDrCotVal": 8890.0,
         "zTotTran": 363.0,
         "qTotTran5J": 22506847.0,
-        "qTotCap": 198764893340.0
+        "qTotCap": 198764893340.0,
+        "priceClose": 11930,
+        "volume": 1212186
       }
     ]
   },
@@ -386694,9 +387206,9 @@
       },
       {
         "priceChange": 300.0,
-        "priceMin": 9960.0,
-        "priceMax": 10490.0,
-        "priceYesterday": 10190.0,
+        "priceMin": 13960,
+        "priceMax": 14800,
+        "priceYesterday": 14370,
         "priceFirst": 10260.0,
         "last": false,
         "id": 0,
@@ -386709,7 +387221,9 @@
         "pDrCotVal": 10490.0,
         "zTotTran": 658.0,
         "qTotTran5J": 14419527.0,
-        "qTotCap": 150571591840.0
+        "qTotCap": 150571591840.0,
+        "priceClose": 14610,
+        "volume": 28564169
       }
     ]
   },
@@ -387844,9 +388358,9 @@
       },
       {
         "priceChange": 64.0,
-        "priceMin": 2650.0,
-        "priceMax": 2771.0,
-        "priceYesterday": 2691.0,
+        "priceMin": 3250,
+        "priceMax": 3310,
+        "priceYesterday": 3220,
         "priceFirst": 2699.0,
         "last": false,
         "id": 0,
@@ -387859,7 +388373,9 @@
         "pDrCotVal": 2755.0,
         "zTotTran": 309.0,
         "qTotTran5J": 14830292.0,
-        "qTotCap": 40711930179.0
+        "qTotCap": 40711930179.0,
+        "priceClose": 3310,
+        "volume": 6034007
       }
     ]
   },
@@ -388419,9 +388935,9 @@
       },
       {
         "priceChange": 26.0,
-        "priceMin": 879.0,
-        "priceMax": 893.0,
-        "priceYesterday": 867.0,
+        "priceMin": 860,
+        "priceMax": 860,
+        "priceYesterday": 835,
         "priceFirst": 893.0,
         "last": false,
         "id": 0,
@@ -388434,7 +388950,9 @@
         "pDrCotVal": 893.0,
         "zTotTran": 5582.0,
         "qTotTran5J": 3462416802.0,
-        "qTotCap": 3090104122082.0
+        "qTotCap": 3090104122082.0,
+        "priceClose": 860,
+        "volume": 838140439
       }
     ]
   },
@@ -394169,9 +394687,9 @@
       },
       {
         "priceChange": 20.0,
-        "priceMin": 15380.0,
-        "priceMax": 16290.0,
-        "priceYesterday": 15850.0,
+        "priceMin": 19240,
+        "priceMax": 19550,
+        "priceYesterday": 18990,
         "priceFirst": 15380.0,
         "last": false,
         "id": 0,
@@ -394184,7 +394702,9 @@
         "pDrCotVal": 15870.0,
         "zTotTran": 662.0,
         "qTotTran5J": 6831832.0,
-        "qTotCap": 106441381740.0
+        "qTotCap": 106441381740.0,
+        "priceClose": 19400,
+        "volume": 3914781
       }
     ]
   },
@@ -396469,9 +396989,9 @@
       },
       {
         "priceChange": 20.0,
-        "priceMin": 6290.0,
-        "priceMax": 6420.0,
-        "priceYesterday": 6310.0,
+        "priceMin": 7470,
+        "priceMax": 7660,
+        "priceYesterday": 7470,
         "priceFirst": 6420.0,
         "last": false,
         "id": 0,
@@ -396484,7 +397004,9 @@
         "pDrCotVal": 6330.0,
         "zTotTran": 137.0,
         "qTotTran5J": 2243435.0,
-        "qTotCap": 14213456800.0
+        "qTotCap": 14213456800.0,
+        "priceClose": 7580,
+        "volume": 472954
       }
     ]
   },
@@ -397044,9 +397566,9 @@
       },
       {
         "priceChange": 210.0,
-        "priceMin": 7320.0,
-        "priceMax": 7440.0,
-        "priceYesterday": 7230.0,
+        "priceMin": 7640,
+        "priceMax": 7740,
+        "priceYesterday": 7520,
         "priceFirst": 7320.0,
         "last": false,
         "id": 0,
@@ -397059,7 +397581,9 @@
         "pDrCotVal": 7440.0,
         "zTotTran": 583.0,
         "qTotTran5J": 33453304.0,
-        "qTotCap": 248847280680.0
+        "qTotCap": 248847280680.0,
+        "priceClose": 7740,
+        "volume": 25233475
       }
     ]
   },
@@ -398194,9 +398718,9 @@
       },
       {
         "priceChange": 110.0,
-        "priceMin": 3950.0,
-        "priceMax": 4050.0,
-        "priceYesterday": 3940.0,
+        "priceMin": 4260,
+        "priceMax": 4420,
+        "priceYesterday": 4300,
         "priceFirst": 4030.0,
         "last": false,
         "id": 0,
@@ -398209,7 +398733,9 @@
         "pDrCotVal": 4050.0,
         "zTotTran": 1842.0,
         "qTotTran5J": 97319325.0,
-        "qTotCap": 393779758330.0
+        "qTotCap": 393779758330.0,
+        "priceClose": 4420,
+        "volume": 99917498
       }
     ]
   },
@@ -399919,9 +400445,9 @@
       },
       {
         "priceChange": 70.0,
-        "priceMin": 4590.0,
-        "priceMax": 4730.0,
-        "priceYesterday": 4600.0,
+        "priceMin": 6820,
+        "priceMax": 6820,
+        "priceYesterday": 6630,
         "priceFirst": 4730.0,
         "last": false,
         "id": 0,
@@ -399934,7 +400460,9 @@
         "pDrCotVal": 4670.0,
         "zTotTran": 361.0,
         "qTotTran5J": 10354462.0,
-        "qTotCap": 48745958810.0
+        "qTotCap": 48745958810.0,
+        "priceClose": 6820,
+        "volume": 14954941
       }
     ]
   },
@@ -402219,9 +402747,9 @@
       },
       {
         "priceChange": -5.0,
-        "priceMin": 658.0,
-        "priceMax": 684.0,
-        "priceYesterday": 667.0,
+        "priceMin": 660,
+        "priceMax": 678,
+        "priceYesterday": 659,
         "priceFirst": 665.0,
         "last": false,
         "id": 0,
@@ -402234,7 +402762,9 @@
         "pDrCotVal": 662.0,
         "zTotTran": 11330.0,
         "qTotTran5J": 3258116592.0,
-        "qTotCap": 2177501607413.0
+        "qTotCap": 2177501607413.0,
+        "priceClose": 674,
+        "volume": 3108584757
       }
     ]
   },
@@ -402794,9 +403324,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 9940.0,
+        "priceMin": 11650,
+        "priceMax": 12080,
+        "priceYesterday": 11730,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -402809,7 +403339,9 @@
         "pDrCotVal": 9940.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 12020,
+        "volume": 1458428
       }
     ]
   },
@@ -404519,9 +405051,9 @@
       },
       {
         "priceChange": 390.0,
-        "priceMin": 12900.0,
-        "priceMax": 13410.0,
-        "priceYesterday": 13020.0,
+        "priceMin": 12560,
+        "priceMax": 13120,
+        "priceYesterday": 12740,
         "priceFirst": 13280.0,
         "last": false,
         "id": 0,
@@ -404534,7 +405066,9 @@
         "pDrCotVal": 13410.0,
         "zTotTran": 369.0,
         "qTotTran5J": 5575432.0,
-        "qTotCap": 74489117200.0
+        "qTotCap": 74489117200.0,
+        "priceClose": 13060,
+        "volume": 6807124
       }
     ]
   },
@@ -405094,9 +405628,9 @@
       },
       {
         "priceChange": 1040.0,
-        "priceMin": 49310.0,
-        "priceMax": 50390.0,
-        "priceYesterday": 48940.0,
+        "priceMin": 71800,
+        "priceMax": 75400,
+        "priceYesterday": 73250,
         "priceFirst": 50380.0,
         "last": false,
         "id": 0,
@@ -405109,7 +405643,9 @@
         "pDrCotVal": 49980.0,
         "zTotTran": 167.0,
         "qTotTran5J": 640179.0,
-        "qTotCap": 31877368980.0
+        "qTotCap": 31877368980.0,
+        "priceClose": 73140,
+        "volume": 255865
       }
     ]
   },
@@ -406244,9 +406780,9 @@
       },
       {
         "priceChange": 350.0,
-        "priceMin": 11620.0,
-        "priceMax": 12090.0,
-        "priceYesterday": 11740.0,
+        "priceMin": 17560,
+        "priceMax": 18070,
+        "priceYesterday": 17550,
         "priceFirst": 11990.0,
         "last": false,
         "id": 0,
@@ -406259,7 +406795,9 @@
         "pDrCotVal": 12090.0,
         "zTotTran": 1069.0,
         "qTotTran5J": 16405281.0,
-        "qTotCap": 197215038320.0
+        "qTotCap": 197215038320.0,
+        "priceClose": 17880,
+        "volume": 20425282
       }
     ]
   },
@@ -407394,9 +407932,9 @@
       },
       {
         "priceChange": 100.0,
-        "priceMin": 12270.0,
-        "priceMax": 12980.0,
-        "priceYesterday": 12640.0,
+        "priceMin": 11420,
+        "priceMax": 11420,
+        "priceYesterday": 11090,
         "priceFirst": 12700.0,
         "last": false,
         "id": 0,
@@ -407409,7 +407947,9 @@
         "pDrCotVal": 12740.0,
         "zTotTran": 1022.0,
         "qTotTran5J": 15085133.0,
-        "qTotCap": 190386950400.0
+        "qTotCap": 190386950400.0,
+        "priceClose": 11420,
+        "volume": 3531171
       }
     ]
   },
@@ -407969,9 +408509,9 @@
       },
       {
         "priceChange": -890.0,
-        "priceMin": 28930.0,
-        "priceMax": 28930.0,
-        "priceYesterday": 29820.0,
+        "priceMin": 24120,
+        "priceMax": 25020,
+        "priceYesterday": 24300,
         "priceFirst": 28930.0,
         "last": false,
         "id": 0,
@@ -407984,7 +408524,9 @@
         "pDrCotVal": 28930.0,
         "zTotTran": 225.0,
         "qTotTran5J": 592475.0,
-        "qTotCap": 17140301750.0
+        "qTotCap": 17140301750.0,
+        "priceClose": 24880,
+        "volume": 3481123
       }
     ]
   },
@@ -408544,9 +409086,9 @@
       },
       {
         "priceChange": 280.0,
-        "priceMin": 9910.0,
-        "priceMax": 9910.0,
-        "priceYesterday": 9630.0,
+        "priceMin": 8670,
+        "priceMax": 9000,
+        "priceYesterday": 8840,
         "priceFirst": 9910.0,
         "last": false,
         "id": 0,
@@ -408559,7 +409101,9 @@
         "pDrCotVal": 9910.0,
         "zTotTran": 1858.0,
         "qTotTran5J": 8910700.0,
-        "qTotCap": 88305037000.0
+        "qTotCap": 88305037000.0,
+        "priceClose": 8830,
+        "volume": 18180967
       }
     ]
   },
@@ -410269,9 +410813,9 @@
       },
       {
         "priceChange": 350.0,
-        "priceMin": 11720.0,
-        "priceMax": 12180.0,
-        "priceYesterday": 11830.0,
+        "priceMin": 14740,
+        "priceMax": 15480,
+        "priceYesterday": 15030,
         "priceFirst": 11720.0,
         "last": false,
         "id": 0,
@@ -410284,7 +410828,9 @@
         "pDrCotVal": 12180.0,
         "zTotTran": 4170.0,
         "qTotTran5J": 70458373.0,
-        "qTotCap": 855806841100.0
+        "qTotCap": 855806841100.0,
+        "priceClose": 15280,
+        "volume": 629357753
       }
     ]
   },
@@ -411994,9 +412540,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 33330.0,
+        "priceMin": 10210,
+        "priceMax": 10440,
+        "priceYesterday": 10140,
         "priceFirst": 0.0,
         "last": false,
         "id": 0,
@@ -412009,7 +412555,9 @@
         "pDrCotVal": 33500.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 10430,
+        "volume": 55034761
       }
     ]
   },
@@ -413144,9 +413692,9 @@
       },
       {
         "priceChange": 260.0,
-        "priceMin": 9150.0,
-        "priceMax": 9150.0,
-        "priceYesterday": 8890.0,
+        "priceMin": 7930,
+        "priceMax": 7950,
+        "priceYesterday": 7720,
         "priceFirst": 9150.0,
         "last": false,
         "id": 0,
@@ -413159,7 +413707,9 @@
         "pDrCotVal": 9150.0,
         "zTotTran": 75.0,
         "qTotTran5J": 1989437.0,
-        "qTotCap": 18203348550.0
+        "qTotCap": 18203348550.0,
+        "priceClose": 7950,
+        "volume": 5776659
       }
     ]
   },
@@ -416019,9 +416569,9 @@
       },
       {
         "priceChange": 170.0,
-        "priceMin": 6050.0,
-        "priceMax": 6150.0,
-        "priceYesterday": 5980.0,
+        "priceMin": 8510,
+        "priceMax": 8740,
+        "priceYesterday": 8630,
         "priceFirst": 6140.0,
         "last": false,
         "id": 0,
@@ -416034,7 +416584,9 @@
         "pDrCotVal": 6150.0,
         "zTotTran": 598.0,
         "qTotTran5J": 20019788.0,
-        "qTotCap": 122945525340.0
+        "qTotCap": 122945525340.0,
+        "priceClose": 8640,
+        "volume": 21549241
       }
     ]
   },
@@ -417744,9 +418296,9 @@
       },
       {
         "priceChange": 250.0,
-        "priceMin": 16120.0,
-        "priceMax": 16870.0,
-        "priceYesterday": 16500.0,
+        "priceMin": 19140,
+        "priceMax": 19140,
+        "priceYesterday": 18590,
         "priceFirst": 16410.0,
         "last": false,
         "id": 0,
@@ -417759,7 +418311,9 @@
         "pDrCotVal": 16750.0,
         "zTotTran": 350.0,
         "qTotTran5J": 337636.0,
-        "qTotCap": 5605832070.0
+        "qTotCap": 5605832070.0,
+        "priceClose": 19140,
+        "volume": 2877242
       }
     ]
   },
@@ -418319,9 +418873,9 @@
       },
       {
         "priceChange": 240.0,
-        "priceMin": 8330.0,
-        "priceMax": 8330.0,
-        "priceYesterday": 8090.0,
+        "priceMin": 11170,
+        "priceMax": 11380,
+        "priceYesterday": 11510,
         "priceFirst": 8330.0,
         "last": false,
         "id": 0,
@@ -418334,7 +418888,9 @@
         "pDrCotVal": 8330.0,
         "zTotTran": 408.0,
         "qTotTran5J": 33470288.0,
-        "qTotCap": 278807499040.0
+        "qTotCap": 278807499040.0,
+        "priceClose": 11180,
+        "volume": 80392228
       }
     ]
   },
@@ -418894,9 +419450,9 @@
       },
       {
         "priceChange": 30.0,
-        "priceMin": 7420.0,
-        "priceMax": 7750.0,
-        "priceYesterday": 7600.0,
+        "priceMin": 7830,
+        "priceMax": 7990,
+        "priceYesterday": 7760,
         "priceFirst": 7600.0,
         "last": false,
         "id": 0,
@@ -418909,7 +419465,9 @@
         "pDrCotVal": 7630.0,
         "zTotTran": 221.0,
         "qTotTran5J": 2647708.0,
-        "qTotCap": 20035264690.0
+        "qTotCap": 20035264690.0,
+        "priceClose": 7990,
+        "volume": 3308490
       }
     ]
   },
@@ -420044,9 +420602,9 @@
       },
       {
         "priceChange": -1430.0,
-        "priceMin": 46460.0,
-        "priceMax": 46460.0,
-        "priceYesterday": 47890.0,
+        "priceMin": 46800,
+        "priceMax": 47750,
+        "priceYesterday": 46360,
         "priceFirst": 46460.0,
         "last": false,
         "id": 0,
@@ -420059,7 +420617,9 @@
         "pDrCotVal": 46460.0,
         "zTotTran": 353.0,
         "qTotTran5J": 854757.0,
-        "qTotCap": 39712010220.0
+        "qTotCap": 39712010220.0,
+        "priceClose": 47610,
+        "volume": 3016916
       }
     ]
   },
@@ -421194,9 +421754,9 @@
       },
       {
         "priceChange": 270.0,
-        "priceMin": 9000.0,
-        "priceMax": 9360.0,
-        "priceYesterday": 9090.0,
+        "priceMin": 10230,
+        "priceMax": 10650,
+        "priceYesterday": 10340,
         "priceFirst": 9290.0,
         "last": false,
         "id": 0,
@@ -421209,7 +421769,9 @@
         "pDrCotVal": 9360.0,
         "zTotTran": 578.0,
         "qTotTran5J": 30630760.0,
-        "qTotCap": 285826702670.0
+        "qTotCap": 285826702670.0,
+        "priceClose": 10620,
+        "volume": 79202716
       }
     ]
   },
@@ -422344,9 +422906,9 @@
       },
       {
         "priceChange": 100.0,
-        "priceMin": 3660.0,
-        "priceMax": 3760.0,
-        "priceYesterday": 3660.0,
+        "priceMin": 5250,
+        "priceMax": 5480,
+        "priceYesterday": 5330,
         "priceFirst": 3750.0,
         "last": false,
         "id": 0,
@@ -422359,7 +422921,9 @@
         "pDrCotVal": 3760.0,
         "zTotTran": 376.0,
         "qTotTran5J": 5074375.0,
-        "qTotCap": 19000409020.0
+        "qTotCap": 19000409020.0,
+        "priceClose": 5410,
+        "volume": 10729249
       }
     ]
   },
@@ -422919,9 +423483,9 @@
       },
       {
         "priceChange": 150.0,
-        "priceMin": 7330.0,
-        "priceMax": 7390.0,
-        "priceYesterday": 7180.0,
+        "priceMin": 7890,
+        "priceMax": 8220,
+        "priceYesterday": 8050,
         "priceFirst": 7390.0,
         "last": false,
         "id": 0,
@@ -422934,7 +423498,9 @@
         "pDrCotVal": 7330.0,
         "zTotTran": 182.0,
         "qTotTran5J": 4096554.0,
-        "qTotCap": 30262839720.0
+        "qTotCap": 30262839720.0,
+        "priceClose": 8050,
+        "volume": 9007947
       }
     ]
   },
@@ -423494,9 +424060,9 @@
       },
       {
         "priceChange": 550.0,
-        "priceMin": 18600.0,
-        "priceMax": 19210.0,
-        "priceYesterday": 18660.0,
+        "priceMin": 13520,
+        "priceMax": 14160,
+        "priceYesterday": 13780,
         "priceFirst": 19210.0,
         "last": false,
         "id": 0,
@@ -423509,7 +424075,9 @@
         "pDrCotVal": 19210.0,
         "zTotTran": 1121.0,
         "qTotTran5J": 6027376.0,
-        "qTotCap": 115519679180.0
+        "qTotCap": 115519679180.0,
+        "priceClose": 13760,
+        "volume": 12255805
       }
     ]
   },
@@ -424644,9 +425212,9 @@
       },
       {
         "priceChange": -21.0,
-        "priceMin": 2425.0,
-        "priceMax": 2545.0,
-        "priceYesterday": 2498.0,
+        "priceMin": 2630,
+        "priceMax": 2684,
+        "priceYesterday": 2606,
         "priceFirst": 2451.0,
         "last": false,
         "id": 0,
@@ -424659,7 +425227,9 @@
         "pDrCotVal": 2477.0,
         "zTotTran": 3603.0,
         "qTotTran5J": 218878497.0,
-        "qTotCap": 544554124136.0
+        "qTotCap": 544554124136.0,
+        "priceClose": 2678,
+        "volume": 109432991
       }
     ]
   },
@@ -425794,9 +426364,9 @@
       },
       {
         "priceChange": 300.0,
-        "priceMin": 10350.0,
-        "priceMax": 10560.0,
-        "priceYesterday": 10260.0,
+        "priceMin": 8750,
+        "priceMax": 9010,
+        "priceYesterday": 8750,
         "priceFirst": 10400.0,
         "last": false,
         "id": 0,
@@ -425809,7 +426379,9 @@
         "pDrCotVal": 10560.0,
         "zTotTran": 483.0,
         "qTotTran5J": 7556579.0,
-        "qTotCap": 79323050650.0
+        "qTotCap": 79323050650.0,
+        "priceClose": 8930,
+        "volume": 16594260
       }
     ]
   },
@@ -426944,9 +427516,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 0.0,
-        "priceMax": 0.0,
-        "priceYesterday": 8190.0,
+        "priceMin": 10400,
+        "priceMax": 10980,
+        "priceYesterday": 10720,
         "priceFirst": 7950.0,
         "last": false,
         "id": 0,
@@ -426959,7 +427531,9 @@
         "pDrCotVal": 8190.0,
         "zTotTran": 0.0,
         "qTotTran5J": 0.0,
-        "qTotCap": 0.0
+        "qTotCap": 0.0,
+        "priceClose": 10430,
+        "volume": 29677228
       }
     ]
   },
@@ -428094,9 +428668,9 @@
       },
       {
         "priceChange": 570.0,
-        "priceMin": 19800.0,
-        "priceMax": 19800.0,
-        "priceYesterday": 19230.0,
+        "priceMin": 23630,
+        "priceMax": 25090,
+        "priceYesterday": 24360,
         "priceFirst": 19800.0,
         "last": false,
         "id": 0,
@@ -428109,7 +428683,9 @@
         "pDrCotVal": 19800.0,
         "zTotTran": 197.0,
         "qTotTran5J": 2319261.0,
-        "qTotCap": 45921367800.0
+        "qTotCap": 45921367800.0,
+        "priceClose": 24010,
+        "volume": 17557406
       }
     ]
   },
@@ -429244,9 +429820,9 @@
       },
       {
         "priceChange": 58.0,
-        "priceMin": 2022.0,
-        "priceMax": 2022.0,
-        "priceYesterday": 1964.0,
+        "priceMin": 2120,
+        "priceMax": 2178,
+        "priceYesterday": 2115,
         "priceFirst": 2022.0,
         "last": false,
         "id": 0,
@@ -429259,7 +429835,9 @@
         "pDrCotVal": 2022.0,
         "zTotTran": 201.0,
         "qTotTran5J": 8046137.0,
-        "qTotCap": 16269289014.0
+        "qTotCap": 16269289014.0,
+        "priceClose": 2174,
+        "volume": 10431631
       }
     ]
   },
@@ -429819,9 +430397,9 @@
       },
       {
         "priceChange": 60.0,
-        "priceMin": 13260.0,
-        "priceMax": 14010.0,
-        "priceYesterday": 13610.0,
+        "priceMin": 14880,
+        "priceMax": 15530,
+        "priceYesterday": 15080,
         "priceFirst": 13260.0,
         "last": false,
         "id": 0,
@@ -429834,7 +430412,9 @@
         "pDrCotVal": 13670.0,
         "zTotTran": 249.0,
         "qTotTran5J": 3160428.0,
-        "qTotCap": 43917108780.0
+        "qTotCap": 43917108780.0,
+        "priceClose": 15460,
+        "volume": 2266129
       }
     ]
   },
@@ -431544,9 +432124,9 @@
       },
       {
         "priceChange": 92.0,
-        "priceMin": 3174.0,
-        "priceMax": 3174.0,
-        "priceYesterday": 3082.0,
+        "priceMin": 4190,
+        "priceMax": 4200,
+        "priceYesterday": 4080,
         "priceFirst": 3174.0,
         "last": false,
         "id": 0,
@@ -431559,7 +432139,9 @@
         "pDrCotVal": 3174.0,
         "zTotTran": 234.0,
         "qTotTran5J": 67306419.0,
-        "qTotCap": 213630573906.0
+        "qTotCap": 213630573906.0,
+        "priceClose": 4200,
+        "volume": 17603432
       }
     ]
   },
@@ -432119,9 +432701,9 @@
       },
       {
         "priceChange": 90.0,
-        "priceMin": 5010.0,
-        "priceMax": 5250.0,
-        "priceYesterday": 5100.0,
+        "priceMin": 6800,
+        "priceMax": 6890,
+        "priceYesterday": 6690,
         "priceFirst": 5010.0,
         "last": false,
         "id": 0,
@@ -432134,7 +432716,9 @@
         "pDrCotVal": 5190.0,
         "zTotTran": 647.0,
         "qTotTran5J": 13136036.0,
-        "qTotCap": 67928219420.0
+        "qTotCap": 67928219420.0,
+        "priceClose": 6880,
+        "volume": 22881649
       }
     ]
   },
@@ -433844,9 +434428,9 @@
       },
       {
         "priceChange": 1640.0,
-        "priceMin": 55900.0,
-        "priceMax": 56550.0,
-        "priceYesterday": 54910.0,
+        "priceMin": 69600,
+        "priceMax": 73190,
+        "priceYesterday": 71060,
         "priceFirst": 55900.0,
         "last": false,
         "id": 0,
@@ -433859,7 +434443,9 @@
         "pDrCotVal": 56550.0,
         "zTotTran": 571.0,
         "qTotTran5J": 4032374.0,
-        "qTotCap": 227971372100.0
+        "qTotCap": 227971372100.0,
+        "priceClose": 72970,
+        "volume": 2290710
       }
     ]
   },
@@ -434419,9 +435005,9 @@
       },
       {
         "priceChange": -80.0,
-        "priceMin": 4280.0,
-        "priceMax": 4470.0,
-        "priceYesterday": 4410.0,
+        "priceMin": 3820,
+        "priceMax": 4000,
+        "priceYesterday": 3890,
         "priceFirst": 4390.0,
         "last": false,
         "id": 0,
@@ -434434,7 +435020,9 @@
         "pDrCotVal": 4330.0,
         "zTotTran": 1723.0,
         "qTotTran5J": 82690403.0,
-        "qTotCap": 355918495410.0
+        "qTotCap": 355918495410.0,
+        "priceClose": 3990,
+        "volume": 33254376
       }
     ]
   },
@@ -437869,9 +438457,9 @@
       },
       {
         "priceChange": -21.0,
-        "priceMin": 680.0,
-        "priceMax": 691.0,
-        "priceYesterday": 701.0,
+        "priceMin": 579,
+        "priceMax": 593,
+        "priceYesterday": 576,
         "priceFirst": 680.0,
         "last": false,
         "id": 0,
@@ -437884,7 +438472,9 @@
         "pDrCotVal": 680.0,
         "zTotTran": 23599.0,
         "qTotTran5J": 12867925412.0,
-        "qTotCap": 8759011108935.0
+        "qTotCap": 8759011108935.0,
+        "priceClose": 592,
+        "volume": 2520110261
       }
     ]
   },
@@ -439019,9 +439609,9 @@
       },
       {
         "priceChange": 44.0,
-        "priceMin": 1540.0,
-        "priceMax": 1540.0,
-        "priceYesterday": 1496.0,
+        "priceMin": 1571,
+        "priceMax": 1571,
+        "priceYesterday": 1526,
         "priceFirst": 1540.0,
         "last": false,
         "id": 0,
@@ -439034,7 +439624,9 @@
         "pDrCotVal": 1540.0,
         "zTotTran": 124.0,
         "qTotTran5J": 30237638.0,
-        "qTotCap": 46565962520.0
+        "qTotCap": 46565962520.0,
+        "priceClose": 1571,
+        "volume": 37813319
       }
     ]
   },
@@ -440169,9 +440761,9 @@
       },
       {
         "priceChange": 90.0,
-        "priceMin": 3100.0,
-        "priceMax": 3160.0,
-        "priceYesterday": 3070.0,
+        "priceMin": 3110,
+        "priceMax": 3240,
+        "priceYesterday": 3160,
         "priceFirst": 3130.0,
         "last": false,
         "id": 0,
@@ -440184,7 +440776,9 @@
         "pDrCotVal": 3160.0,
         "zTotTran": 267.0,
         "qTotTran5J": 12812224.0,
-        "qTotCap": 40416414870.0
+        "qTotCap": 40416414870.0,
+        "priceClose": 3170,
+        "volume": 25550751
       }
     ]
   },
@@ -440744,9 +441338,9 @@
       },
       {
         "priceChange": -30.0,
-        "priceMin": 13340.0,
-        "priceMax": 13620.0,
-        "priceYesterday": 13620.0,
+        "priceMin": 13100,
+        "priceMax": 13880,
+        "priceYesterday": 13480,
         "priceFirst": 13620.0,
         "last": false,
         "id": 0,
@@ -440759,7 +441353,9 @@
         "pDrCotVal": 13590.0,
         "zTotTran": 20.0,
         "qTotTran5J": 39048.0,
-        "qTotCap": 522016540.0
+        "qTotCap": 522016540.0,
+        "priceClose": 13780,
+        "volume": 601364
       }
     ]
   },
@@ -441319,9 +441915,9 @@
       },
       {
         "priceChange": 230.0,
-        "priceMin": 8010.0,
-        "priceMax": 8010.0,
-        "priceYesterday": 7780.0,
+        "priceMin": 13440,
+        "priceMax": 14260,
+        "priceYesterday": 13850,
         "priceFirst": 8010.0,
         "last": false,
         "id": 0,
@@ -441334,7 +441930,9 @@
         "pDrCotVal": 8010.0,
         "zTotTran": 10425.0,
         "qTotTran5J": 3118307.0,
-        "qTotCap": 24977639070.0
+        "qTotCap": 24977639070.0,
+        "priceClose": 14110,
+        "volume": 40247404
       }
     ]
   },
@@ -443619,9 +444217,9 @@
       },
       {
         "priceChange": -10.0,
-        "priceMin": 19600.0,
-        "priceMax": 20170.0,
-        "priceYesterday": 19610.0,
+        "priceMin": 22300,
+        "priceMax": 23660,
+        "priceYesterday": 22980,
         "priceFirst": 20070.0,
         "last": false,
         "id": 0,
@@ -443634,7 +444232,9 @@
         "pDrCotVal": 19600.0,
         "zTotTran": 32.0,
         "qTotTran5J": 56691.0,
-        "qTotCap": 1128331640.0
+        "qTotCap": 1128331640.0,
+        "priceClose": 22510,
+        "volume": 4054832
       }
     ]
   },
@@ -446494,9 +447094,9 @@
       },
       {
         "priceChange": 0.0,
-        "priceMin": 20040.0,
-        "priceMax": 20880.0,
-        "priceYesterday": 20650.0,
+        "priceMin": 23100,
+        "priceMax": 23160,
+        "priceYesterday": 22490,
         "priceFirst": 20040.0,
         "last": false,
         "id": 0,
@@ -446509,7 +447109,9 @@
         "pDrCotVal": 20650.0,
         "zTotTran": 1911.0,
         "qTotTran5J": 32476707.0,
-        "qTotCap": 656647706870.0
+        "qTotCap": 656647706870.0,
+        "priceClose": 23150,
+        "volume": 4914895
       }
     ]
   },
@@ -447644,9 +448246,9 @@
       },
       {
         "priceChange": 40.0,
-        "priceMin": 10990.0,
-        "priceMax": 11290.0,
-        "priceYesterday": 11090.0,
+        "priceMin": 11190,
+        "priceMax": 11490,
+        "priceYesterday": 11160,
         "priceFirst": 11290.0,
         "last": false,
         "id": 0,
@@ -447659,7 +448261,9 @@
         "pDrCotVal": 11130.0,
         "zTotTran": 648.0,
         "qTotTran5J": 1396926.0,
-        "qTotCap": 15638333260.0
+        "qTotCap": 15638333260.0,
+        "priceClose": 11460,
+        "volume": 1592899
       }
     ]
   },
@@ -449369,9 +449973,9 @@
       },
       {
         "priceChange": -210.0,
-        "priceMin": 6870.0,
-        "priceMax": 7280.0,
-        "priceYesterday": 7080.0,
+        "priceMin": 8780,
+        "priceMax": 8780,
+        "priceYesterday": 8530,
         "priceFirst": 7200.0,
         "last": false,
         "id": 0,
@@ -449384,7 +449988,9 @@
         "pDrCotVal": 6870.0,
         "zTotTran": 177.0,
         "qTotTran5J": 3895627.0,
-        "qTotCap": 27131462970.0
+        "qTotCap": 27131462970.0,
+        "priceClose": 8780,
+        "volume": 1069064
       }
     ]
   },
@@ -451094,9 +451700,9 @@
       },
       {
         "priceChange": 550.0,
-        "priceMin": 17810.0,
-        "priceMax": 18900.0,
-        "priceYesterday": 18350.0,
+        "priceMin": 25670,
+        "priceMax": 26410,
+        "priceYesterday": 25650,
         "priceFirst": 18700.0,
         "last": false,
         "id": 0,
@@ -451109,7 +451715,9 @@
         "pDrCotVal": 18900.0,
         "zTotTran": 602.0,
         "qTotTran5J": 5274134.0,
-        "qTotCap": 98522938390.0
+        "qTotCap": 98522938390.0,
+        "priceClose": 26410,
+        "volume": 6777082
       }
     ]
   },
@@ -452244,9 +452852,9 @@
       },
       {
         "priceChange": -45.0,
-        "priceMin": 2383.0,
-        "priceMax": 2529.0,
-        "priceYesterday": 2456.0,
+        "priceMin": 2600,
+        "priceMax": 2625,
+        "priceYesterday": 2549,
         "priceFirst": 2465.0,
         "last": false,
         "id": 0,
@@ -452259,7 +452867,9 @@
         "pDrCotVal": 2411.0,
         "zTotTran": 1216.0,
         "qTotTran5J": 108457273.0,
-        "qTotCap": 263069440630.0
+        "qTotCap": 263069440630.0,
+        "priceClose": 2623,
+        "volume": 22342728
       }
     ]
   },
@@ -452819,9 +453429,9 @@
       },
       {
         "priceChange": 1010.0,
-        "priceMin": 65740.0,
-        "priceMax": 66960.0,
-        "priceYesterday": 65010.0,
+        "priceMin": 81610,
+        "priceMax": 84760,
+        "priceYesterday": 84130,
         "priceFirst": 66890.0,
         "last": false,
         "id": 0,
@@ -452834,7 +453444,9 @@
         "pDrCotVal": 66020.0,
         "zTotTran": 1597.0,
         "qTotTran5J": 5250191.0,
-        "qTotCap": 350178373940.0
+        "qTotCap": 350178373940.0,
+        "priceClose": 82450,
+        "volume": 4456660
       }
     ]
   },
@@ -453394,9 +454006,9 @@
       },
       {
         "priceChange": 720.0,
-        "priceMin": 24310.0,
-        "priceMax": 25030.0,
-        "priceYesterday": 24310.0,
+        "priceMin": 29000,
+        "priceMax": 29960,
+        "priceYesterday": 29090,
         "priceFirst": 24900.0,
         "last": false,
         "id": 0,
@@ -453409,7 +454021,9 @@
         "pDrCotVal": 25030.0,
         "zTotTran": 39124.0,
         "qTotTran5J": 516829015.0,
-        "qTotCap": 12877478762400.0
+        "qTotCap": 12877478762400.0,
+        "priceClose": 29670,
+        "volume": 654607829
       }
     ]
   },
@@ -453969,9 +454583,9 @@
       },
       {
         "priceChange": 190.0,
-        "priceMin": 14410.0,
-        "priceMax": 15160.0,
-        "priceYesterday": 14720.0,
+        "priceMin": 4740,
+        "priceMax": 4790,
+        "priceYesterday": 4660,
         "priceFirst": 15070.0,
         "last": false,
         "id": 0,
@@ -453984,7 +454598,9 @@
         "pDrCotVal": 14910.0,
         "zTotTran": 15317.0,
         "qTotTran5J": 356262364.0,
-        "qTotCap": 5341499233820.0
+        "qTotCap": 5341499233820.0,
+        "priceClose": 4790,
+        "volume": 61830036
       }
     ]
   },
@@ -454544,9 +455160,9 @@
       },
       {
         "priceChange": 20.0,
-        "priceMin": 2760.0,
-        "priceMax": 2850.0,
-        "priceYesterday": 2770.0,
+        "priceMin": 2902,
+        "priceMax": 2997,
+        "priceYesterday": 2910,
         "priceFirst": 2840.0,
         "last": false,
         "id": 0,
@@ -454559,7 +455175,9 @@
         "pDrCotVal": 2790.0,
         "zTotTran": 4957.0,
         "qTotTran5J": 397020356.0,
-        "qTotCap": 1120667346450.0
+        "qTotCap": 1120667346450.0,
+        "priceClose": 2977,
+        "volume": 242557555
       }
     ]
   },
@@ -455119,9 +455737,9 @@
       },
       {
         "priceChange": -22.0,
-        "priceMin": 991.0,
-        "priceMax": 1045.0,
-        "priceYesterday": 1020.0,
+        "priceMin": 18600,
+        "priceMax": 19250,
+        "priceYesterday": 18690,
         "priceFirst": 1000.0,
         "last": false,
         "id": 0,
@@ -455134,7 +455752,9 @@
         "pDrCotVal": 998.0,
         "zTotTran": 6587.0,
         "qTotTran5J": 1020880892.0,
-        "qTotCap": 1036282920241.0
+        "qTotCap": 1036282920241.0,
+        "priceClose": 18990,
+        "volume": 12810595
       }
     ]
   },
@@ -455694,9 +456314,9 @@
       },
       {
         "priceChange": -1530.0,
-        "priceMin": 49760.0,
-        "priceMax": 52820.0,
-        "priceYesterday": 51290.0,
+        "priceMin": 41000,
+        "priceMax": 41850,
+        "priceYesterday": 40640,
         "priceFirst": 52820.0,
         "last": false,
         "id": 0,
@@ -455709,7 +456329,9 @@
         "pDrCotVal": 49760.0,
         "zTotTran": 28865.0,
         "qTotTran5J": 211943951.0,
-        "qTotCap": 10670727783970.0
+        "qTotCap": 10670727783970.0,
+        "priceClose": 41830,
+        "volume": 29266725
       }
     ]
   }
