@@ -1,0 +1,8 @@
+.git
+.gitignore
+package.json
+package-lock.json
+wrangler.toml
+_worker.js
+README.md
+node_modules
