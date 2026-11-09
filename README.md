@@ -67,3 +67,4 @@ For high-rate on-chain transaction receipt querying:
 - **Networking:** OkHttp & Retrofit
 - **Concurrency:** Kotlin Coroutines & StateFlow
 Trigger build
+Trigger Assets Build
