@@ -66,3 +66,4 @@ For high-rate on-chain transaction receipt querying:
 - **Local Persistence:** Room Database + KSP
 - **Networking:** OkHttp & Retrofit
 - **Concurrency:** Kotlin Coroutines & StateFlow
+Trigger build
