@@ -100,7 +100,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         MarketDataCacheManager.init(this)
 
         try {
@@ -408,13 +407,15 @@ fun RigourApp(
                         MarketSelectorScreen(
                             onNavigateToCrypto = { viewModel.navigateTo(Screen.Markets) },
                             onNavigateToIranStock = { viewModel.navigateTo(Screen.IranStockSearch) },
-                            onNavigateToForex = { viewModel.navigateTo(Screen.Forex) }, // اتصال به فارکس
+                            onNavigateToForex = { 
+                                android.util.Log.d("ForexTest", "Forex button clicked!")
+                                viewModel.navigateTo(Screen.Forex) 
+                            }, // <-- تغییر تست
                             onNavigateToDex = { /* به‌زودی */ }
                         )
                     }
 
                     is Screen.Forex -> {
-                        // صفحه فارکس (موقت)
                         Text("صفحه فارکس در حال ساخت است...", color = Color.White)
                     }
 
