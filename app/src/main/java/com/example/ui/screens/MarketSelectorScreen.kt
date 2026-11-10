@@ -39,12 +39,10 @@ fun MarketSelectorScreen(
         animationSpec = tween(1000),
         label = "scale"
     )
-
     LaunchedEffect(Unit) {
         visible = true
         delay(100)
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -59,15 +57,12 @@ fun MarketSelectorScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // لوگو
             Image(
                 painter = painterResource(id = R.drawable.rigor_logo),
                 contentDescription = "Rigor Logo",
                 modifier = Modifier.size(100.dp).clip(RoundedCornerShape(20.dp))
             )
-            
             Spacer(modifier = Modifier.height(16.dp))
-            
             Text(
                 text = "RIGOR",
                 fontSize = 48.sp,
@@ -75,10 +70,7 @@ fun MarketSelectorScreen(
                 color = Color.White,
                 letterSpacing = 8.sp
             )
-            
             Spacer(modifier = Modifier.height(12.dp))
-            
-            // جمله تزئینی
             Text(
                 text = "A comprehensive analytical and trading platform for financial markets.",
                 color = Color(0xFF94A3B8),
@@ -94,9 +86,7 @@ fun MarketSelectorScreen(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
-            
             Spacer(modifier = Modifier.height(40.dp))
-            
             Text(
                 text = "انتخاب بازار",
                 fontSize = 20.sp,
@@ -104,9 +94,7 @@ fun MarketSelectorScreen(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            
             Spacer(modifier = Modifier.height(16.dp))
-            
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -137,7 +125,7 @@ fun MarketSelectorScreen(
                     gradient = listOf(Color(0xFF6366F1).copy(alpha = 0.8f), Color(0xFF8B5CF6).copy(alpha = 0.6f)),
                     onClick = onNavigateToForex,
                     modifier = Modifier.weight(1f),
-                    disabled = true
+                    disabled = false // <-- اینجا فعال شد
                 )
                 GlassMarketCard(
                     title = "دکس",
