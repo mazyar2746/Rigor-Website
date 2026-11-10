@@ -101,7 +101,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // --- راه‌اندازی کش دیتای بازار (سیستم همزمانی) ---
         MarketDataCacheManager.init(this)
 
         try {
@@ -212,6 +211,7 @@ fun RigourApp(
                 is Screen.Subscription -> viewModel.navigateTo(Screen.Markets)
                 is Screen.ContactUs -> viewModel.navigateTo(Screen.Settings)
                 is Screen.Settings -> viewModel.navigateTo(Screen.Markets)
+                is Screen.Forex -> viewModel.navigateTo(Screen.Hub)
                 Screen.Markets -> {}
             }
         }
@@ -408,9 +408,14 @@ fun RigourApp(
                         MarketSelectorScreen(
                             onNavigateToCrypto = { viewModel.navigateTo(Screen.Markets) },
                             onNavigateToIranStock = { viewModel.navigateTo(Screen.IranStockSearch) },
-                            onNavigateToForex = { /* به‌زودی */ },
+                            onNavigateToForex = { viewModel.navigateTo(Screen.Forex) }, // اتصال به فارکس
                             onNavigateToDex = { /* به‌زودی */ }
                         )
+                    }
+
+                    is Screen.Forex -> {
+                        // صفحه فارکس (موقت)
+                        Text("صفحه فارکس در حال ساخت است...", color = Color.White)
                     }
 
                     is Screen.Markets -> {
@@ -501,8 +506,8 @@ fun RigourApp(
                 if (showLanguageDialog) {
                     LanguageSelectorDialog(
                         currentLanguage = currentLanguage,
-                        onLanguageSelected = { viewModel.setLanguage(it) },
-                        onDismissRequest = { showLanguageDialog = false }
+                        onSelected = { viewModel.setLanguage(it) },
+                        onDismiss = { showLanguageDialog = false }
                     )
                 }
             }

@@ -35,6 +35,7 @@ sealed class Screen {
     object Subscription : Screen()
     object ContactUs : Screen()
     object Settings : Screen()
+    object Forex : Screen() // صفحه جدید فارکس
 }
 
 class RigourViewModel(application: Application) : AndroidViewModel(application) {
@@ -43,22 +44,18 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
     private val cryptoRepository = CryptoRepository(database.favoritesDao(), database.coinCacheDao(), context = application)
     private val subscriptionRepository = SubscriptionRepository(database.subscriptionDao())
 
-    // App Navigation
     private val _currentScreen = MutableStateFlow<Screen>(Screen.Hub)
     val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
 
-    // i18n & RTL State
     private val _currentLanguage = MutableStateFlow(Language.ENGLISH)
     val currentLanguage: StateFlow<Language> = _currentLanguage.asStateFlow()
 
-    // Search and Filter State
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     private val _onlyFavorites = MutableStateFlow(false)
     val onlyFavorites: StateFlow<Boolean> = _onlyFavorites.asStateFlow()
 
-    // Crypto Market Data & Pagination
     val coins: StateFlow<List<CryptoCoin>> = cryptoRepository.coins
     val isMarketLoading: StateFlow<Boolean> = cryptoRepository.isLoading
     val isLoadingMore: StateFlow<Boolean> = cryptoRepository.isLoadingMore
@@ -86,7 +83,6 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
         list
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // Selected Coin & Technical Analysis
     private val _selectedCoin = MutableStateFlow<CryptoCoin?>(null)
     val selectedCoin: StateFlow<CryptoCoin?> = _selectedCoin.asStateFlow()
 
@@ -99,14 +95,12 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
     private val _isAnalysisLoading = MutableStateFlow(false)
     val isAnalysisLoading: StateFlow<Boolean> = _isAnalysisLoading.asStateFlow()
 
-    // Dedicated AI Trading Signals Stream
     private val _signals = MutableStateFlow<List<CoinSignalData>>(emptyList())
     val signals: StateFlow<List<CoinSignalData>> = _signals.asStateFlow()
 
     private val _isSignalsLoading = MutableStateFlow(false)
     val isSignalsLoading: StateFlow<Boolean> = _isSignalsLoading.asStateFlow()
 
-    // Subscription & Paywall
     val subscription: StateFlow<UserSubscription> = subscriptionRepository.currentSubscriptionFlow
         .stateIn(
             viewModelScope,
@@ -123,7 +117,6 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
     private val _isVerificationSuccess = MutableStateFlow(false)
     val isVerificationSuccess: StateFlow<Boolean> = _isVerificationSuccess.asStateFlow()
 
-    // API Keys & Settings
     private val _cmcApiKey = MutableStateFlow("")
     val cmcApiKey: StateFlow<String> = _cmcApiKey.asStateFlow()
 
@@ -158,11 +151,8 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
             for (coin in currentCoins) {
                 try {
                     val analysis = cryptoRepository.getTechnicalAnalysis(coin, "1h")
-                    // CRITICAL: Real trading signals must NEVER be generated from synthetic or unavailable candles!
                     if (analysis.provenance == MarketDataProvenance.LIVE_EXCHANGE || analysis.provenance == MarketDataProvenance.CACHED_EXCHANGE) {
                         list.add(CoinSignalData(coin, analysis))
-                    } else {
-                        android.util.Log.d("RigourVM", "Skipping ${coin.symbol} from signals feed due to synthetic/unavailable provenance (${analysis.provenance})")
                     }
                 } catch (e: Exception) {
                     android.util.Log.w("RigourVM", "Failed to compute signals for ${coin.symbol}: ${e.message}")
@@ -237,7 +227,6 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
                 val result = cryptoRepository.getTechnicalAnalysis(coin, timeframe)
                 _analysisResult.value = result
             } catch (e: Exception) {
-                // Return explicitly marked unavailable result, NOT disguised signals
                 _analysisResult.value = com.example.engine.TechnicalAnalysisEngine.createUnavailableResult(
                     symbol = coin.symbol,
                     currentPrice = coin.priceUsd,
@@ -327,7 +316,7 @@ class RigourViewModel(application: Application) : AndroidViewModel(application) 
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
             while (true) {
-                delay(60_000) // 60 seconds data refresh
+                delay(60_000)
                 cryptoRepository.refreshCoins(_cmcApiKey.value)
             }
         }
