@@ -28,8 +28,14 @@ export default {
       // --- DEX Chart Data (OKX API - Bypasses Iran Blocks) ---
       if (path.startsWith("/api/dex/chart")) {
         const symbol = url.searchParams.get("symbol") || "BNB-USDT";
-        const bar = url.searchParams.get("interval") || "1H";
+        const interval = url.searchParams.get("interval") || "1H";
         const limit = url.searchParams.get("limit") || "100";
+        
+        // تبدیل فرمت تایم‌فریم به فرمت OKX
+        let bar = "1H";
+        if (interval === "1h") bar = "1H";
+        else if (interval === "4h") bar = "4H";
+        else if (interval === "1d") bar = "1D";
 
         const targetUrl = `https://www.okx.com/api/v5/market/candles?instId=${symbol}&bar=${bar}&limit=${limit}`;
         const r = await fetch(targetUrl, {
