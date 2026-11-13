@@ -2,14 +2,19 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
-    const h = { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" };
+    const h = { 
+      "Access-Control-Allow-Origin": "*", 
+      "Content-Type": "application/json" 
+    };
 
     if (request.method === "OPTIONS") return new Response(null, { headers: h });
 
     try {
+      // --- 1. DEX Swap Proxy (0x API) ---
       if (path.startsWith("/api/dex/quote")) {
         const params = url.searchParams.toString();
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
+        
         const r = await fetch(targetUrl, {
           headers: {
             "0x-api-key": "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950",
@@ -17,10 +22,48 @@ export default {
             "Content-Type": "application/json"
           }
         });
-        if (!r.ok) return new Response(JSON.stringify({ error: "0x API Error", status: r.status }), { status: r.status, headers: h });
+        
+        if (!r.ok) {
+            const errText = await r.text();
+            return new Response(JSON.stringify({ error: "0x API Error", status: r.status, details: errText }), { status: r.status, headers: h });
+        }
         return new Response(await r.text(), { headers: h });
       }
 
+      // --- 2. DEX Chart Data (GeckoTerminal OHLCV) ---
+      if (path.startsWith("/api/dex/chart")) {
+        const params = url.searchParams.toString();
+        const targetUrl = "https://api.geckoterminal.com/api/v2/networks/" + params;
+        
+        const r = await fetch(targetUrl, {
+          headers: { "User-Agent": "Mozilla/5.0" }
+        });
+        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Blocked" }), { status: 500, headers: h });
+        return new Response(await r.text(), { headers: h });
+      }
+
+      // --- 3. Supported Networks (GeckoTerminal) ---
+      if (path.startsWith("/api/dex/networks")) {
+        const r = await fetch("https://api.geckoterminal.com/api/v2/networks", {
+          headers: { "User-Agent": "Mozilla/5.0" }
+        });
+        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Blocked" }), { status: 500, headers: h });
+        return new Response(await r.text(), { headers: h });
+      }
+
+      // --- 4. New Pools / Trending Tokens (GeckoTerminal) ---
+      if (path.startsWith("/api/dex/new-pools")) {
+        const params = url.searchParams.toString();
+        const targetUrl = "https://api.geckoterminal.com/api/v2/networks/" + params + "/new_pools";
+        
+        const r = await fetch(targetUrl, {
+          headers: { "User-Agent": "Mozilla/5.0" }
+        });
+        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Blocked" }), { status: 500, headers: h });
+        return new Response(await r.text(), { headers: h });
+      }
+
+      // --- 5. Crypto List (OKX) ---
       if (path.startsWith("/api/crypto/list")) {
         const r = await fetch("https://www.okx.com/api/v5/market/tickers?instType=SPOT", {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
