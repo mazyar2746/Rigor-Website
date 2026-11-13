@@ -32,13 +32,20 @@ export default {
 
       // --- 2. DEX Chart Data (GeckoTerminal OHLCV) ---
       if (path.startsWith("/api/dex/chart")) {
-        const params = url.searchParams.toString();
-        const targetUrl = "https://api.geckoterminal.com/api/v2/networks/" + params;
+        const network = url.searchParams.get("network") || "bsc";
+        const pool = url.searchParams.get("pool");
+        const timeframe = url.searchParams.get("timeframe") || "hour";
+        const aggregate = url.searchParams.get("aggregate") || "1";
+        const limit = url.searchParams.get("limit") || "100";
+        
+        if (!pool) return new Response(JSON.stringify({ error: "pool address required" }), { status: 400, headers: h });
+
+        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/${network}/pools/${pool}/ohlcv/${timeframe}?aggregate=${aggregate}&limit=${limit}`;
         
         const r = await fetch(targetUrl, {
           headers: { "User-Agent": "Mozilla/5.0" }
         });
-        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Blocked" }), { status: 500, headers: h });
+        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Chart Blocked" }), { status: 500, headers: h });
         return new Response(await r.text(), { headers: h });
       }
 
@@ -47,19 +54,19 @@ export default {
         const r = await fetch("https://api.geckoterminal.com/api/v2/networks", {
           headers: { "User-Agent": "Mozilla/5.0" }
         });
-        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Blocked" }), { status: 500, headers: h });
+        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Networks Blocked" }), { status: 500, headers: h });
         return new Response(await r.text(), { headers: h });
       }
 
       // --- 4. New Pools / Trending Tokens (GeckoTerminal) ---
       if (path.startsWith("/api/dex/new-pools")) {
-        const params = url.searchParams.toString();
-        const targetUrl = "https://api.geckoterminal.com/api/v2/networks/" + params + "/new_pools";
+        const network = url.searchParams.get("network") || "bsc";
+        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/${network}/new_pools`;
         
         const r = await fetch(targetUrl, {
           headers: { "User-Agent": "Mozilla/5.0" }
         });
-        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Blocked" }), { status: 500, headers: h });
+        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal New Pools Blocked" }), { status: 500, headers: h });
         return new Response(await r.text(), { headers: h });
       }
 
