@@ -9,15 +9,6 @@ export default {
 
     if (request.method === "OPTIONS") return new Response(null, { headers: h });
 
-    // Common browser-like headers to bypass GeckoTerminal's Cloudflare protection
-    const browserHeaders = {
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Accept": "application/json",
-      "Accept-Language": "en-US,en;q=0.9",
-      "Referer": "https://www.geckoterminal.com/",
-      "Origin": "https://www.geckoterminal.com"
-    };
-
     try {
       // --- 1. DEX Swap Proxy (0x API) ---
       if (path.startsWith("/api/dex/quote")) {
@@ -39,50 +30,42 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- 2. DEX Chart Data (GeckoTerminal OHLCV) ---
+      // --- 2. DEX Chart Data (DexPaprika OHLCV - No rate limit issues) ---
       if (path.startsWith("/api/dex/chart")) {
         const network = url.searchParams.get("network") || "bsc";
         const pool = url.searchParams.get("pool");
-        const timeframe = url.searchParams.get("timeframe") || "hour";
-        const aggregate = url.searchParams.get("aggregate") || "1";
+        const interval = url.searchParams.get("interval") || "1h";
         const limit = url.searchParams.get("limit") || "100";
         
         if (!pool) return new Response(JSON.stringify({ error: "pool address required" }), { status: 400, headers: h });
 
-        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/${network}/pools/${pool}/ohlcv/${timeframe}?aggregate=${aggregate}&limit=${limit}`;
+        const targetUrl = `https://api.dexpaprika.com/networks/${network}/pools/${pool}/ohlcv?interval=${interval}&limit=${limit}`;
         
-        const r = await fetch(targetUrl, { headers: browserHeaders });
-        if (!r.ok) {
-            const errText = await r.text();
-            return new Response(JSON.stringify({ error: "GeckoTerminal Chart Blocked", status: r.status, details: errText }), { status: 500, headers: h });
-        }
+        const r = await fetch(targetUrl, {
+          headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
+        });
+        if (!r.ok) return new Response(JSON.stringify({ error: "DexPaprika Chart Blocked" }), { status: 500, headers: h });
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- 3. Supported Networks (GeckoTerminal) ---
-      if (path.startsWith("/api/dex/networks")) {
-        const r = await fetch("https://api.geckoterminal.com/api/v2/networks", { headers: browserHeaders });
-        if (!r.ok) {
-            const errText = await r.text();
-            return new Response(JSON.stringify({ error: "GeckoTerminal Networks Blocked", status: r.status, details: errText }), { status: 500, headers: h });
-        }
-        return new Response(await r.text(), { headers: h });
-      }
-
-      // --- 4. New Pools / Trending Tokens (GeckoTerminal) ---
+      // --- 3. DEX New Pools (DexScreener - 300 req/min) ---
       if (path.startsWith("/api/dex/new-pools")) {
         const network = url.searchParams.get("network") || "bsc";
-        const targetUrl = `https://api.geckoterminal.com/api/v2/networks/${network}/new_pools`;
+        // DexScreener doesn't have a direct "new pools" API, but we can get the latest boosted tokens
+        const targetUrl = "https://api.dexscreener.com/token-boosts/latest/v1";
         
-        const r = await fetch(targetUrl, { headers: browserHeaders });
-        if (!r.ok) {
-            const errText = await r.text();
-            return new Response(JSON.stringify({ error: "GeckoTerminal New Pools Blocked", status: r.status, details: errText }), { status: 500, headers: h });
-        }
-        return new Response(await r.text(), { headers: h });
+        const r = await fetch(targetUrl, {
+          headers: { "User-Agent": "Mozilla/5.0" }
+        });
+        if (!r.ok) return new Response(JSON.stringify({ error: "DexScreener Blocked" }), { status: 500, headers: h });
+        
+        const data = await r.json();
+        // Filter for BSC chain if needed
+        const filtered = data.filter(item => item.chainId === network || network === "bsc");
+        return new Response(JSON.stringify(filtered), { headers: h });
       }
 
-      // --- 5. Crypto List (OKX) ---
+      // --- 4. Crypto List (OKX) ---
       if (path.startsWith("/api/crypto/list")) {
         const r = await fetch("https://www.okx.com/api/v5/market/tickers?instType=SPOT", {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
