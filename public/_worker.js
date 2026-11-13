@@ -14,7 +14,6 @@ export default {
       if (path.startsWith("/api/dex/quote")) {
         const params = url.searchParams.toString();
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
-        
         const r = await fetch(targetUrl, {
           headers: {
             "0x-api-key": "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950",
@@ -22,50 +21,29 @@ export default {
             "Content-Type": "application/json"
           }
         });
+        if (!r.ok) return new Response(JSON.stringify({ error: "0x API Error", status: r.status }), { status: r.status, headers: h });
+        return new Response(await r.text(), { headers: h });
+      }
+
+      // --- 2. Crypto Events (CoinMarketCal) ---
+      if (path.startsWith("/api/crypto/events")) {
+        const limit = url.searchParams.get("limit") || "20";
+        const targetUrl = `https://api.coinmarketcal.com/v2/events?limit=${limit}`;
         
+        const r = await fetch(targetUrl, {
+          headers: {
+            "x-api-key": "cmc_live_279d96ad72df9b4baec1d1acc6c38fef",
+            "Accept": "application/json"
+          }
+        });
         if (!r.ok) {
             const errText = await r.text();
-            return new Response(JSON.stringify({ error: "0x API Error", status: r.status, details: errText }), { status: r.status, headers: h });
+            return new Response(JSON.stringify({ error: "CoinMarketCal Error", status: r.status, details: errText }), { status: r.status, headers: h });
         }
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- 2. DEX Chart Data (DexPaprika OHLCV - No rate limit issues) ---
-      if (path.startsWith("/api/dex/chart")) {
-        const network = url.searchParams.get("network") || "bsc";
-        const pool = url.searchParams.get("pool");
-        const interval = url.searchParams.get("interval") || "1h";
-        const limit = url.searchParams.get("limit") || "100";
-        
-        if (!pool) return new Response(JSON.stringify({ error: "pool address required" }), { status: 400, headers: h });
-
-        const targetUrl = `https://api.dexpaprika.com/networks/${network}/pools/${pool}/ohlcv?interval=${interval}&limit=${limit}`;
-        
-        const r = await fetch(targetUrl, {
-          headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
-        });
-        if (!r.ok) return new Response(JSON.stringify({ error: "DexPaprika Chart Blocked" }), { status: 500, headers: h });
-        return new Response(await r.text(), { headers: h });
-      }
-
-      // --- 3. DEX New Pools (DexScreener - 300 req/min) ---
-      if (path.startsWith("/api/dex/new-pools")) {
-        const network = url.searchParams.get("network") || "bsc";
-        // DexScreener doesn't have a direct "new pools" API, but we can get the latest boosted tokens
-        const targetUrl = "https://api.dexscreener.com/token-boosts/latest/v1";
-        
-        const r = await fetch(targetUrl, {
-          headers: { "User-Agent": "Mozilla/5.0" }
-        });
-        if (!r.ok) return new Response(JSON.stringify({ error: "DexScreener Blocked" }), { status: 500, headers: h });
-        
-        const data = await r.json();
-        // Filter for BSC chain if needed
-        const filtered = data.filter(item => item.chainId === network || network === "bsc");
-        return new Response(JSON.stringify(filtered), { headers: h });
-      }
-
-      // --- 4. Crypto List (OKX) ---
+      // --- 3. Crypto List (OKX) ---
       if (path.startsWith("/api/crypto/list")) {
         const r = await fetch("https://www.okx.com/api/v5/market/tickers?instType=SPOT", {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
