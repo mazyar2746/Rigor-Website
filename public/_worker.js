@@ -10,7 +10,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { headers: h });
 
     try {
-      // --- DEX Proxy for 0x API (Fixed: WBNB address + v2 header) ---
+      // --- DEX Proxy (0x API) ---
       if (path.startsWith("/api/dex/quote")) {
         const params = url.searchParams.toString();
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
@@ -30,21 +30,33 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- Crypto Route (Switched to Binance - no key, no block) ---
+      // --- Crypto Route (CoinCap API mapped to CoinGecko format) ---
       if (path.startsWith("/api/crypto/list")) {
-        const r = await fetch("https://api.binance.com/api/v3/ticker/24hr", {
+        const r = await fetch("https://api.coincap.io/v2/assets?limit=250", {
           headers: {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Accept": "application/json"
           }
         });
-        if (!r.ok) return new Response(JSON.stringify({ error: "Binance Blocked" }), { status: 500, headers: h });
-        return new Response(await r.text(), { headers: h });
+        if (!r.ok) return new Response(JSON.stringify({ error: "CoinCap Blocked" }), { status: 500, headers: h });
+        
+        const data = await r.json();
+        // Map CoinCap to CoinGecko format so Android app works without changes
+        const mapped = data.data.map(item => ({
+            id: item.id,
+            symbol: item.symbol.toLowerCase(),
+            name: item.name,
+            image: `https://assets.coincap.io/assets/icons/${item.symbol.toLowerCase()}@2x.png`,
+            current_price: parseFloat(item.priceUsd),
+            market_cap: parseFloat(item.marketCapUsd),
+            price_change_percentage_24h: parseFloat(item.changePercent24Hr)
+        }));
+        return new Response(JSON.stringify(mapped), { headers: h });
       }
 
       return new Response("Not Found", { status: 404, headers: h });
     } catch (err) {
-      return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: h });
+        return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: h });
     }
   }
 };
