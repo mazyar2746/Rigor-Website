@@ -9,6 +9,15 @@ export default {
 
     if (request.method === "OPTIONS") return new Response(null, { headers: h });
 
+    // Common browser-like headers to bypass GeckoTerminal's Cloudflare protection
+    const browserHeaders = {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Accept": "application/json",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Referer": "https://www.geckoterminal.com/",
+      "Origin": "https://www.geckoterminal.com"
+    };
+
     try {
       // --- 1. DEX Swap Proxy (0x API) ---
       if (path.startsWith("/api/dex/quote")) {
@@ -42,19 +51,21 @@ export default {
 
         const targetUrl = `https://api.geckoterminal.com/api/v2/networks/${network}/pools/${pool}/ohlcv/${timeframe}?aggregate=${aggregate}&limit=${limit}`;
         
-        const r = await fetch(targetUrl, {
-          headers: { "User-Agent": "Mozilla/5.0" }
-        });
-        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Chart Blocked" }), { status: 500, headers: h });
+        const r = await fetch(targetUrl, { headers: browserHeaders });
+        if (!r.ok) {
+            const errText = await r.text();
+            return new Response(JSON.stringify({ error: "GeckoTerminal Chart Blocked", status: r.status, details: errText }), { status: 500, headers: h });
+        }
         return new Response(await r.text(), { headers: h });
       }
 
       // --- 3. Supported Networks (GeckoTerminal) ---
       if (path.startsWith("/api/dex/networks")) {
-        const r = await fetch("https://api.geckoterminal.com/api/v2/networks", {
-          headers: { "User-Agent": "Mozilla/5.0" }
-        });
-        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal Networks Blocked" }), { status: 500, headers: h });
+        const r = await fetch("https://api.geckoterminal.com/api/v2/networks", { headers: browserHeaders });
+        if (!r.ok) {
+            const errText = await r.text();
+            return new Response(JSON.stringify({ error: "GeckoTerminal Networks Blocked", status: r.status, details: errText }), { status: 500, headers: h });
+        }
         return new Response(await r.text(), { headers: h });
       }
 
@@ -63,10 +74,11 @@ export default {
         const network = url.searchParams.get("network") || "bsc";
         const targetUrl = `https://api.geckoterminal.com/api/v2/networks/${network}/new_pools`;
         
-        const r = await fetch(targetUrl, {
-          headers: { "User-Agent": "Mozilla/5.0" }
-        });
-        if (!r.ok) return new Response(JSON.stringify({ error: "GeckoTerminal New Pools Blocked" }), { status: 500, headers: h });
+        const r = await fetch(targetUrl, { headers: browserHeaders });
+        if (!r.ok) {
+            const errText = await r.text();
+            return new Response(JSON.stringify({ error: "GeckoTerminal New Pools Blocked", status: r.status, details: errText }), { status: 500, headers: h });
+        }
         return new Response(await r.text(), { headers: h });
       }
 
