@@ -17,7 +17,7 @@ export default {
         
         const r = await fetch(targetUrl, {
           headers: {
-            "0x-api-key": "b3f49937-55a8-4f1d-ba9d-70c0bbb0c88e",
+            "0x-api-key": "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950",
             "Content-Type": "application/json"
           }
         });
@@ -28,9 +28,14 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- Crypto Route (for testing) ---
+      // --- Crypto Route (with User-Agent to bypass CoinGecko block) ---
       if (path.startsWith("/api/crypto/list")) {
-        const r = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false");
+        const r = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false", {
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "application/json"
+          }
+        });
         if (!r.ok) return new Response(JSON.stringify({ error: "CoinGecko Blocked" }), { status: 500, headers: h });
         return new Response(await r.text(), { headers: h });
       }
