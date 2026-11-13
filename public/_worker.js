@@ -16,7 +16,7 @@ export default {
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
         const r = await fetch(targetUrl, {
           headers: {
-            "0x-api-key": "کلید_خودت",
+            "0x-api-key": "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950",
             "0x-version": "v2",
             "Content-Type": "application/json"
           }
@@ -25,25 +25,17 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- DEX Chart Data (DexPaprika OHLCV - Fixed with start param) ---
+      // --- DEX Chart Data (OKX API - Bypasses Iran Blocks) ---
       if (path.startsWith("/api/dex/chart")) {
-        const network = url.searchParams.get("network") || "bsc";
-        const pool = url.searchParams.get("pool");
-        const interval = url.searchParams.get("interval") || "1h";
+        const symbol = url.searchParams.get("symbol") || "BNB-USDT";
+        const bar = url.searchParams.get("interval") || "1H";
         const limit = url.searchParams.get("limit") || "100";
-        
-        if (!pool) return new Response(JSON.stringify({ error: "pool address required" }), { status: 400, headers: h });
 
-        // محاسبه زمان شروع بر اساس تعداد کندل و تایم‌فریم
-        const now = Math.floor(Date.now() / 1000);
-        const start = now - (parseInt(limit) * 3600); // 3600 ثانیه = 1 ساعت
-
-        const targetUrl = `https://api.dexpaprika.com/networks/${network}/pools/${pool}/ohlcv?interval=${interval}&limit=${limit}&start=${start}`;
-        
+        const targetUrl = `https://www.okx.com/api/v5/market/candles?instId=${symbol}&bar=${bar}&limit=${limit}`;
         const r = await fetch(targetUrl, {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
         });
-        if (!r.ok) return new Response(JSON.stringify({ error: "DexPaprika Chart Blocked" }), { status: 500, headers: h });
+        if (!r.ok) return new Response(JSON.stringify({ error: "OKX Chart Blocked" }), { status: 500, headers: h });
         return new Response(await r.text(), { headers: h });
       }
 
