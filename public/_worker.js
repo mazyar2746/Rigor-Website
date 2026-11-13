@@ -10,7 +10,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { headers: h });
 
     try {
-      // --- DEX Proxy for 0x API ---
+      // --- DEX Proxy for 0x API (Fixed: WBNB address + v2 header) ---
       if (path.startsWith("/api/dex/quote")) {
         const params = url.searchParams.toString();
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
@@ -18,25 +18,27 @@ export default {
         const r = await fetch(targetUrl, {
           headers: {
             "0x-api-key": "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950",
+            "0x-version": "v2",
             "Content-Type": "application/json"
           }
         });
         
         if (!r.ok) {
-            return new Response(JSON.stringify({ error: "0x API Error", status: r.status }), { status: r.status, headers: h });
+            const errText = await r.text();
+            return new Response(JSON.stringify({ error: "0x API Error", status: r.status, details: errText }), { status: r.status, headers: h });
         }
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- Crypto Route (with User-Agent to bypass CoinGecko block) ---
+      // --- Crypto Route (Switched to Binance - no key, no block) ---
       if (path.startsWith("/api/crypto/list")) {
-        const r = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false", {
+        const r = await fetch("https://api.binance.com/api/v3/ticker/24hr", {
           headers: {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Accept": "application/json"
           }
         });
-        if (!r.ok) return new Response(JSON.stringify({ error: "CoinGecko Blocked" }), { status: 500, headers: h });
+        if (!r.ok) return new Response(JSON.stringify({ error: "Binance Blocked" }), { status: 500, headers: h });
         return new Response(await r.text(), { headers: h });
       }
 
