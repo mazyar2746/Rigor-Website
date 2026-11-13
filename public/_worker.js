@@ -30,7 +30,7 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- Crypto Route (CoinCap API mapped to CoinGecko format) ---
+      // --- Crypto Route (CoinCap API) ---
       if (path.startsWith("/api/crypto/list")) {
         const r = await fetch("https://api.coincap.io/v2/assets?limit=250", {
           headers: {
@@ -41,7 +41,6 @@ export default {
         if (!r.ok) return new Response(JSON.stringify({ error: "CoinCap Blocked" }), { status: 500, headers: h });
         
         const data = await r.json();
-        // Map CoinCap to CoinGecko format so Android app works without changes
         const mapped = data.data.map(item => ({
             id: item.id,
             symbol: item.symbol.toLowerCase(),
