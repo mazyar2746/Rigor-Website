@@ -30,26 +30,35 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- Crypto Route (CoinCap API) ---
+      // --- Crypto Route (OKX API - Free, No Key, No Block) ---
       if (path.startsWith("/api/crypto/list")) {
-        const r = await fetch("https://api.coincap.io/v2/assets?limit=250", {
+        const r = await fetch("https://www.okx.com/api/v5/market/tickers?instType=SPOT", {
           headers: {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Accept": "application/json"
           }
         });
-        if (!r.ok) return new Response(JSON.stringify({ error: "CoinCap Blocked" }), { status: 500, headers: h });
+        if (!r.ok) return new Response(JSON.stringify({ error: "OKX Blocked" }), { status: 500, headers: h });
         
         const data = await r.json();
-        const mapped = data.data.map(item => ({
-            id: item.id,
-            symbol: item.symbol.toLowerCase(),
-            name: item.name,
-            image: `https://assets.coincap.io/assets/icons/${item.symbol.toLowerCase()}@2x.png`,
-            current_price: parseFloat(item.priceUsd),
-            market_cap: parseFloat(item.marketCapUsd),
-            price_change_percentage_24h: parseFloat(item.changePercent24Hr)
-        }));
+        if (!data.data) return new Response(JSON.stringify({ error: "OKX invalid response" }), { status: 500, headers: h });
+
+        const mapped = data.data
+            .filter(item => item.instId.endsWith("-USDT"))
+            .map(item => {
+                const symbol = item.instId.split("-")[0].toLowerCase();
+                return {
+                    id: symbol,
+                    symbol: symbol,
+                    name: symbol.toUpperCase(),
+                    image: `https://assets.coincap.io/assets/icons/${symbol}@2x.png`,
+                    current_price: parseFloat(item.last),
+                    market_cap: 0,
+                    price_change_percentage_24h: parseFloat(item.open24h) > 0 
+                        ? ((parseFloat(item.last) - parseFloat(item.open24h)) / parseFloat(item.open24h)) * 100 
+                        : 0
+                };
+            });
         return new Response(JSON.stringify(mapped), { headers: h });
       }
 
