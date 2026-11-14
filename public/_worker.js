@@ -10,7 +10,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { headers: h });
 
     try {
-      // --- 1. DEX Swap Proxy (0x API) ---
+      // --- 1. DEX Swap Proxy (0x API - Single Chain) ---
       if (path.startsWith("/api/dex/quote")) {
         const params = url.searchParams.toString();
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
@@ -25,7 +25,21 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- 2. DEX Chart (OKX API) ---
+      // --- 2. CROSS-CHAIN Swap (Li.Fi API) ---
+      if (path.startsWith("/api/dex/cross-quote")) {
+        const params = url.searchParams.toString();
+        const targetUrl = "https://li.quest/v1/quote?" + params;
+        const r = await fetch(targetUrl, {
+          headers: { "Accept": "application/json" }
+        });
+        if (!r.ok) {
+            const errText = await r.text();
+            return new Response(JSON.stringify({ error: "Li.Fi API Error", status: r.status, details: errText }), { status: r.status, headers: h });
+        }
+        return new Response(await r.text(), { headers: h });
+      }
+
+      // --- 3. DEX Chart (OKX API) ---
       if (path.startsWith("/api/dex/chart")) {
         const symbol = url.searchParams.get("symbol") || "BNB-USDT";
         const interval = url.searchParams.get("interval") || "1H";
@@ -43,7 +57,7 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- 3. Crypto List (OKX) ---
+      // --- 4. Crypto List (OKX) ---
       if (path.startsWith("/api/crypto/list")) {
         const r = await fetch("https://www.okx.com/api/v5/market/tickers?instType=SPOT", {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
@@ -72,14 +86,12 @@ export default {
         return new Response(JSON.stringify(mapped), { headers: h });
       }
 
-      // --- 4. Multi-Chain Token Lookup (Using Stable CDNs) ---
+      // --- 5. Multi-Chain Token Lookup ---
       if (path.startsWith("/api/dex/lookup-token-multi")) {
         const address = url.searchParams.get("address") || "";
         if (!address) return new Response(JSON.stringify({found: false, error: "address required"}), {status: 400, headers: h});
         
         const normalized = address.toLowerCase();
-        
-        // لیست‌های رسمی و پایدار (CDN)
         const networks = [
             { chainId: 56, name: "BSC", url: "https://tokens.pancakeswap.finance/pancakeswap-extended.json" },
             { chainId: 1, name: "Ethereum", url: "https://tokens.uniswap.org" },
@@ -89,29 +101,15 @@ export default {
         
         for (const net of networks) {
             try {
-                const r = await fetch(net.url, { 
-                    headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" } 
-                });
+                const r = await fetch(net.url, { headers: {"User-Agent": "Mozilla/5.0"} });
                 if (!r.ok) continue;
-                
                 const data = await r.json();
                 const tokens = data.tokens || [];
                 const match = tokens.find(t => t.address.toLowerCase() === normalized);
-                
                 if (match) {
-                    return new Response(JSON.stringify({
-                        found: true,
-                        symbol: match.symbol,
-                        name: match.name,
-                        address: match.address,
-                        chainId: net.chainId,
-                        network: net.name,
-                        decimals: match.decimals
-                    }), {headers: h});
+                    return new Response(JSON.stringify({found: true, symbol: match.symbol, name: match.name, address: match.address, chainId: net.chainId, network: net.name, decimals: match.decimals}), {headers: h});
                 }
-            } catch (e) {
-                continue;
-            }
+            } catch (e) { continue; }
         }
         return new Response(JSON.stringify({found: false, error: "Token not found on any supported network"}), {headers: h});
       }
