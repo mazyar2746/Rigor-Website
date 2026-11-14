@@ -72,38 +72,38 @@ export default {
         return new Response(JSON.stringify(mapped), { headers: h });
       }
 
-      // --- 4. Token Lookup by Contract Address ---
+      // --- 4. Token Lookup by Contract Address (PancakeSwap Token List) ---
       if (path.startsWith("/api/dex/lookup-token")) {
         const address = url.searchParams.get("address") || "";
         if (!address) return new Response(JSON.stringify({found: false, error: "address required"}), {status: 400, headers: h});
         
         try {
-            const r = await fetch("https://www.okx.com/api/v5/asset/currencies", {
-                headers: {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+            // لیست جامع توکن‌های پنکیک سواپ (ضد بلاک)
+            const listUrl = "https://tokens.pancakeswap.finance/pancakeswap-extended.json";
+            
+            const r = await fetch(listUrl, {
+                headers: {"User-Agent": "Mozilla/5.0"}
             });
-            if (!r.ok) return new Response(JSON.stringify({found: false, error: "OKX blocked"}), {status: 500, headers: h});
+            if (!r.ok) return new Response(JSON.stringify({found: false, error: "Token list blocked"}), {status: 500, headers: h});
             
             const data = await r.json();
-            if (!data.data || !Array.isArray(data.data)) {
-                return new Response(JSON.stringify({found: false, error: "invalid response"}), {status: 500, headers: h});
-            }
+            const tokens = data.tokens || [];
             
             const normalized = address.toLowerCase();
-            const matches = data.data.filter(t => t.addr && t.addr.toLowerCase() === normalized);
+            const match = tokens.find(t => t.address.toLowerCase() === normalized);
             
-            if (matches.length > 0) {
-                const match = matches[0];
+            if (match) {
                 return new Response(JSON.stringify({
                     found: true,
-                    symbol: match.ccy,
-                    name: match.name || match.ccy,
-                    address: match.addr,
-                    network: match.chain,
-                    decimals: parseInt(match.decimals) || 18
+                    symbol: match.symbol,
+                    name: match.name,
+                    address: match.address,
+                    network: "BSC",
+                    decimals: match.decimals
                 }), {headers: h});
             }
             
-            return new Response(JSON.stringify({found: false, error: "Token not found"}), {headers: h});
+            return new Response(JSON.stringify({found: false, error: "Token not found in PancakeSwap list"}), {headers: h});
         } catch (e) {
             return new Response(JSON.stringify({found: false, error: e.message}), {status: 500, headers: h});
         }
