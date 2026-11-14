@@ -10,13 +10,13 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { headers: h });
 
     try {
-      // --- DEX Swap Proxy (0x API) ---
+      // --- 1. DEX Swap Proxy (0x API) ---
       if (path.startsWith("/api/dex/quote")) {
         const params = url.searchParams.toString();
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
         const r = await fetch(targetUrl, {
           headers: {
-            "0x-api-key": "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950",
+            "0x-api-key": "کلید_0x_خودت",
             "0x-version": "v2",
             "Content-Type": "application/json"
           }
@@ -25,13 +25,11 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- DEX Chart Data (OKX API - Bypasses Iran Blocks) ---
+      // --- 2. DEX Chart (OKX API) ---
       if (path.startsWith("/api/dex/chart")) {
         const symbol = url.searchParams.get("symbol") || "BNB-USDT";
         const interval = url.searchParams.get("interval") || "1H";
         const limit = url.searchParams.get("limit") || "100";
-        
-        // تبدیل فرمت تایم‌فریم به فرمت OKX
         let bar = "1H";
         if (interval === "1h") bar = "1H";
         else if (interval === "4h") bar = "4H";
@@ -45,7 +43,7 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- Crypto List (OKX) ---
+      // --- 3. Crypto List (OKX) ---
       if (path.startsWith("/api/crypto/list")) {
         const r = await fetch("https://www.okx.com/api/v5/market/tickers?instType=SPOT", {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
@@ -74,16 +72,19 @@ export default {
         return new Response(JSON.stringify(mapped), { headers: h });
       }
 
-      // --- Token Lookup by Contract Address (OKX Asset List) ---
+      // --- 4. Token Lookup by Contract Address ---
       if (path.startsWith("/api/dex/lookup-token")) {
         const address = url.searchParams.get("address") || "";
+        if (!address) return new Response(JSON.stringify({found: false, error: "address required"}), {status: 400, headers: h});
         
         try {
             const r = await fetch("https://www.okx.com/api/v5/asset/currencies", {
                 headers: {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
             });
+            if (!r.ok) return new Response(JSON.stringify({found: false, error: "OKX blocked"}), {status: 500, headers: h});
             
             const data = await r.json();
+            if (!data.data || !Array.isArray(data.data)) {
                 return new Response(JSON.stringify({found: false, error: "invalid response"}), {status: 500, headers: h});
             }
             
@@ -102,7 +103,7 @@ export default {
                 }), {headers: h});
             }
             
-            return new Response(JSON.stringify({found: false, error: "Token not found in OKX list"}), {headers: h});
+            return new Response(JSON.stringify({found: false, error: "Token not found"}), {headers: h});
         } catch (e) {
             return new Response(JSON.stringify({found: false, error: e.message}), {status: 500, headers: h});
         }
