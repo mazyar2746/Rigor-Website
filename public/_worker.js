@@ -74,6 +74,40 @@ export default {
         return new Response(JSON.stringify(mapped), { headers: h });
       }
 
+      // --- Token Lookup by Contract Address (OKX Asset List) ---
+      if (path.startsWith("/api/dex/lookup-token")) {
+        const address = url.searchParams.get("address") || "";
+        
+        try {
+            const r = await fetch("https://www.okx.com/api/v5/asset/currencies", {
+                headers: {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+            });
+            
+            const data = await r.json();
+                return new Response(JSON.stringify({found: false, error: "invalid response"}), {status: 500, headers: h});
+            }
+            
+            const normalized = address.toLowerCase();
+            const matches = data.data.filter(t => t.addr && t.addr.toLowerCase() === normalized);
+            
+            if (matches.length > 0) {
+                const match = matches[0];
+                return new Response(JSON.stringify({
+                    found: true,
+                    symbol: match.ccy,
+                    name: match.name || match.ccy,
+                    address: match.addr,
+                    network: match.chain,
+                    decimals: parseInt(match.decimals) || 18
+                }), {headers: h});
+            }
+            
+            return new Response(JSON.stringify({found: false, error: "Token not found in OKX list"}), {headers: h});
+        } catch (e) {
+            return new Response(JSON.stringify({found: false, error: e.message}), {status: 500, headers: h});
+        }
+      }
+
       return new Response("Not Found", { status: 404, headers: h });
     } catch (err) {
         return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: h });
