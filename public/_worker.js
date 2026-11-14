@@ -25,16 +25,23 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- 2. CROSS-CHAIN Swap (Li.Fi API) ---
+      // --- 2. CROSS-CHAIN Swap (Li.Fi API with Browser Headers) ---
       if (path.startsWith("/api/dex/cross-quote")) {
         const params = url.searchParams.toString();
         const targetUrl = "https://li.quest/v1/quote?" + params;
+        
         const r = await fetch(targetUrl, {
-          headers: { "Accept": "application/json" }
+          headers: { 
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Origin": "https://jumper.exchange",
+            "Referer": "https://jumper.exchange/"
+          }
         });
+        
         if (!r.ok) {
             const errText = await r.text();
-            return new Response(JSON.stringify({ error: "Li.Fi API Error", status: r.status, details: errText }), { status: r.status, headers: h });
+            return new Response(JSON.stringify({ error: "Li.Fi API Error", status: r.status, details: errText.substring(0, 100) }), { status: r.status, headers: h });
         }
         return new Response(await r.text(), { headers: h });
       }
