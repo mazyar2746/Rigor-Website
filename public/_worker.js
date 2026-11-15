@@ -121,6 +121,28 @@ export default {
         return new Response(JSON.stringify({found: false, error: "Token not found on any supported network"}), {headers: h});
       }
 
+      // --- 7. 0x Cross-Chain Quote ---
+      if (path.startsWith("/api/dex/cross-chain-0x")) {
+        const params = url.searchParams.toString();
+        const targetUrl = "https://api.0x.org/cross-chain/quotes?" + params + "&sortQuotesBy=price";
+        
+        const apiKey = "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950";
+        
+        const r = await fetch(targetUrl, {
+          headers: { 
+            "0x-api-key": apiKey,
+            "0x-version": "v2",
+            "Accept": "application/json"
+          }
+        });
+        
+        if (!r.ok) {
+            const errText = await r.text();
+            return new Response(JSON.stringify({ error: "0x Cross-Chain Error", status: r.status, details: errText.substring(0, 300) }), { status: r.status, headers: h });
+        }
+        return new Response(await r.text(), { headers: h });
+      }
+
       return new Response("Not Found", { status: 404, headers: h });
     } catch (err) {
         return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: h });
