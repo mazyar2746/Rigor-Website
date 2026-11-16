@@ -10,7 +10,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { headers: h });
 
     try {
-      // --- 1. DEX Swap Proxy (0x API - Single Chain) ---
+      // --- 1. DEX Swap Proxy (0x API) ---
       if (path.startsWith("/api/dex/quote")) {
         const params = url.searchParams.toString();
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
@@ -25,25 +25,26 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- 2. CROSS-CHAIN Swap (Li.Fi API with Browser Headers) ---
-      if (path.startsWith("/api/dex/cross-quote")) {
-        const params = url.searchParams.toString();
-        const targetUrl = "https://li.quest/v1/quote?" + params;
-        
-        const r = await fetch(targetUrl, {
-          headers: { 
-            "Accept": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Origin": "https://jumper.exchange",
-            "Referer": "https://jumper.exchange/"
-          }
+      // --- 2. Full BSC Token List (PancakeSwap) ---
+      if (path.startsWith("/api/dex/token-list")) {
+        const r = await fetch("https://tokens.pancakeswap.finance/pancakeswap-extended.json", {
+          headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
         });
+        if (!r.ok) return new Response(JSON.stringify({ error: "Token list blocked" }), { status: 500, headers: h });
         
-        if (!r.ok) {
-            const errText = await r.text();
-            return new Response(JSON.stringify({ error: "Li.Fi API Error", status: r.status, details: errText.substring(0, 100) }), { status: r.status, headers: h });
-        }
-        return new Response(await r.text(), { headers: h });
+        const data = await r.json();
+        const tokens = data.tokens || [];
+        
+        // Map to a simple format for our app
+        const mapped = tokens.map(t => ({
+          symbol: t.symbol,
+          name: t.name,
+          address: t.address,
+          decimals: t.decimals,
+          chainId: t.chainId || 56
+        }));
+        
+        return new Response(JSON.stringify(mapped), { headers: h });
       }
 
       // --- 3. DEX Chart (OKX API) ---
@@ -64,7 +65,7 @@ export default {
         return new Response(await r.text(), { headers: h });
       }
 
-      // --- 4. Crypto List (OKX) ---
+      // --- 4. Crypto List (OKX) for Trending ---
       if (path.startsWith("/api/crypto/list")) {
         const r = await fetch("https://www.okx.com/api/v5/market/tickers?instType=SPOT", {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
@@ -119,28 +120,6 @@ export default {
             } catch (e) { continue; }
         }
         return new Response(JSON.stringify({found: false, error: "Token not found on any supported network"}), {headers: h});
-      }
-
-      // --- 7. 0x Cross-Chain Quote ---
-      if (path.startsWith("/api/dex/cross-chain-0x")) {
-        const params = url.searchParams.toString();
-        const targetUrl = "https://api.0x.org/cross-chain/quotes?" + params + "&sortQuotesBy=price";
-        
-        const apiKey = "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950";
-        
-        const r = await fetch(targetUrl, {
-          headers: { 
-            "0x-api-key": apiKey,
-            "0x-version": "v2",
-            "Accept": "application/json"
-          }
-        });
-        
-        if (!r.ok) {
-            const errText = await r.text();
-            return new Response(JSON.stringify({ error: "0x Cross-Chain Error", status: r.status, details: errText.substring(0, 300) }), { status: r.status, headers: h });
-        }
-        return new Response(await r.text(), { headers: h });
       }
 
       return new Response("Not Found", { status: 404, headers: h });
