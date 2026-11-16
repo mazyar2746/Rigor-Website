@@ -16,7 +16,7 @@ export default {
         const targetUrl = "https://api.0x.org/swap/permit2/quote?" + params;
         const r = await fetch(targetUrl, {
           headers: {
-            "0x-api-key": "کلید_0x_خودت",
+            "0x-api-key": "4b9b9fe6-dfde-4e5c-a89b-8ea0376b0950",
             "0x-version": "v2",
             "Content-Type": "application/json"
           }
