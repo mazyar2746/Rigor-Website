@@ -27,7 +27,7 @@ export default {
 
       // --- 2. Full BSC Token List (PancakeSwap) ---
       if (path.startsWith("/api/dex/token-list")) {
-        const r = await fetch("https://tokens.pancakeswap.finance/pancakeswap-extended.json", {
+        const r = await fetch("https://raw.githubusercontent.com/pancakeswap/pancake-default-token-list/master/build/pancakeswap-extended.json", {
           headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
         });
         if (!r.ok) return new Response(JSON.stringify({ error: "Token list blocked" }), { status: 500, headers: h });
@@ -101,7 +101,7 @@ export default {
         
         const normalized = address.toLowerCase();
         const networks = [
-            { chainId: 56, name: "BSC", url: "https://tokens.pancakeswap.finance/pancakeswap-extended.json" },
+            { chainId: 56, name: "BSC", url: "https://raw.githubusercontent.com/pancakeswap/pancake-default-token-list/master/build/pancakeswap-extended.json" },
             { chainId: 1, name: "Ethereum", url: "https://tokens.uniswap.org" },
             { chainId: 137, name: "Polygon", url: "https://tokens.uniswap.org" },
             { chainId: 42161, name: "Arbitrum", url: "https://tokens.uniswap.org" }
